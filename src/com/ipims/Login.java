@@ -7,6 +7,7 @@ import java.awt.event.*;
 public class Login extends JFrame {
 	
 	private static JButton button;
+	private static JButton newUserButton;
 	private static JLabel userName;
 	private static JLabel password;
 	private static JLabel authentication;
@@ -17,7 +18,21 @@ public class Login extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			authentication.setText("In progress");
-			
+			if(userNameField.getText().equals("user") && passwordField.getText().equals("1234")) {
+				authentication.setText("Successful Login!");
+				// call method to get user type and return/load view based on user type
+				
+			}
+			else {
+				authentication.setText("Invalid username/password");
+			}
+		}
+		
+	}
+	static class newUserListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			authentication.setText("New User");
 		}
 		
 	}
@@ -35,6 +50,8 @@ public class Login extends JFrame {
 		// declare button, labels, text fields
 		button = new JButton("Login");
 		button.addActionListener(new ClickListener());
+		newUserButton = new JButton("New User");
+		newUserButton.addActionListener(new newUserListener());
 		userName = new JLabel("Username: ");
 		password = new JLabel("Password: ");
 		authentication = new JLabel("Authentication..");
@@ -51,6 +68,7 @@ public class Login extends JFrame {
 		panel.add(password);
 		panel.add(passwordField);
 		panel.add(button);
+		panel.add(newUserButton); 
 		panel.add(authentication);
 		frame.add(panel);
 	}
