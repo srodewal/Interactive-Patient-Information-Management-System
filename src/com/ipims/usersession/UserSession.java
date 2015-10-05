@@ -18,7 +18,7 @@ public class UserSession {
 		return instance;
 	}
 
-	public User getLoggedInUser() {
+	public User getCurrentUser() {
 		return loggedInUser;
 	}
 	
