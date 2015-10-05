@@ -1,6 +1,11 @@
 package com.ipims.usersession;
 import com.ipims.models.User;
 
+/**
+ * Stores the current session of the application
+ * @author jithin
+ *
+ */
 public class UserSession {
 
 
@@ -8,9 +13,14 @@ public class UserSession {
 	private User loggedInUser;
 	
 	private UserSession() {
-		// Exists only to defeat instantiation.
+		loggedInUser = null;
 	}
 	
+	
+	/**
+	 * Get the singleton instance of the Usersession class
+	 * @return returns the singleton instance
+	 */
 	public static UserSession getInstance() {
 		if(instance == null) {
 			instance = new UserSession();
@@ -18,6 +28,10 @@ public class UserSession {
 		return instance;
 	}
 
+	/**
+	 * Returns the current user logged in 
+	 * @return null if user is not logged in.
+	 */
 	public User getCurrentUser() {
 		return loggedInUser;
 	}
