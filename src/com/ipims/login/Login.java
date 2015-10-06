@@ -62,12 +62,30 @@ public class Login extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                actiontarget.setFill(Color.FIREBRICK);
+                actiontarget.setFill(Color.RED);
                 actiontarget.setText("Sign in button pressed");
+                
+                // these if statements should send userTextField.getText() to database to see if user in database
+                if(userTextField.getText().equals("Doctor")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Doctor Logged In");
+                }
+                if(userTextField.getText().equals("Patient")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Patient Logged In");
+                }
+                if(userTextField.getText().equals("Nurse")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Nurse Logged In");
+                }
+                if(userTextField.getText().equals("Lab Staff")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Lab Staff Logged In");
+                }
             }
         });
 
-        Scene scene = new Scene(grid, 300, 275);
+        Scene scene = new Scene(grid, 600, 550);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
