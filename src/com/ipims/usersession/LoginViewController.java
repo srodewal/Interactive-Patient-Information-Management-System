@@ -1,6 +1,7 @@
 package com.ipims.usersession;
 
 
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,9 +17,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class LoginViewController  {
 
+	private Scene currentScene;
+	
 	public Scene getScene() {
 		GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -57,10 +61,16 @@ public class LoginViewController  {
             public void handle(ActionEvent e) {
                 actiontarget.setFill(Color.FIREBRICK);
                 actiontarget.setText("Sign in button pressed");
+            	
+            	
+//            	Registration reg = new Registration();
+//            	Stage stage = (Stage) currentScene.getWindow();
+//            	stage.setScene(reg.getScene());
+            	
             }
         });
-        Scene scene = new Scene(grid, 300, 275);
-		return scene;
+        currentScene = new Scene(grid, 300, 275);
+		return currentScene;
 	}
 
 	
