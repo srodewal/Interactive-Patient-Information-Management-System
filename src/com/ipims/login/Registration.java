@@ -159,6 +159,13 @@ public class Registration extends Application {
                 phoneNumberToDatabase = phoneNumberTextField.getText();
                 dateOfBirthToDatabase = dateOfBirthTextField.getText(); 
                 
+                // create new user Object
+                // User newUser = new User();
+                // newUser.setFirstName(firstNameToDatabase);
+                // .....
+                // UserSession.getInstance().login(newUser);
+            
+                
                 firstNameTarget.setFill(Color.RED);
                 firstNameTarget.setText(firstNameToDatabase);
             }
