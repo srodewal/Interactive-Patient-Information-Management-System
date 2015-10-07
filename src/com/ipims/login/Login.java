@@ -44,14 +44,14 @@ public class Login extends Application {
         register.setPadding(new Insets(25, 25, 25, 25));
         
         Text registerText = new Text("Register");
-        registerText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        registerText.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
         register.add(registerText, 0, 0, 2, 1);
         
         Scene scene = new Scene(grid, 600, 550);
         Scene registerScene = new Scene(register, 600, 550);
 
         Text scenetitle = new Text("Login");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        scenetitle.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
         Label userName = new Label("User Name:");
