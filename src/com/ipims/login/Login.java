@@ -19,22 +19,39 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Login extends Application {
-
+	Stage currentStage;
+	Scene scene;
+	
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
+    	currentStage = primaryStage;
+    	
         primaryStage.setTitle("Interactive Patient Information Management System");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
+        
+        GridPane register = new GridPane();
+        register.setAlignment(Pos.CENTER);
+        register.setHgap(10);
+        register.setVgap(10);
+        register.setPadding(new Insets(25, 25, 25, 25));
+        
+        Text registerText = new Text("Register");
+        registerText.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+        register.add(registerText, 0, 0, 2, 1);
+        
+        Scene scene = new Scene(grid, 600, 550);
+        Scene registerScene = new Scene(register, 600, 550);
 
         Text scenetitle = new Text("Login");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        scenetitle.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
         Label userName = new Label("User Name:");
@@ -51,9 +68,9 @@ public class Login extends Application {
 
         Button btn = new Button("Login");
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        //hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
+        grid.add(hbBtn, 1, 3);
 
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
@@ -62,12 +79,38 @@ public class Login extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                actiontarget.setFill(Color.FIREBRICK);
+                actiontarget.setFill(Color.RED);
                 actiontarget.setText("Sign in button pressed");
+                
+                // these if statements should send userTextField.getText() to database to see if user in database
+                if(userTextField.getText().equals("Doctor")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Doctor Logged In");
+                    currentStage.setScene(registerScene);
+                }
+                if(userTextField.getText().equals("Patient")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Patient Logged In");
+                    currentStage.setScene(registerScene);
+                }
+                if(userTextField.getText().equals("Nurse")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Nurse Logged In");
+                    currentStage.setScene(registerScene);
+                }
+                if(userTextField.getText().equals("Lab Staff")) {
+                	actiontarget.setFill(Color.RED);
+                    actiontarget.setText("Lab Staff Logged In");
+                    currentStage.setScene(registerScene);
+                }
             }
         });
 
-        Scene scene = new Scene(grid, 300, 275);
+        /*Scene scene = new Scene(grid, 600, 550);
+        Scene registerScene = new Scene(grid, 600, 550);
+        primaryStage.setScene(scene);
+        primaryStage.show();*/
+        
         primaryStage.setScene(scene);
         primaryStage.show();
     }
