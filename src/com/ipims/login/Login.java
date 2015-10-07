@@ -91,14 +91,17 @@ public class Login extends Application {
                 if(userTextField.getText().equals("Patient")) {
                 	actiontarget.setFill(Color.RED);
                     actiontarget.setText("Patient Logged In");
+                    currentStage.setScene(registerScene);
                 }
                 if(userTextField.getText().equals("Nurse")) {
                 	actiontarget.setFill(Color.RED);
                     actiontarget.setText("Nurse Logged In");
+                    currentStage.setScene(registerScene);
                 }
                 if(userTextField.getText().equals("Lab Staff")) {
                 	actiontarget.setFill(Color.RED);
                     actiontarget.setText("Lab Staff Logged In");
+                    currentStage.setScene(registerScene);
                 }
             }
         });
