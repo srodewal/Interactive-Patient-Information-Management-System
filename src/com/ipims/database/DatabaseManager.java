@@ -4,6 +4,8 @@ import java.sql.*;
 import java.nio.file.*;
 import java.nio.charset.*;
 import java.io.BufferedWriter;
+import com.ipims.models.Patient;
+
 
 public class DatabaseManager {
 	private static final DatabaseManager INSTANCE = new DatabaseManager();
@@ -40,7 +42,7 @@ public class DatabaseManager {
 		return INSTANCE;
 	}
 	
-	public static void newPatient()
+	public static void newPatient(Patient patient)
 	{
 		
 	}

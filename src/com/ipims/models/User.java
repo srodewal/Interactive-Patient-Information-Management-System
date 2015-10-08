@@ -9,9 +9,16 @@ public class User {
 	    NURSE,
 	    UNKNOWN
 	}
+	
+	protected UserType type;
+	
+	public User()
+	{ 
+		type = UserType.UNKNOWN;
+	}
 
 	public UserType getUsertype() {
-		return UserType.UNKNOWN;
+		return type;
 	}
 	
 }
