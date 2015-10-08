@@ -37,18 +37,22 @@ public class MenuViewController {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-
-        Button btn = new Button("Schedule Appointment");
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
-
+        Button scheduleAppBtn = new Button("Schedule Appointment");
+        HBox scheduleAppBox = new HBox(10);
+        scheduleAppBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        scheduleAppBox.getChildren().add(scheduleAppBtn);
+        grid.add(scheduleAppBtn, 0, 2);
+        
+        Button updateHealthBtn = new Button("Update Health Condition");
+        HBox updateHealthBox = new HBox(10);
+        updateHealthBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        updateHealthBox.getChildren().add(updateHealthBtn);
+        grid.add(updateHealthBtn, 0, 3);
         
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
 
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {

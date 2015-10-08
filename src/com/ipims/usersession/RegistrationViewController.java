@@ -138,10 +138,10 @@ public class RegistrationViewController {
         
         
         final Text actiontarget = new Text();
-        registerPane.add(actiontarget, 1, 10);
+        registerPane.add(actiontarget, 1, 11);
         
-        final Text firstNameTarget = new Text();
-        registerPane.add(firstNameTarget, 1, 11);
+        //final Text firstNameTarget = new Text();
+        //registerPane.add(firstNameTarget, 1, 12);
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -169,8 +169,8 @@ public class RegistrationViewController {
                 // UserSession.getInstance().login(newUser);
             
                 
-                firstNameTarget.setFill(Color.RED);
-                firstNameTarget.setText(firstNameToDatabase);
+                //firstNameTarget.setFill(Color.RED);
+                //firstNameTarget.setText(firstNameToDatabase);
 
             }
         });
