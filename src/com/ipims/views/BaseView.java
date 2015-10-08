@@ -4,8 +4,10 @@ import javafx.scene.Scene;
 
 public class BaseView {
 
-	public Scene currentScene;
-	public void displayMessage(String message) {
-		
+	protected Scene currentScene;
+	
+	public Scene getCurrentScene() {
+		return currentScene;
 	}
+	
 }

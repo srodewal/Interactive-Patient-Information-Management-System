@@ -19,8 +19,9 @@ import javafx.scene.text.Text;
 
 public class MenuView extends BaseView {
 
-	public Scene getMenuScene(User user, MenuViewController parentController) {
-		Scene scene = null;
+	
+	public void createMenuScene(User user, MenuViewController parentController) {
+		
 		
 		if (user.getUsertype() == UserType.UNKNOWN) {
 			
@@ -53,16 +54,15 @@ public class MenuView extends BaseView {
 
 	            @Override
 	            public void handle(ActionEvent e) {
-	            	
+	            	// Call
 	            	parentController.handleScheduleAppointment();
 	            	
 	            	
 	            }
 	        });
-	        scene = new Scene(grid, 300, 275);
+	        currentScene = new Scene(grid, 300, 275);
 			
 		}
 		
-		return scene;
 	}
 }

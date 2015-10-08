@@ -1,4 +1,5 @@
 package com.ipims.usersession;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 
 /**
@@ -37,7 +38,7 @@ public class UserSession {
 	}
 	
 	public void login(String userName, String password) {
-		loggedInUser = new User();
+		loggedInUser = new Patient();
 		
 	}
 	

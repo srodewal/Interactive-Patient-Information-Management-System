@@ -15,14 +15,14 @@ public class MenuViewController {
 	public Scene getScene() {
 
         view = new MenuView();
-		return view.getMenuScene(new User(), this);
+        view.createMenuScene(new User(), this);
+		return view.getCurrentScene();
 	}
 	
 	public void handleScheduleAppointment() {
 
     	ScheduleAppointmentViewController schedule = new ScheduleAppointmentViewController();
-    	
-    	Stage stage = (Stage) view.currentScene.getWindow();
+    	Stage stage = (Stage) view.getCurrentScene().getWindow();
     	stage.setScene(schedule.getScene());
     	
 	}
