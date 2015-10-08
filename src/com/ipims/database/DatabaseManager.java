@@ -39,4 +39,9 @@ public class DatabaseManager {
 	{
 		return INSTANCE;
 	}
+	
+	public static void newPatient()
+	{
+		
+	}
 }
