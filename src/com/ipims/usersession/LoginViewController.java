@@ -1,7 +1,5 @@
 package com.ipims.usersession;
 
-
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -51,27 +49,51 @@ public class LoginViewController  {
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 4);
+        
+        Button btn2 = new Button("New User");
+        HBox hbBtn2 = new HBox(10);
+        hbBtn2.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn2.getChildren().add(btn2);
+        grid.add(hbBtn2, 1, 5);
 
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
 
+        //If login button is pressed
+        
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
-                actiontarget.setFill(Color.FIREBRICK);
-                actiontarget.setText("Sign in button pressed");
+   //             actiontarget.setFill(Color.FIREBRICK);
+  //              actiontarget.setText("Sign in button pressed");
             	
-            	
-//            	Registration reg = new Registration();
-//            	Stage stage = (Stage) currentScene.getWindow();
-//            	stage.setScene(reg.getScene());
+            
+            	MenuViewController menu = new MenuViewController();
+            	Stage stage = (Stage) currentScene.getWindow();
+            	stage.setScene(menu.getScene());
             	
             }
         });
+        
+        
+        //If New User button is pressed
+        
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+  	
+            	RegistrationViewController menu = new RegistrationViewController();
+            	Stage stage = (Stage) currentScene.getWindow();
+            	stage.setScene(menu.getScene());
+            	
+            }
+        });
+        
+        
         currentScene = new Scene(grid, 300, 275);
 		return currentScene;
 	}
-//asd
 	
 }

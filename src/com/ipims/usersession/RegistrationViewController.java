@@ -83,7 +83,7 @@ public class RegistrationViewController {
         TextField firstNameTextField = new TextField();
         registerPane.add(firstNameTextField, 1, 1);
 
-        Label lastName = new Label("First Name:");
+        Label lastName = new Label("Last Name:");
         registerPane.add(lastName, 0, 2);
         TextField lastNameTextField = new TextField();
         registerPane.add(lastNameTextField, 1, 2);
