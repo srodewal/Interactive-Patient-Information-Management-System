@@ -1,5 +1,7 @@
 package com.ipims.healthconditions;
 
+import java.awt.TextArea;
+
 import com.ipims.MenuViewController;
 
 import javafx.event.ActionEvent;
@@ -34,29 +36,29 @@ private Scene ScheduleScene;
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-        Label userName = new Label("Date:");
-        grid.add(userName, 0, 1);
+        Label patientName = new Label("Patient Name: ");
+        grid.add(patientName, 0, 1);
 
-        TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
+        TextField patientNameTextField = new TextField();
+        grid.add(patientNameTextField, 1, 1);
 
-        Label pw = new Label("Time:");
-        grid.add(pw, 0, 2);
+        Label condition = new Label("Enter Updated Conditions: ");
+        grid.add(condition, 0, 2, 2, 2);
 
-        PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
+        TextField conditionTextField = new TextField();
+        grid.add(conditionTextField, 0, 4, 2, 2);
 
         Button submitBtn = new Button("Submit");
         HBox submitBox = new HBox(10);
         submitBtn.setAlignment(Pos.BOTTOM_RIGHT);
         submitBox.getChildren().add(submitBtn);
-        grid.add(submitBtn, 1, 4);
+        grid.add(submitBtn, 1, 6);
         
         Button backBtn = new Button("Back");
         HBox backBox = new HBox(10);
         backBtn.setAlignment(Pos.BOTTOM_RIGHT);
         backBox.getChildren().add(backBtn);
-        grid.add(backBtn, 1, 5);
+        grid.add(backBtn, 1, 7);
 
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
