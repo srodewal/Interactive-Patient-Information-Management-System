@@ -3,6 +3,7 @@ package com.ipims;
 
 import com.ipims.appointment.ScheduleAppointmentViewController;
 import com.ipims.healthconditions.HealthViewController;
+import com.ipims.usersession.LoginViewController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -50,6 +51,13 @@ public class MenuViewController {
         updateHealthBox.getChildren().add(updateHealthBtn);
         grid.add(updateHealthBtn, 0, 3);
         
+        Button logoutBtn = new Button("Logout");
+        HBox logoutBox = new HBox(20);
+        logoutBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        logoutBox.getChildren().add(logoutBtn);
+        grid.add(logoutBtn, 0, 4);
+        
+        
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
 
@@ -76,6 +84,22 @@ public class MenuViewController {
             	
             	Stage stage = (Stage) menuScene.getWindow();
             	stage.setScene(hc.getScene());
+            	
+            }
+        });
+        
+        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+            	
+            	// need to add logout functionality 
+            	// currentUser of userSession should be "deleted"
+            	
+            	LoginViewController login = new LoginViewController();
+            	
+            	Stage stage = (Stage) menuScene.getWindow();
+            	stage.setScene(login.getScene());
             	
             }
         });
