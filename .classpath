@@ -6,6 +6,6 @@
 			<accessrule kind="accessible" pattern="javafx/*"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/matt/CSE360Proj/bin/sqlite-jdbc-3.8.11.2.jar"/>
+	<classpathentry kind="lib" path="org"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
