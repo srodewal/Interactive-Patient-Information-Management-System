@@ -44,11 +44,15 @@ public class LoginViewController  {
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 2);
 
+        // Create Login Button
+        
         Button btn = new Button("Login");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 4);
+        
+        // Create New User Button
         
         Button btn2 = new Button("New User");
         HBox hbBtn2 = new HBox(10);

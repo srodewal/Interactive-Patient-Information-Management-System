@@ -130,6 +130,13 @@ public class RegistrationViewController {
         hbBtn.getChildren().add(btn);
         registerPane.add(hbBtn, 1, 9);
 
+        Button btn2 = new Button("Back");
+        HBox hbBtn2 = new HBox(10);
+        hbBtn2.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn2.getChildren().add(btn2);
+        registerPane.add(hbBtn2, 1, 10);
+        
+        
         final Text actiontarget = new Text();
         registerPane.add(actiontarget, 1, 10);
         
@@ -138,6 +145,9 @@ public class RegistrationViewController {
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
+        	
+        	
+        	
             @Override
             public void handle(ActionEvent e) {
                 actiontarget.setFill(Color.RED);
@@ -161,9 +171,26 @@ public class RegistrationViewController {
                 
                 firstNameTarget.setFill(Color.RED);
                 firstNameTarget.setText(firstNameToDatabase);
+
             }
         });
         
+        
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+            	
+            	
+            	LoginViewController LoginPage = new LoginViewController();
+            	
+            	Stage stage = (Stage) registerScene.getWindow();
+            	
+            	stage.setScene(LoginPage.getScene());
+            	
+            }
+        });
+             
      
     
     return registerScene;

@@ -42,6 +42,7 @@ public class MenuViewController {
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 4);
 
+        
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
 
