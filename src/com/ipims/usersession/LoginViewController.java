@@ -1,5 +1,7 @@
 package com.ipims.usersession;
 
+import com.ipims.MenuViewController;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

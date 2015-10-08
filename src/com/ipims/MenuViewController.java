@@ -1,4 +1,4 @@
-package com.ipims.usersession;
+package com.ipims;
 
 
 import com.ipims.appointment.ScheduleAppointmentViewController;
