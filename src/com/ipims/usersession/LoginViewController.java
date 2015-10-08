@@ -24,7 +24,6 @@ public class LoginViewController  {
 	
 	public void handleNewUserButtonClick() {
 		RegistrationViewController menu = new RegistrationViewController();
-		Stage stage = (Stage) view.getCurrentScene().getWindow();
-		stage.setScene(menu.getScene());
+		view.getStage().setScene(menu.getScene());
 	}
 }

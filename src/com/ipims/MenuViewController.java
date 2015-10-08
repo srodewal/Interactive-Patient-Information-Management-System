@@ -7,7 +7,6 @@ import com.ipims.models.User;
 import com.ipims.views.MenuView;
 
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 public class MenuViewController {
 	private MenuView view;
@@ -22,8 +21,7 @@ public class MenuViewController {
 	public void handleScheduleAppointment() {
 
     	ScheduleAppointmentViewController schedule = new ScheduleAppointmentViewController();
-    	Stage stage = (Stage) view.getCurrentScene().getWindow();
-    	stage.setScene(schedule.getScene());
+    	view.getStage().setScene(schedule.getScene());
     	
 	}
 	

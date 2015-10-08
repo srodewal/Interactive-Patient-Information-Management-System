@@ -22,8 +22,8 @@ public class MenuView extends BaseView {
 	
 	public void createMenuScene(User user, MenuViewController parentController) {
 		
-		
-		if (user.getUsertype() == UserType.UNKNOWN) {
+		//If the passed in user is patient, create the menu for patient.
+		if (user.getUsertype() == UserType.PATIENT) {
 			
 			GridPane grid = new GridPane();
 	        grid.setAlignment(Pos.CENTER);
@@ -54,9 +54,8 @@ public class MenuView extends BaseView {
 
 	            @Override
 	            public void handle(ActionEvent e) {
-	            	// Call
+	            	// Pass the control of handling button clicks to the view controller
 	            	parentController.handleScheduleAppointment();
-	            	
 	            	
 	            }
 	        });
