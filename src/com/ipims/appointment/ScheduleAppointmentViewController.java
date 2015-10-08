@@ -1,5 +1,7 @@
 package com.ipims.appointment;
 
+import com.ipims.MenuViewController;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -44,26 +46,47 @@ public class ScheduleAppointmentViewController {
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 2);
 
-        Button btn = new Button("Submit");
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
+        Button submitBtn = new Button("Submit");
+        HBox submitBox = new HBox(10);
+        submitBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        submitBox.getChildren().add(submitBtn);
+        grid.add(submitBtn, 1, 4);
+        
+        Button backBtn = new Button("Back");
+        HBox backBox = new HBox(10);
+        backBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        backBox.getChildren().add(backBtn);
+        grid.add(backBtn, 1, 5);
 
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
 
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        submitBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
                 actiontarget.setFill(Color.GREEN);
-               actiontarget.setText("Appointment Scheduled. Thank You.");
+                actiontarget.setText("Appointment Scheduled. Thank You.");
             	
             	
             //	MenuViewController menu = new MenuViewController();
             //	Stage stage = (Stage) ScheduleScene.getWindow();
             //	stage.setScene(menu.getScene());
+            	
+            }
+        });
+        
+        backBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                actiontarget.setFill(Color.GREEN);
+                actiontarget.setText("Back Pressed!"); 
+            	
+            	
+                MenuViewController menu = new MenuViewController();
+                Stage stage = (Stage) ScheduleScene.getWindow();
+                stage.setScene(menu.getScene());
             	
             }
         });

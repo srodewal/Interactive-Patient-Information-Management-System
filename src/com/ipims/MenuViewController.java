@@ -2,6 +2,7 @@ package com.ipims;
 
 
 import com.ipims.appointment.ScheduleAppointmentViewController;
+import com.ipims.healthconditions.HealthViewController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -37,13 +38,13 @@ public class MenuViewController {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-        Button scheduleAppBtn = new Button("Schedule Appointment");
+        Button scheduleAppBtn = new Button("Schedule Appointment(s)");
         HBox scheduleAppBox = new HBox(10);
         scheduleAppBtn.setAlignment(Pos.BOTTOM_RIGHT);
         scheduleAppBox.getChildren().add(scheduleAppBtn);
         grid.add(scheduleAppBtn, 0, 2);
         
-        Button updateHealthBtn = new Button("Update Health Condition");
+        Button updateHealthBtn = new Button("Update Healthcare Condition(s)");
         HBox updateHealthBox = new HBox(10);
         updateHealthBtn.setAlignment(Pos.BOTTOM_RIGHT);
         updateHealthBox.getChildren().add(updateHealthBtn);
@@ -62,6 +63,19 @@ public class MenuViewController {
             	
             	Stage stage = (Stage) menuScene.getWindow();
             	stage.setScene(schedule.getScene());
+            	
+            }
+        });
+        updateHealthBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+            	
+            	
+            	HealthViewController hc = new HealthViewController();
+            	
+            	Stage stage = (Stage) menuScene.getWindow();
+            	stage.setScene(hc.getScene());
             	
             }
         });
