@@ -9,9 +9,12 @@ public class LoginViewController  {
 
 	private LoginView view;
 
-	public Scene getScene() {
+	public LoginViewController () {
 		view = new LoginView();
 		view.createLoginView(this);
+	}
+	
+	public Scene getScene() {
 		return view.getCurrentScene();
 	}
 
@@ -19,6 +22,7 @@ public class LoginViewController  {
 		UserSession.getInstance().login(username, password);
 		MenuViewController menu = new MenuViewController();
 		Stage stage = (Stage) view.getCurrentScene().getWindow();
+		
 		stage.setScene(menu.getScene());
 	}
 	

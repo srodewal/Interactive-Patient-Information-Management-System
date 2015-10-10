@@ -1,6 +1,8 @@
 package com.ipims.views;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class BaseView {
@@ -16,6 +18,15 @@ public class BaseView {
 			return (Stage)currentScene.getWindow();
 		}
 		return null;
+	}
+	
+	public void showErrorMessage(String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Error");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
 	}
 	
 }

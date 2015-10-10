@@ -3,7 +3,7 @@ package com.ipims.models;
 
 public class Patient extends User {
 
-	Patient()
+	public Patient()
 	{
 		type = UserType.PATIENT;
 	}

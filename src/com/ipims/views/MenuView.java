@@ -37,15 +37,21 @@ public class MenuView extends BaseView {
 
 	        Button scheduleAppBtn = new Button("Schedule Appointment");
 	        HBox scheduleAppBox = new HBox(10);
-	        scheduleAppBtn.setAlignment(Pos.BOTTOM_RIGHT);
+	        scheduleAppBtn.setAlignment(Pos.BOTTOM_CENTER);
 	        scheduleAppBox.getChildren().add(scheduleAppBtn);
 	        grid.add(scheduleAppBtn, 0, 2);
 	        
+	        Button manageAppoinmentBtn = new Button("Manage Appointment");
+	        HBox manageAppBox = new HBox(10);
+	        manageAppoinmentBtn.setAlignment(Pos.BOTTOM_CENTER);
+	        manageAppBox.getChildren().add(manageAppoinmentBtn);
+	        grid.add(manageAppoinmentBtn, 0, 3);
+	        
 	        Button updateHealthBtn = new Button("Update Health Condition");
 	        HBox updateHealthBox = new HBox(10);
-	        updateHealthBtn.setAlignment(Pos.BOTTOM_RIGHT);
+	        updateHealthBtn.setAlignment(Pos.BOTTOM_CENTER);
 	        updateHealthBox.getChildren().add(updateHealthBtn);
-	        grid.add(updateHealthBtn, 0, 3);
+	        grid.add(updateHealthBtn, 0, 4);
 	        
 	        final Text actiontarget = new Text();
 	        grid.add(actiontarget, 1, 6);
