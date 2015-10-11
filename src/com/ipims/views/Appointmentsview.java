@@ -1,5 +1,6 @@
 package com.ipims.views;
 
+import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -25,16 +26,32 @@ import javafx.scene.text.Text;
 
 public class Appointmentsview extends BaseView {
 
-	public void createAppointmentsView(User user) {
+	public void createAppointmentsView(User user, AppointmentViewController parentController) {
 
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
 		vbox.setSpacing(8);
 
+		HBox hbox = new HBox();
+		hbox.setSpacing(10);
+		
 		Text title = new Text("Appoinments");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		vbox.getChildren().add(title);
+		hbox.getChildren().add(title);
 
+		Button mainMenuBtn = new Button("Main Menu");
+		mainMenuBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				parentController.goBack();
+
+
+			}
+		});
+		hbox.getChildren().add(mainMenuBtn);
+		vbox.getChildren().add(hbox);
+		
 		// Show schedule appointment if patient or HSP staff
 		if (user.getUsertype() == UserType.PATIENT ) {
 			vbox.getChildren().add(addScheduleAppoinment());
