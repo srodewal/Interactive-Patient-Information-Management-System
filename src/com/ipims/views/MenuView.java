@@ -22,25 +22,35 @@ public class MenuView extends BaseView {
 
 	public void createMenuScene(User user, MenuViewController parentController) {
 
+		VBox vbox = new VBox();
+		vbox.setPadding(new Insets(25));
+		vbox.setSpacing(8);
+
+		
+		Text scenetitle = new Text("Menu");
+		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		vbox.getChildren().add(scenetitle);
+		
+		
+		
 		//If the passed in user is patient, create the menu for patient.
 		if (user.getUsertype() == UserType.PATIENT) {
-
-			VBox vbox = new VBox();
-			vbox.setPadding(new Insets(25));
-			vbox.setSpacing(8);
-
-			Text scenetitle = new Text("Menu");
-			scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-			vbox.getChildren().add(scenetitle);
-
-
+			
+			Text welcomeTitle = new Text("Welcome John (Patient)");
+			welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+			vbox.getChildren().add(welcomeTitle);
+			
 			vbox.getChildren().add(appoinmentButton(parentController));
 			vbox.getChildren().add(updateHealthButton(parentController));
-			vbox.getChildren().add(logoutButton(parentController));
-			currentScene = new Scene(vbox, 300, 275);
+			vbox.getChildren().add(labRecordButton(parentController));
+			
+			
 
+		} else if (user.getUsertype() == UserType.HSPSTAFF) {
+			
 		}
-
+		vbox.getChildren().add(logoutButton(parentController));
+		currentScene = new Scene(vbox, 300, 350);
 	}
 
 	private Button appoinmentButton(MenuViewController parentController) {
@@ -69,6 +79,20 @@ public class MenuView extends BaseView {
 			}
 		});
 		return updateHealthBtn;
+	}
+	
+	private Button labRecordButton(MenuViewController parentController) {
+		Button btn = new Button("Lab Record");
+		btn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				//parentController.handleHealthCondition();
+
+			}
+		});
+		return btn;
 	}
 
 	private Button logoutButton(MenuViewController parentController) {
