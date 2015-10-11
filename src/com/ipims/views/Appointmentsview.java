@@ -1,14 +1,19 @@
 package com.ipims.views;
 
+import java.util.List;
+
 import com.ipims.appointment.AppointmentViewController;
+import com.ipims.models.Appointment;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
+import com.ipims.usersession.UserSession;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -52,26 +57,30 @@ public class Appointmentsview extends BaseView {
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
 		
+		ListView<String> list = new ListView<String>();
+		ObservableList<String> items = FXCollections.observableArrayList (
+				"1. Dr. John (Category: Eye) on 10/12/2015 at 14:35",
+				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");
+		//list.setItems(items);
+		
 		// Show schedule appointment if patient or HSP staff
 		if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addScheduleAppoinment());
+			vbox.getChildren().add(addScheduleAppoinment(items));
 		}
+		
+		list.setItems(items); // moved
 
 		Text subTitle = new Text("Manage Appoinments");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
 
 
-		ListView<String> list = new ListView<String>();
-		ObservableList<String> items = FXCollections.observableArrayList (
-				"1. Dr. John (Category: Eye) on 10/12/2015 at 14:35",
-				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");
-		list.setItems(items);
+		
 		vbox.getChildren().add(list);
 		currentScene = new Scene(vbox, 500, 700);
 	}
 
-	public VBox addScheduleAppoinment() {
+	public VBox addScheduleAppoinment(ObservableList<String> items) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -133,8 +142,13 @@ public class Appointmentsview extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
-
-
+	
+				Appointment newApp = new Appointment(datePicker.getAccessibleText(), timeTextField.getText(), docComboBox.getAccessibleText(), UserSession.getInstance().getCurrentUser(), catComboBox.getAccessibleText());
+				String scheduledApp = "Dr. " + docComboBox.getAccessibleText();
+				scheduledApp += " (Category: " + catComboBox.getAccessibleText() + " ) on ";
+				scheduledApp += datePicker.getAccessibleText() + " at ";
+				scheduledApp += timeTextField.getText();
+				items.add(scheduledApp);
 			}
 		});
 

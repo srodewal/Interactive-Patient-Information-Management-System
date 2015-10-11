@@ -8,6 +8,7 @@ public class User {
 	    PATIENT,
 	    HSPSTAFF,
 	    NURSE,
+	    LABSTAFF,
 	    UNKNOWN
 	}
 	
