@@ -108,7 +108,8 @@ public class HealthView extends BaseView {
 		conditionComboBox.getItems().addAll(
 				"Chest Pain",
 				"Heart Problems",
-				"Diabities"
+				"Diabities",
+				"Allergies"
 				);
 
 		Label commentsLabel = new Label("Comments:");
