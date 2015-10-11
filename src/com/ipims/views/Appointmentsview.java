@@ -63,7 +63,7 @@ public class Appointmentsview extends BaseView {
 
 
 		ListView<String> list = new ListView<String>();
-		ObservableList<String> items =FXCollections.observableArrayList (
+		ObservableList<String> items = FXCollections.observableArrayList (
 				"1. Dr. John (Category: Eye) on 10/12/2015 at 14:35",
 				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");
 		list.setItems(items);
