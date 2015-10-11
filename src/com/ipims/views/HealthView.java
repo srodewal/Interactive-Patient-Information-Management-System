@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -130,10 +131,9 @@ public class HealthView extends BaseView {
 
 			}
 		});
-
-
+		
 		baseVbox.getChildren().addAll(title, 
-				conditionLabel, 
+				conditionLabel,
 				conditionComboBox, 
 				commentsLabel,
 				commentsTextField,
@@ -180,11 +180,16 @@ public class HealthView extends BaseView {
 			}
 		});
 		
+		// add checkbox for severity
+		CheckBox severity = new CheckBox("Send Alert");
+		severity.setSelected(false);
+		
 		baseVbox.getChildren().addAll(title, 
 				conditionLabel, 
 				conditionComboBox, 
 				commentsLabel, 
 				commentsTextField,
+				severity,
 				submitBtn);
 
 		return baseVbox;

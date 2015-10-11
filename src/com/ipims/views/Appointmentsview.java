@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -77,6 +78,24 @@ public class Appointmentsview extends BaseView {
 
 		
 		vbox.getChildren().add(list);
+		
+		Button cancelBtn = new Button("Cancel");
+		HBox hbBtn = new HBox(10);
+		//hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtn.getChildren().add(cancelBtn);
+		vbox.getChildren().add(cancelBtn);
+		
+		cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// call destructor to remove appointment object
+				
+				// remove currently selected appointment
+				items.remove(0);
+			}
+		});
+		
 		currentScene = new Scene(vbox, 500, 700);
 	}
 
