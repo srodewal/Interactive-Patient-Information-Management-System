@@ -36,7 +36,11 @@ private HealthView view;
 	}
 	
 	
-     
+	public void goBack() {
+		 MenuViewController menu = new MenuViewController();
+        view.getStage().setScene(menu.getScene());
+        
+	}
     
         
 	
