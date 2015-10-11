@@ -1,5 +1,10 @@
 package com.ipims.models;
 
-public class LabStaff extends User {
+import com.ipims.models.User.UserType;
 
+public class LabStaff extends User {
+	public LabStaff()
+	{
+		type = UserType.LABSTAFF;
+	}
 }
