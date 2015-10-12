@@ -1,5 +1,6 @@
 package com.ipims.models;
 
+import java.util.ArrayList;
 
 public class User {
 
@@ -20,6 +21,9 @@ public class User {
 	private String address;
 	private String email;
 	private String phoneNumber;
+	
+	// added
+	//public ArrayList<User> validUsers = new ArrayList<User>();
 	
 	public User()
 	{ 

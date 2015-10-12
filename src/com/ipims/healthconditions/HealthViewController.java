@@ -41,6 +41,10 @@ private HealthView view;
         view.getStage().setScene(menu.getScene());
         
 	}
+	
+	public void sendAlert() {
+		view.showErrorMessage("Alert: Patient with severe condition needs attention.");
+	}
     
         
 	

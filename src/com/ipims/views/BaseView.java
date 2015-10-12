@@ -1,5 +1,10 @@
 package com.ipims.views;
 
+import java.util.ArrayList;
+import java.util.*;
+
+import com.ipims.models.User;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -8,6 +13,11 @@ import javafx.stage.Stage;
 public class BaseView {
 
 	protected Scene currentScene;
+	
+	// added
+	//public ArrayList<User> validUsers = new ArrayList<User>();
+	static protected Map<String, String> validUsers = new HashMap<String, String>();
+	// added
 	
 	public Scene getCurrentScene() {
 		return currentScene;

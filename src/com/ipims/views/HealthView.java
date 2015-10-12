@@ -32,6 +32,12 @@ public class HealthView extends BaseView {
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
 		vbox.setSpacing(8);
+		
+		// moved
+		ListView<String> list = new ListView<String>();
+		ObservableList<String> items = FXCollections.observableArrayList (
+				"1. (History) Severe Chest Pain");
+		list.setItems(items);
 
 		// Add title and main menu 
 
@@ -73,25 +79,25 @@ public class HealthView extends BaseView {
 		}
 
 		// Add Medical History box
-		vbox.getChildren().add(addMedicalHistory());
+		vbox.getChildren().add(addMedicalHistory(items));
 
 		// Add Medical Condition box
-		vbox.getChildren().add(addMedicalCondition());
+		vbox.getChildren().add(addMedicalCondition(parentController, items));
 
 		Text subTitle = new Text("View Health Conditions");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
 
-		ListView<String> list = new ListView<String>();
+		/*ListView<String> list = new ListView<String>();
 		ObservableList<String> items = FXCollections.observableArrayList (
 				"1. (History) Severe Chest Pain");
-		list.setItems(items);
+		list.setItems(items);*/
 		vbox.getChildren().add(list);
 
 		currentScene = new Scene(vbox, 500, 700);
 	}
 
-	public VBox addMedicalHistory() {
+	public VBox addMedicalHistory(ObservableList<String> items) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -107,10 +113,10 @@ public class HealthView extends BaseView {
 
 		ComboBox<String> conditionComboBox = new ComboBox<String>();
 		conditionComboBox.getItems().addAll(
+				"Allergies",
 				"Chest Pain",
 				"Heart Problems",
-				"Diabities",
-				"Allergies"
+				"Diabetes"
 				);
 
 		Label commentsLabel = new Label("Comments:");
@@ -127,8 +133,12 @@ public class HealthView extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
-
-
+				// pass conditions to database
+				if(!conditionComboBox.equals(null)) {
+					String updatedHistory = "(History) " + conditionComboBox.getValue();
+					items.add(updatedHistory);
+				}
+	
 			}
 		});
 		
@@ -142,7 +152,7 @@ public class HealthView extends BaseView {
 		return baseVbox;
 	}
 
-	public VBox addMedicalCondition() {
+	public VBox addMedicalCondition(HealthViewController parentController, ObservableList<String> items) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -159,7 +169,7 @@ public class HealthView extends BaseView {
 		conditionComboBox.getItems().addAll(
 				"Chest Pain",
 				"Heart Problems",
-				"Diabities"
+				"Diabetes"
 				);
 
 		Label commentsLabel = new Label("Comments:");
@@ -170,15 +180,7 @@ public class HealthView extends BaseView {
 		commentsTextField.setMaxSize(400, 55);
 
 		Button submitBtn = new Button("Submit");
-		submitBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				// Pass the control of handling button clicks to the view controller
-
-
-			}
-		});
+		
 		
 		// add checkbox for severity
 		CheckBox severity = new CheckBox("Send Alert");
@@ -191,6 +193,30 @@ public class HealthView extends BaseView {
 				commentsTextField,
 				severity,
 				submitBtn);
+		
+		submitBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				if(!conditionComboBox.equals(null)) {
+					String updatedCondition = "(Condition) " + conditionComboBox.getValue();
+					items.add(updatedCondition);
+				}
+				
+				if(severity.isSelected()) {
+					// send alert
+					parentController.sendAlert(); // alerts system to patient with "severe condition"
+				}
+				
+				if(conditionComboBox.getValue().equals("Chest Pain")) {
+					// send alert
+					parentController.sendAlert(); // alerts system to patient with "severe condition"
+
+				}
+
+			}
+		});
 
 		return baseVbox;
 	}

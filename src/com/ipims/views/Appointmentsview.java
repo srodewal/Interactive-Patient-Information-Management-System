@@ -59,9 +59,11 @@ public class Appointmentsview extends BaseView {
 		vbox.getChildren().add(hbox);
 		
 		ListView<String> list = new ListView<String>();
-		ObservableList<String> items = FXCollections.observableArrayList (
+		/*ObservableList<String> items = FXCollections.observableArrayList (
 				"1. Dr. John (Category: Eye) on 10/12/2015 at 14:35",
-				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");
+				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");*/
+		ObservableList<String> items = FXCollections.observableArrayList (
+			);
 		//list.setItems(items);
 		
 		// Show schedule appointment if patient or HSP staff
@@ -79,7 +81,7 @@ public class Appointmentsview extends BaseView {
 		
 		vbox.getChildren().add(list);
 		
-		Button cancelBtn = new Button("Cancel");
+		Button cancelBtn = new Button("Cancel Appointment");
 		HBox hbBtn = new HBox(10);
 		//hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(cancelBtn);
@@ -90,7 +92,6 @@ public class Appointmentsview extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// call destructor to remove appointment object
-				
 				// remove currently selected appointment
 				items.remove(0);
 			}
@@ -140,7 +141,7 @@ public class Appointmentsview extends BaseView {
 		ComboBox<String> docComboBox = new ComboBox<String>();
 		docComboBox.getItems().addAll(
 				"John",
-				"ASD" 
+				"Bob" 
 				);
 
 		Label categoryLabel = new Label("Category:");

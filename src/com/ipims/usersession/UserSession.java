@@ -38,7 +38,7 @@ public class UserSession {
 	}
 	
 	public void login(String userName, String password) {
-		loggedInUser = new Patient();
+		loggedInUser = new Patient(userName, password);
 		
 	}
 	

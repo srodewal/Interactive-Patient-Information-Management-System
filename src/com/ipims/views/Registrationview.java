@@ -46,38 +46,44 @@ public class Registrationview extends BaseView {
 		TextField userNameTextField = new TextField();
 		userNameTextField.setPromptText("Enter a unique username");
 		registerPane.add(userNameTextField, 1, 2);
+		
+		Label password = new Label("Password:");
+		registerPane.add(password, 0, 3);
+		TextField passwordTextField = new TextField();
+		passwordTextField.setPromptText("Enter a unique password");
+		registerPane.add(passwordTextField, 1, 3);
 
 		Label dateOfBirth = new Label("Date of Birth:");
-		registerPane.add(dateOfBirth, 0, 3);
+		registerPane.add(dateOfBirth, 0, 4);
 
 		DatePicker datePicker = new DatePicker();
 		datePicker.setPromptText("mm/dd/yyyy");
-		registerPane.add(datePicker, 1, 3);
+		registerPane.add(datePicker, 1, 4);
 
 		Label currentAddress = new Label("Current Address:");
-		registerPane.add(currentAddress, 0, 4);
+		registerPane.add(currentAddress, 0, 5);
 		TextField currentAddressTextField = new TextField();
-		registerPane.add(currentAddressTextField, 1, 4);
+		registerPane.add(currentAddressTextField, 1, 5);
 
 		Label ssnNumber = new Label("Social Security Number:");
-		registerPane.add(ssnNumber, 0, 5);
+		registerPane.add(ssnNumber, 0, 6);
 		TextField ssnNumberTextField = new TextField();
-		registerPane.add(ssnNumberTextField, 1, 5);
+		registerPane.add(ssnNumberTextField, 1, 6);
 
 		Label phoneNumber = new Label("Phone Number:");
-		registerPane.add(phoneNumber, 0, 6);
+		registerPane.add(phoneNumber, 0, 7);
 		TextField phoneNumberTextField = new TextField();
-		registerPane.add(phoneNumberTextField, 1, 6);
+		registerPane.add(phoneNumberTextField, 1, 7);
 
 		Label email = new Label("Email:");
-		registerPane.add(email, 0, 7);
+		registerPane.add(email, 0, 8);
 		TextField emailTextField = new TextField();
-		registerPane.add(emailTextField, 1, 7);
+		registerPane.add(emailTextField, 1, 8);
 
 		Label healthInsuranceProvider = new Label("Health Insurance Provider:");
-		registerPane.add(healthInsuranceProvider, 0, 8);
+		registerPane.add(healthInsuranceProvider, 0, 9);
 		TextField healthInsuranceTextField = new TextField();
-		registerPane.add(healthInsuranceTextField, 1, 8);
+		registerPane.add(healthInsuranceTextField, 1, 9);
 
 		//Label pw = new Label("Password:");
 		//registerPane.add(pw, 0, 2);
@@ -89,17 +95,17 @@ public class Registrationview extends BaseView {
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btn);
-		registerPane.add(hbBtn, 1, 9);
+		registerPane.add(hbBtn, 1, 10);
 
 		Button btn2 = new Button("Back");
 		HBox hbBtn2 = new HBox(10);
 		hbBtn2.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn2.getChildren().add(btn2);
-		registerPane.add(hbBtn2, 1, 10);
+		registerPane.add(hbBtn2, 1, 11);
 
 
 		final Text actiontarget = new Text();
-		registerPane.add(actiontarget, 1, 11);
+		registerPane.add(actiontarget, 1, 12);
 
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -110,8 +116,11 @@ public class Registrationview extends BaseView {
 				actiontarget.setText("Information submitted");
 //TODO: Validate input
 				if(true) {
-					User patient = new Patient();
-					
+					User patient = new Patient(userNameTextField.getText(), passwordTextField.getText());
+					System.out.println(userNameTextField.getText()); // for testing
+					System.out.println(passwordTextField.getText()); // for testing
+					validUsers.put(userNameTextField.getText(), passwordTextField.getText());
+					System.out.println(validUsers.values());
 					// Uncomment below lines when database is setup and validation is done.
 					
 //					patient.setName(nameTextField.getText());
@@ -123,6 +132,9 @@ public class Registrationview extends BaseView {
 //					patient.setEmail(emailTextField.getText());
 //					patient.setPhoneNumber(phoneNumberTextField.getText());
 					parentController.handleRegister(patient);
+
+					// go back to login
+					parentController.handleBackButton();
 				}
 				
 

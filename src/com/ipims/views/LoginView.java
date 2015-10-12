@@ -47,10 +47,10 @@ public class LoginView extends BaseView {
 
 		// Create Login Button
 
-		Button btn = new Button("Login");
+		Button loginBtn = new Button("Login");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(btn);
+		hbBtn.getChildren().add(loginBtn);
 		grid.add(hbBtn, 1, 4);
 
 		// Create New User Button
@@ -66,12 +66,16 @@ public class LoginView extends BaseView {
 
 		//If login button is pressed
 
-		btn.setOnAction(new EventHandler<ActionEvent>() {
+		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
 				
-				parentController.handleLoginButtonClick("Asd","asd");
+				//parentController.handleLoginButtonClick("Asd","asd");
+				
+				System.out.println(userTextField.getText()); // for testing
+				System.out.println(pwBox.getText()); // for testing
+				parentController.handleLoginButtonClick(userTextField.getText(), pwBox.getText(), validUsers);
 
 			}
 		});

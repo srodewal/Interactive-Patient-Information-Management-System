@@ -36,7 +36,7 @@ public class MenuView extends BaseView {
 		//If the passed in user is patient, create the menu for patient.
 		if (user.getUsertype() == UserType.PATIENT) {
 			
-			Text welcomeTitle = new Text("Welcome John (Patient)");
+			Text welcomeTitle = new Text("Welcome User");
 			welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 			vbox.getChildren().add(welcomeTitle);
 			

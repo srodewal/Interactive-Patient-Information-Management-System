@@ -20,7 +20,7 @@ public class RegistrationViewController {
 
     public void handleRegister(User user) {
     	UserSession.getInstance().register(user);
-    	view.showErrorMessage("This wont work without database setup");
+    	//view.showErrorMessage("This wont work without database setup");
     }
     
     public void handleBackButton() {
