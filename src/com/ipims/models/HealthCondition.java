@@ -6,6 +6,7 @@ public class HealthCondition {
 	private String healthConcern;
 	private String comments;
 	private int severity;
+	private boolean current;
 	
 	public int getHealthConditionId() {
 		return healthConditionId;
@@ -37,6 +38,14 @@ public class HealthCondition {
 	
 	public void setSeverity(int severity) {
 		this.severity = severity;
+	}
+
+	public boolean isCurrent() {
+		return current;
+	}
+
+	public void setCurrent(boolean pastOrCurrent) {
+		this.current = pastOrCurrent;
 	}
 	
 }

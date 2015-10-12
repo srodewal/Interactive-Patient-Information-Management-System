@@ -21,6 +21,7 @@ public class User {
 	private String address;
 	private String email;
 	private String phoneNumber;
+	private String passwordHash;
 	
 	// added
 	//public ArrayList<User> validUsers = new ArrayList<User>();
@@ -88,6 +89,14 @@ public class User {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 	
 }
