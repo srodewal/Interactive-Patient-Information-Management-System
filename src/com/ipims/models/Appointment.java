@@ -1,21 +1,23 @@
 package com.ipims.models;
 
+import java.time.LocalDate;
+
 public class Appointment {
 	
-	private String date;
+	private LocalDate date;
 	private String time;
 	private String doctor;
 	private User patient;
 	private String category;
-	public Appointment(String date, String time, String doctor, User patient, String category) {
-		this.date = date;
+	public Appointment(LocalDate localDate, String time, String doctor, User patient, String category) {
+		this.date = localDate;
 		this.time = time;
 		this.doctor = doctor;
 		this.patient = patient;
 		this.category = category;
 	}
 	
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	

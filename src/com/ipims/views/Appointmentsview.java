@@ -93,7 +93,9 @@ public class Appointmentsview extends BaseView {
 			public void handle(ActionEvent e) {
 				// call destructor to remove appointment object
 				// remove currently selected appointment
-				items.remove(0);
+				int index = list.getSelectionModel().getSelectedIndex();
+				
+				items.remove(index);
 			}
 		});
 		
@@ -162,13 +164,16 @@ public class Appointmentsview extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
-	
-				Appointment newApp = new Appointment(datePicker.getAccessibleText(), timeTextField.getText(), docComboBox.getAccessibleText(), UserSession.getInstance().getCurrentUser(), catComboBox.getAccessibleText());
-				String scheduledApp = "Dr. " + docComboBox.getAccessibleText();
-				scheduledApp += " (Category: " + catComboBox.getAccessibleText() + " ) on ";
-				scheduledApp += datePicker.getAccessibleText() + " at ";
+				//System.out.println(docComboBox.getValue()); // for testing
+				//Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), docComboBox.getAccessibleText(), UserSession.getInstance().getCurrentUser(), catComboBox.getAccessibleText());
+				String scheduledApp = "Dr. " + (String)docComboBox.getValue();
+				scheduledApp += " (Category: " + catComboBox.getValue() + " ) on ";
+				scheduledApp += datePicker.getValue() + " at ";
 				scheduledApp += timeTextField.getText();
-				items.add(scheduledApp);
+				//items.add(scheduledApp);
+				if(!items.contains(scheduledApp)) {
+					items.add(scheduledApp);
+				}
 			}
 		});
 
