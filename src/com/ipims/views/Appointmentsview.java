@@ -73,7 +73,7 @@ public class Appointmentsview extends BaseView {
 		
 		list.setItems(items); // moved
 
-		Text subTitle = new Text("Manage Appoinments");
+		Text subTitle = new Text("Manage/View Appoinments");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
 

@@ -68,7 +68,7 @@ public class MenuView extends BaseView {
 	}
 
 	private Button updateHealthButton(MenuViewController parentController) {
-		Button updateHealthBtn = new Button("Health Condition");
+		Button updateHealthBtn = new Button("Health Condition(s)/Concern(s)");
 		updateHealthBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

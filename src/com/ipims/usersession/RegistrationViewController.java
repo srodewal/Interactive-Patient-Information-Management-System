@@ -27,4 +27,8 @@ public class RegistrationViewController {
     	LoginViewController loginVC = new LoginViewController();
     	view.getStage().setScene(loginVC.getScene());
     }
+    
+    public void handleError() {
+    	view.showErrorMessage("Error! Please make sure all available field are filled out.");
+    }
 }

@@ -112,15 +112,39 @@ public class Registrationview extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 
-				actiontarget.setFill(Color.RED);
-				actiontarget.setText("Information submitted");
 //TODO: Validate input
-				if(true) {
+				if(nameTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(userNameTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(passwordTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(currentAddressTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(ssnNumberTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(phoneNumberTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(emailTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else if(healthInsuranceTextField.getText().equals("")) {
+					parentController.handleError();
+				}
+				else {
+					actiontarget.setFill(Color.RED);
+					actiontarget.setText("Information submitted");
 					User patient = new Patient(userNameTextField.getText(), passwordTextField.getText());
-					System.out.println(userNameTextField.getText()); // for testing
-					System.out.println(passwordTextField.getText()); // for testing
+					//System.out.println(userNameTextField.getText()); // for testing
+					//System.out.println(passwordTextField.getText()); // for testing
 					validUsers.put(userNameTextField.getText(), passwordTextField.getText());
-					System.out.println(validUsers.values());
+					//System.out.println(validUsers.values()); // for testing
 					// Uncomment below lines when database is setup and validation is done.
 					
 //					patient.setName(nameTextField.getText());
