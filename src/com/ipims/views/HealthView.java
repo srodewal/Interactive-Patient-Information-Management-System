@@ -135,7 +135,7 @@ public class HealthView extends BaseView {
 				// Pass the control of handling button clicks to the view controller
 				// pass conditions to database
 				if(!conditionComboBox.equals(null)) {
-					String updatedHistory = "(History) " + conditionComboBox.getValue();
+					String updatedHistory = "(History) " + conditionComboBox.getValue() + "\n" + commentsTextField.getText();
 					items.add(updatedHistory);
 				}
 	
@@ -200,7 +200,7 @@ public class HealthView extends BaseView {
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
 				if(!conditionComboBox.equals(null)) {
-					String updatedCondition = "(Condition) " + conditionComboBox.getValue();
+					String updatedCondition = "(Condition) " + conditionComboBox.getValue() + "\n" + commentsTextField.getText();
 					items.add(updatedCondition);
 				}
 				

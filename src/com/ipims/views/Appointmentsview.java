@@ -70,9 +70,12 @@ public class Appointmentsview extends BaseView {
 			);
 		//list.setItems(items);
 		
+		// for success/error message
+		final Text actionTarget = new Text();
+		
 		// Show schedule appointment if patient or HSP staff
 		if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addScheduleAppoinment(items));
+			vbox.getChildren().add(addScheduleAppoinment(items, actionTarget));
 		}
 		
 		list.setItems(items); // moved
@@ -91,6 +94,9 @@ public class Appointmentsview extends BaseView {
 		hbBtn.getChildren().add(cancelBtn);
 		vbox.getChildren().add(cancelBtn);
 		
+		// to display success or error message
+		vbox.getChildren().add(actionTarget);
+		
 		cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -106,7 +112,7 @@ public class Appointmentsview extends BaseView {
 		currentScene = new Scene(vbox, 500, 700);
 	}
 
-	public VBox addScheduleAppoinment(ObservableList<String> items) {
+	public VBox addScheduleAppoinment(ObservableList<String> items, Text actionTarget) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -203,6 +209,12 @@ public class Appointmentsview extends BaseView {
 				//items.add(scheduledApp);
 				if(!items.contains(scheduledApp)) {
 					items.add(scheduledApp);
+					actionTarget.setFill(Color.GREEN);
+					actionTarget.setText("Appointment successfully scheduled!");
+				}
+				else {
+					actionTarget.setFill(Color.RED);
+					actionTarget.setText("Appointment already scheduled!");
 				}
 			}
 		});

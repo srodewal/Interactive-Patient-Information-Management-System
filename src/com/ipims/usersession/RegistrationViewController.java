@@ -31,4 +31,9 @@ public class RegistrationViewController {
     public void handleError() {
     	view.showErrorMessage("Error! Please make sure all available field are filled out.");
     }
+    
+    public void handleExistingUserError() {
+    	view.showErrorMessage("Username already exists");
+    }
 }
+

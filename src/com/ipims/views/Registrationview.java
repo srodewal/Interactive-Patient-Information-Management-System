@@ -143,7 +143,13 @@ public class Registrationview extends BaseView {
 					User patient = new Patient(userNameTextField.getText(), passwordTextField.getText());
 					//System.out.println(userNameTextField.getText()); // for testing
 					//System.out.println(passwordTextField.getText()); // for testing
-					validUsers.put(userNameTextField.getText(), passwordTextField.getText());
+					if(validUsers.containsKey(userNameTextField.getText())) {
+						parentController.handleExistingUserError();
+					}
+					else {
+						validUsers.put(userNameTextField.getText(), passwordTextField.getText());
+					}
+			
 					//System.out.println(validUsers.values()); // for testing
 					// Uncomment below lines when database is setup and validation is done.
 					
