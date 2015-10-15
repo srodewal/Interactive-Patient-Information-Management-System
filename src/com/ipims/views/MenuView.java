@@ -31,24 +31,14 @@ public class MenuView extends BaseView {
 		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		vbox.getChildren().add(scenetitle);
 		
-		
-		
 		//If the passed in user is patient, create the menu for patient.
-		if (user.getUsertype() == UserType.PATIENT) {
-			
-			Text welcomeTitle = new Text("Welcome User");
-			welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
-			vbox.getChildren().add(welcomeTitle);
-			
-			vbox.getChildren().add(appoinmentButton(parentController));
-			vbox.getChildren().add(updateHealthButton(parentController));
-			vbox.getChildren().add(labRecordButton(parentController));
-			
-			
-
-		} else if (user.getUsertype() == UserType.HSPSTAFF) {
-			
-		}
+		Text welcomeTitle = new Text("Welcome User");
+		welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		vbox.getChildren().add(welcomeTitle);
+		
+		vbox.getChildren().add(appoinmentButton(parentController));
+		vbox.getChildren().add(updateHealthButton(parentController));
+		vbox.getChildren().add(labRecordButton(parentController));
 		vbox.getChildren().add(logoutButton(parentController));
 		currentScene = new Scene(vbox, 300, 350);
 	}
