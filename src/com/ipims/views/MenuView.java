@@ -4,6 +4,7 @@ import com.ipims.MenuViewController;
 import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
+import com.ipims.patientcase.PatientCaseViewController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -43,6 +44,7 @@ public class MenuView extends BaseView {
 		vbox.getChildren().add(labRecordButton(parentController));
 		vbox.getChildren().add(generateStatsButton(parentController));
 		vbox.getChildren().add(PrescribeMedButton(parentController));
+		vbox.getChildren().add(PatientCaseButton(parentController));
 
 //		if (user.getUsertype() == UserType.PATIENT) {
 //			
@@ -136,6 +138,21 @@ public class MenuView extends BaseView {
 			}
 		});
 		return PrescribeMedBtn;
+	}
+	
+	private Button PatientCaseButton(MenuViewController parentController) {
+		
+		Button PatientCaseBtn = new Button("View Patient Case");
+		PatientCaseBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handlePatientCase();
+
+			}
+		});
+		return PatientCaseBtn;
 	}
 
 	private Button logoutButton(MenuViewController parentController) {
