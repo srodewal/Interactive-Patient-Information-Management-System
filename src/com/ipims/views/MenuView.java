@@ -32,6 +32,7 @@ public class MenuView extends BaseView {
 		vbox.getChildren().add(scenetitle);
 		
 		//If the passed in user is patient, create the menu for patient.
+
 		Text welcomeTitle = new Text("Welcome User");
 		welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(welcomeTitle);
@@ -39,6 +40,25 @@ public class MenuView extends BaseView {
 		vbox.getChildren().add(appoinmentButton(parentController));
 		vbox.getChildren().add(updateHealthButton(parentController));
 		vbox.getChildren().add(labRecordButton(parentController));
+		vbox.getChildren().add(generateStatsButton(parentController));
+		
+//		if (user.getUsertype() == UserType.PATIENT) {
+//			
+//			Text welcomeTitle = new Text("Welcome User");
+//			welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+//			vbox.getChildren().add(welcomeTitle);
+//			
+//			vbox.getChildren().add(appoinmentButton(parentController));
+//			vbox.getChildren().add(updateHealthButton(parentController));
+//			vbox.getChildren().add(labRecordButton(parentController));
+//			
+//			
+//			
+//
+//		} else if (user.getUsertype() == UserType.HSPSTAFF) {
+//			
+//		}
+
 		vbox.getChildren().add(logoutButton(parentController));
 		currentScene = new Scene(vbox, 300, 350);
 	}
@@ -80,6 +100,19 @@ public class MenuView extends BaseView {
 				// Pass the control of handling button clicks to the view controller
 				//parentController.handleHealthCondition();
 
+			}
+		});
+		return btn;
+	}
+	
+	private Button generateStatsButton(MenuViewController parentController) {
+		Button btn = new Button("Generate Statistical Reports");
+		btn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleGenerateStatsReports();
 			}
 		});
 		return btn;

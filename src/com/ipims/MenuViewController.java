@@ -3,6 +3,7 @@ package com.ipims;
 
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.healthconditions.HealthViewController;
+import com.ipims.stats.StatsViewController;
 import com.ipims.usersession.LoginViewController;
 import com.ipims.usersession.UserSession;
 import com.ipims.views.MenuView;
@@ -48,6 +49,11 @@ public class MenuViewController {
 		UserSession.getInstance().logout();
 		LoginViewController vc = new LoginViewController();
 		view.getStage().setScene(vc.getScene());
+	}
+	
+	public void handleGenerateStatsReports() {
+		StatsViewController statsView = new StatsViewController();
+		view.getStage().setScene(statsView.getScene());
 	}
 
 }
