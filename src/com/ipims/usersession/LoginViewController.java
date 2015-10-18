@@ -21,7 +21,8 @@ public class LoginViewController  {
 	}
 
 	public void handleLoginButtonClick(String username, String password, Map<String, String> validUsers) {
-		System.out.println(validUsers.values()); // for testing
+		validUsers.put("test", ""); // for easy access in testing
+		//System.out.println(validUsers.values()); // for testing
 		if(validUsers.containsKey(username) && validUsers.containsValue(password)) { // check to see if valid user
 			UserSession.getInstance().login(username, password);
 			MenuViewController menu = new MenuViewController();
