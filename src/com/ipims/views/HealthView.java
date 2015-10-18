@@ -62,7 +62,7 @@ public class HealthView extends BaseView {
 		vbox.getChildren().add(hbox);
 
 		// Add patient selector if the user is not Patient
-		//if(user.getUsertype() == UserType.PATIENT) {
+		if(user.getUsertype() == UserType.PATIENT) {
 			HBox hbox2 = new HBox();
 			hbox2.setSpacing(10);
 
@@ -76,7 +76,7 @@ public class HealthView extends BaseView {
 
 			hbox2.getChildren().addAll(docLabel, docComboBox);
 			vbox.getChildren().add(hbox2);
-		//}
+		}
 
 		// Add Medical History box
 		vbox.getChildren().add(addMedicalHistory(items));

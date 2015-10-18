@@ -69,9 +69,9 @@ public class PrescribeMedView extends BaseView {
 		final Text actionTarget = new Text();
 		
 		// Show Prescribe Medication if Doctor
-		//if (user.getUsertype() == UserType.PATIENT ) {
+		if (user.getUsertype() == UserType.PATIENT ) {
 			vbox.getChildren().add(addPrescription(items, actionTarget));
-		//}
+		}
 		
 		list.setItems(items); // moved
 
