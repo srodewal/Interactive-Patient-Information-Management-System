@@ -96,7 +96,7 @@ public class MenuView extends BaseView {
 	}
 	
 	private Button labRecordButton(MenuViewController parentController) {
-		Button btn = new Button("Lab Record");
+		Button btn = new Button("Lab Records");
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

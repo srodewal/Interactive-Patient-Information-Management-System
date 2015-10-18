@@ -1,7 +1,5 @@
 package com.ipims.models;
 
-import java.util.ArrayList;
-
 public class User {
 
 	public enum UserType {
@@ -10,7 +8,23 @@ public class User {
 	    HSPSTAFF,
 	    NURSE,
 	    LABSTAFF,
-	    UNKNOWN
+	    UNKNOWN;
+	    
+	    public static UserType fromInteger(int x) {
+	        switch(x) {
+	        case 1:
+	            return DOCTOR;
+	        case 2:
+	            return PATIENT;
+	        case 3:
+	            return HSPSTAFF;
+	        case 4:
+	            return NURSE;
+	        case 5:
+	            return LABSTAFF;
+	        }
+	        return UNKNOWN;
+	    }
 	}
 	
 	protected UserType type;
@@ -31,6 +45,38 @@ public class User {
 		type = UserType.UNKNOWN;
 	}
 
+	public static User createUser(UserType userType) {
+		User user = null;
+		switch (userType) {
+		case DOCTOR:
+			user = new Doctor();
+			break;
+
+		case PATIENT:
+			user = new Patient();
+			break;
+			
+		case HSPSTAFF:
+			user = new HSPStaff();
+			break;
+			
+		case NURSE:
+			user = new Nurse();
+			break;
+			
+		case LABSTAFF:
+			user = new LabStaff();
+			break;
+			
+		case UNKNOWN:
+			break;
+		default:
+			break;
+		}
+		
+		return user;
+	}
+	
 	public UserType getUsertype() {
 		return type;
 	}

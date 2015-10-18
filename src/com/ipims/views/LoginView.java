@@ -70,12 +70,13 @@ public class LoginView extends BaseView {
 
 			@Override
 			public void handle(ActionEvent e) {
-				
+
 				//parentController.handleLoginButtonClick("Asd","asd");
-				
+
+
 				System.out.println(userTextField.getText()); // for testing
 				System.out.println(pwBox.getText()); // for testing
-				parentController.handleLoginButtonClick(userTextField.getText(), pwBox.getText(), validUsers);
+				parentController.handleLoginButtonClick(userTextField.getText(), pwBox.getText());
 
 			}
 		});
@@ -93,7 +94,7 @@ public class LoginView extends BaseView {
 
 
 		currentScene = new Scene(grid, 300, 275);
-		
-	
+
+
 	}
 }

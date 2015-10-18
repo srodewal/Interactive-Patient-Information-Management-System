@@ -18,8 +18,8 @@ public class RegistrationViewController {
     	return view.getCurrentScene();
     }
 
-    public void handleRegister(User user) {
-    	UserSession.getInstance().register(user);
+    public void handleRegister(User user, String password) {
+    	UserSession.getInstance().register(user, password);
     	//view.showErrorMessage("This wont work without database setup");
     }
     

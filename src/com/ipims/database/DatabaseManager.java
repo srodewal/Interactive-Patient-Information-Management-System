@@ -1,33 +1,27 @@
 package com.ipims.database;
 
 import java.sql.*;
-import java.nio.file.*;
-import java.nio.charset.*;
-import java.io.BufferedWriter;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.ipims.models.Patient;
+import com.ipims.models.User;
+import com.ipims.models.User.UserType;
 import com.ipims.models.HealthCondition;
 
 public class DatabaseManager {
 	private static final DatabaseManager INSTANCE = new DatabaseManager();
-	private static Connection dbConnection = null;
-	private static BufferedWriter writer = null;
+	
+	private Connection dbConnection = null;
+	
 	private static final int NUM_TABLES = 4;
 	
 	
 	private DatabaseManager()
 	{
-		try
-		{
-			Charset charset = Charset.forName("UTF-8");
-			Path path = FileSystems.getDefault().getPath("logs", "error.log");
-			writer = Files.newBufferedWriter(path, charset, StandardOpenOption.APPEND);
-		}
-		catch(Exception e)
-		{
-			System.err.println(String.format("Could not write to log file. Please check that file permissions are set correctly.%n") + e.getMessage() + "%n");
-		}
 
+		logError("Setting up db");
 		try
 		{
 			Class.forName("org.sqlite.JDBC");
@@ -41,7 +35,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	private static void checkTables()
+	private  void checkTables()
 	{
 		if(dbConnection != null)
 		{
@@ -68,7 +62,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	private static void fixTables(HashSet<String> existingTables)
+	private  void fixTables(HashSet<String> existingTables)
 	{
 		if(dbConnection != null)
 		{
@@ -78,13 +72,13 @@ public class DatabaseManager {
 				{
 					Statement createUser = dbConnection.createStatement();
 					createUser.executeUpdate("CREATE TABLE User("
-							+ "userId INT PRIMARY KEY AUTOINCREMENT,"
+							+ "userId INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "name TEXT NOT NULL,"
 							+ "userName TEXT NOT NULL,"
 							+ "passwordHash TEXT NOT NULL,"
 							+ "ssn TEXT NOT NULL,"
-							+ "type INT NOT NULL,"
-							+ "dob TEXT NOT NULL"
+							+ "type INTEGER NOT NULL,"
+							+ "dob DATE NOT NULL"
 							+ ")");
 					createUser.close();
 				}
@@ -99,7 +93,8 @@ public class DatabaseManager {
 				try
 				{
 					Statement createDoctorCategory = dbConnection.createStatement();
-					createDoctorCategory.executeUpdate("CREATE TABLE DoctorCategory( userId INT PRIMARY KEY NOT NULL, categoryId INT NOT NULL )");
+					createDoctorCategory.executeUpdate("CREATE TABLE DoctorCategory( userId INTEGER PRIMARY KEY NOT NULL,"
+							+ " categoryId INTEGER NOT NULL )");
 					createDoctorCategory.close();
 				}
 				catch(Exception e)
@@ -113,7 +108,9 @@ public class DatabaseManager {
 				try
 				{
 					Statement createAppointment = dbConnection.createStatement();
-					createAppointment.executeUpdate("CREATE TABLE Appointment( patientId INT PRIMARY KEY NOT NULL, doctorId INT NOT NULL, time TEXT NOT NULL )");
+					createAppointment.executeUpdate("CREATE TABLE Appointment( patientId INTEGER PRIMARY KEY NOT NULL,"
+							+ " doctorId INT NOT NULL, "
+							+ "time DATETIME NOT NULL )");
 					createAppointment.close();
 				}
 				catch(Exception e)
@@ -128,11 +125,11 @@ public class DatabaseManager {
 				{
 					Statement createHealthCondition = dbConnection.createStatement();
 					createHealthCondition.executeUpdate("CREATE TABLE HealthCondition("
-							+ "userId INT PRIMARY KEY NOT NULL,"
+							+ "userId INTEGER PRIMARY KEY NOT NULL,"
 							+ "healthConcerns TEXT NOT NULL,"
 							+ "comments TEXT NOT NULL,"
-							+ "severity INT NOT NULL,"
-							+ "pastOrCurrent INT NOT NULL"
+							+ "severity INTEGER NOT NULL,"
+							+ "pastOrCurrent INTEGER NOT NULL"
 							+ ")");
 					
 				}
@@ -149,21 +146,10 @@ public class DatabaseManager {
 		}
 	}
 	
-	private static void logError(String errMessage)
+	private  void logError(String errMessage)
 	{
-		if(writer != null)
-		{
-			try
-			{
-				writer.write(errMessage);
-				writer.newLine();
-			}
-			catch(Exception e)
-			{
-				System.err.println(String.format("Could not write to log file. Please check that file permissions are set correctly.%n") + e.getMessage() + "%n");
-				writer = null;
-			}
-		}
+		
+		Logger.getGlobal().log(Level.WARNING, errMessage);
 	}
 	
 	public static DatabaseManager getInstance()
@@ -171,16 +157,16 @@ public class DatabaseManager {
 		return INSTANCE;
 	}
 	
-	public static void newPatient(Patient patient)
+	public  void newPatient(User patient, String password)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
-				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob) VALUES (?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob) VALUES (?, ?, ?, ?, ?, ?)");
 				insertPatient.setString(1, patient.getName());
 				insertPatient.setString(2, patient.getUserName());
-				insertPatient.setString(3, patient.getPasswordHash());
+				insertPatient.setString(3, password);
 				insertPatient.setString(4, patient.getSsn());
 				insertPatient.setInt(5, patient.getUsertype().ordinal());
 				insertPatient.setString(6, patient.getDateOfBirth());
@@ -199,7 +185,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	public static void newAppointment(int patientId, int doctorId, String time)
+	public  void newAppointment(int patientId, int doctorId, String time)
 	{
 		if(dbConnection != null)
 		{
@@ -224,7 +210,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	public static void newHealthCondition(HealthCondition condition)
+	public  void newHealthCondition(HealthCondition condition)
 	{
 		if(dbConnection != null)
 		{
@@ -258,7 +244,28 @@ public class DatabaseManager {
 		}
 	}
 	
-	public static void close()
+	
+	public User getUser(String userName, String password) {
+		User user = null;
+		try {
+			System.out.println("Trying to get user");
+			Statement stat = dbConnection.createStatement();
+			ResultSet rs = stat.executeQuery("select * from USER where userName=\"" +userName+ "\" and passwordHash=\""+password+"\";");
+
+	        while (rs.next()) {
+	        	
+	        	user = User.createUser(UserType.fromInteger( rs.getInt("type")));
+	        	user.setName(rs.getString("name"));
+	        	user.setUserName(rs.getString("userName"));
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
+	}
+	
+	public  void close()
 	{
 		if(dbConnection != null)
 		{
@@ -271,16 +278,6 @@ public class DatabaseManager {
 				logError(e.getMessage());
 			}
 		}
-		if(writer != null)
-		{
-			try
-			{
-				writer.close();
-			}
-			catch(Exception e)
-			{
-				System.err.println(String.format("Could not write to log file. Please check that file permissions are set correctly.%n") + e.getMessage() + "%n");
-			}
-		}
+		
 	}
 }
