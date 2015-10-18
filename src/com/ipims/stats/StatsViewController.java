@@ -29,6 +29,27 @@ public class StatsViewController {
          
 	}
 	
+	// to-do
+	public void handlePP() {
+		
+	}
+	
+	// to-do
+	public void handleHA() {
+		
+	}
+	
+	// to-do
+	public void handleTA() {
+		
+	}
+	
+	// to-do
+	public void handleTP() {
+		
+	}
+
+	
 	
 	
 }
