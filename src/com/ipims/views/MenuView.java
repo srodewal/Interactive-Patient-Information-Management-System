@@ -1,6 +1,7 @@
 package com.ipims.views;
 
 import com.ipims.MenuViewController;
+import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -41,7 +42,8 @@ public class MenuView extends BaseView {
 		vbox.getChildren().add(updateHealthButton(parentController));
 		vbox.getChildren().add(labRecordButton(parentController));
 		vbox.getChildren().add(generateStatsButton(parentController));
-		
+		vbox.getChildren().add(PrescribeMedButton(parentController));
+
 //		if (user.getUsertype() == UserType.PATIENT) {
 //			
 //			Text welcomeTitle = new Text("Welcome User");
@@ -116,6 +118,24 @@ public class MenuView extends BaseView {
 			}
 		});
 		return btn;
+	}
+	
+	
+	
+	
+	private Button PrescribeMedButton(MenuViewController parentController) {
+		
+		Button PrescribeMedBtn = new Button("Prescribe Medication(s)");
+		PrescribeMedBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handlePrescribeMed();
+
+			}
+		});
+		return PrescribeMedBtn;
 	}
 
 	private Button logoutButton(MenuViewController parentController) {
