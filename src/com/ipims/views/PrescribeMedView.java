@@ -59,8 +59,8 @@ public class PrescribeMedView extends BaseView {
 		
 		ListView<String> list = new ListView<String>();
 		/*ObservableList<String> items = FXCollections.observableArrayList (
-				"1. Dr. John (Category: Eye) on 10/12/2015 at 14:35",
-				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");*/
+				"1. Gregg prescribed advil
+				*/
 		ObservableList<String> items = FXCollections.observableArrayList (
 			);
 		//list.setItems(items);
@@ -68,7 +68,7 @@ public class PrescribeMedView extends BaseView {
 		// for success/error message
 		final Text actionTarget = new Text();
 		
-		// Show schedule appointment if patient or HSP staff
+		// Show Prescribe Medication if Doctor
 		if (user.getUsertype() == UserType.PATIENT ) {
 			vbox.getChildren().add(addPrescription(items, actionTarget));
 		}
