@@ -1,4 +1,5 @@
 package com.ipims.usersession;
+import com.ipims.database.DatabaseManager;
 import com.ipims.models.Patient;
 import com.ipims.models.User;
 
@@ -38,16 +39,17 @@ public class UserSession {
 	}
 	
 	public void login(String userName, String password) {
-		loggedInUser = new Patient(userName, password);
-		
+		//loggedInUser = new Patient(userName, password);
+		loggedInUser = DatabaseManager.getInstance().getUser(userName, password);
 	}
 	
 	public void logout() {
 		loggedInUser = null;
 	}
 	
-	public void register(User user) {
+	public void register(User user, String password) {
 		loggedInUser = user;
+		DatabaseManager.getInstance().newPatient(user, password);
 	}
 }
 

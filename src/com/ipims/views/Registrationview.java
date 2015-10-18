@@ -138,33 +138,19 @@ public class Registrationview extends BaseView {
 					parentController.handleError();
 				}
 				else {
-					actiontarget.setFill(Color.RED);
-					actiontarget.setText("Information submitted");
-					User patient = new Patient(userNameTextField.getText(), passwordTextField.getText());
-					//System.out.println(userNameTextField.getText()); // for testing
-					//System.out.println(passwordTextField.getText()); // for testing
-					if(validUsers.containsKey(userNameTextField.getText())) {
-						parentController.handleExistingUserError();
-					}
-					else {
-						validUsers.put(userNameTextField.getText(), passwordTextField.getText());
-					}
 			
-					//System.out.println(validUsers.values()); // for testing
-					// Uncomment below lines when database is setup and validation is done.
+					User patient = new Patient();
+					patient.setName(nameTextField.getText());
+					patient.setUserName(userNameTextField.getText());
+					patient.setAddress(currentAddressTextField.getText());
+					patient.setSsn(ssnNumberTextField.getText());
+					LocalDate date = datePicker.getValue();
+					patient.setDateOfBirth(date.toString());
 					
-//					patient.setName(nameTextField.getText());
-//					patient.setAddress(currentAddressTextField.getText());
-//					patient.setSsn(ssnNumberTextField.getText());
-//					LocalDate date = datePicker.getValue();
-//					patient.setDateOfBirth(date.toString());
-//					//                insuranceProviderToDatabase = healthInsuranceTextField.getText();
-//					patient.setEmail(emailTextField.getText());
-//					patient.setPhoneNumber(phoneNumberTextField.getText());
-					parentController.handleRegister(patient);
-
-					// go back to login
-					parentController.handleBackButton();
+					//insuranceProviderToDatabase = healthInsuranceTextField.getText();
+					patient.setEmail(emailTextField.getText());
+					patient.setPhoneNumber(phoneNumberTextField.getText());
+					parentController.handleRegister(patient, passwordTextField.getText());
 				}
 				
 

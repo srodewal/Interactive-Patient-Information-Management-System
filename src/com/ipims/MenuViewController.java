@@ -2,6 +2,7 @@ package com.ipims;
 
 
 import com.ipims.appointment.AppointmentViewController;
+import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController;
 import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.stats.StatsViewController;
@@ -27,6 +28,7 @@ public class MenuViewController {
 	public MenuViewController() {
 		view = new MenuView();
 		view.createMenuScene(UserSession.getInstance().getCurrentUser(), this);
+		DatabaseManager.getInstance();
 	}
 
 	public Scene getScene() {

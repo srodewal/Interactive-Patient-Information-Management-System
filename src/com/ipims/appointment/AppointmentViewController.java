@@ -1,6 +1,7 @@
 package com.ipims.appointment;
 
 import com.ipims.MenuViewController;
+import com.ipims.database.DatabaseManager;
 import com.ipims.usersession.UserSession;
 import com.ipims.views.Appointmentsview;
 
@@ -17,6 +18,7 @@ public class AppointmentViewController {
 	public  AppointmentViewController() {
 		view = new Appointmentsview();
 		view.createAppointmentsView(UserSession.getInstance().getCurrentUser(), this);
+		
 	}
 	
 	public Scene getScene() {

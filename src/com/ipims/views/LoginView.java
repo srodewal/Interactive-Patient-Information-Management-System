@@ -75,7 +75,7 @@ public class LoginView extends BaseView {
 				
 				System.out.println(userTextField.getText()); // for testing
 				System.out.println(pwBox.getText()); // for testing
-				parentController.handleLoginButtonClick(userTextField.getText(), pwBox.getText(), validUsers);
+				parentController.handleLoginButtonClick(userTextField.getText(), pwBox.getText());
 
 			}
 		});

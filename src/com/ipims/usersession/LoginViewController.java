@@ -1,12 +1,13 @@
 package com.ipims.usersession;
 //A test from Kevin G.
-import java.util.*;
+
 
 import com.ipims.MenuViewController;
+
 import com.ipims.views.LoginView;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import com.ipims.models.*;
+
+
 public class LoginViewController  {
 
 	private LoginView view;
@@ -20,19 +21,16 @@ public class LoginViewController  {
 		return view.getCurrentScene();
 	}
 
-	public void handleLoginButtonClick(String username, String password, Map<String, String> validUsers) {
-		validUsers.put("test", ""); // for easy access in testing
-		//System.out.println(validUsers.values()); // for testing
-		if(validUsers.containsKey(username) && validUsers.containsValue(password)) { // check to see if valid user
-			UserSession.getInstance().login(username, password);
-			MenuViewController menu = new MenuViewController();
-			Stage stage = (Stage) view.getCurrentScene().getWindow();
-			
-			stage.setScene(menu.getScene());
+	public void handleLoginButtonClick(String username, String password) {
+		
+		UserSession.getInstance().login(username, password);
+		if (UserSession.getInstance().getCurrentUser() == null) {
+			view.showErrorMessage("Could not login please check the username / password");
+		} else {
+			MenuViewController vc = new MenuViewController();
+			view.getStage().setScene(vc.getScene());
 		}
-		else {
-			view.showErrorMessage("Invalid username/password");
-		}
+
 	}
 	
 	public void handleNewUserButtonClick() {
