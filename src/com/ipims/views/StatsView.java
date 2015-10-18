@@ -1,9 +1,6 @@
 package com.ipims.views;
 
-import com.ipims.models.Patient;
-import com.ipims.models.User;
 import com.ipims.stats.StatsViewController;
-import com.ipims.usersession.RegistrationViewController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,9 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -33,12 +27,6 @@ public class StatsView extends BaseView {
 		Text statsText = new Text("Generate Statistical Reports");
 		statsText.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
 		statsPane.add(statsText, 0, 0, 2, 1);
-
-		/*Label name = new Label("Name:");
-		registerPane.add(name, 0, 1);
-		TextField nameTextField = new TextField();
-		registerPane.add(nameTextField, 1, 1);
-		*/
 
 		Button patientPopulations = new Button("Analysis of patient populations");
 		HBox ppBtn = new HBox(10);
@@ -74,6 +62,7 @@ public class StatsView extends BaseView {
 			public void handle(ActionEvent e) {
 					actiontarget.setFill(Color.RED);
 					actiontarget.setText("patient populations button pressed");
+					parentController.handlePP();
 				}
 		});
 		
@@ -83,6 +72,7 @@ public class StatsView extends BaseView {
 			public void handle(ActionEvent e) {
 					actiontarget.setFill(Color.RED);
 					actiontarget.setText("Health outcomes button pressed");
+					parentController.handleHA();
 				}
 		});
 		
@@ -92,6 +82,7 @@ public class StatsView extends BaseView {
 			public void handle(ActionEvent e) {
 					actiontarget.setFill(Color.RED);
 					actiontarget.setText("Tracking admission rates button pressed");
+					parentController.handleTA();
 				}
 		});
 		
@@ -101,6 +92,7 @@ public class StatsView extends BaseView {
 			public void handle(ActionEvent e) {
 					actiontarget.setFill(Color.RED);
 					actiontarget.setText("Analysis of type of patients button pressed");
+					parentController.handleTP();
 				}
 		});
 		

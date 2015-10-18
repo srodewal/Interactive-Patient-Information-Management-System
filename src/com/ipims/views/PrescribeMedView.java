@@ -81,7 +81,7 @@ public class PrescribeMedView extends BaseView {
 
 
 		
-		vbox.getChildren().add(list);
+		vbox.getChildren().addAll(list, actionTarget);
 		
 		
 		currentScene = new Scene(vbox, 500, 700);
@@ -134,15 +134,18 @@ public class PrescribeMedView extends BaseView {
 				
 				
 				String prescribeMed = PatientTextField.getText() + " prescribed " + MedicationTextField.getText();
-
-				if(!items.contains(prescribeMed)) {
+				if(MedicationTextField.getText().equals("") || PatientTextField.getText().equals("")) {
+					actionTarget.setFill(Color.RED);
+					actionTarget.setText("Error: Unable to Prescribe Medication!");
+				}
+				else if(!items.contains(prescribeMed)) {
 					items.add(prescribeMed);
 					actionTarget.setFill(Color.GREEN);
 					actionTarget.setText("Medication Prescribed!");
 				}
 				else {
 					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Error: Unable to Prescribe Medication!");
+					actionTarget.setText("Error: Prescription already entered!");
 				}
 			}
 		});
