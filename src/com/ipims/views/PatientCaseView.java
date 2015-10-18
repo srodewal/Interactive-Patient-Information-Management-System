@@ -67,9 +67,9 @@ public class PatientCaseView extends BaseView{
 		final Text actionTarget = new Text();
 		
 		// Show Patient Case if Doctor
-		if (user.getUsertype() == UserType.PATIENT ) {
+		//if (user.getUsertype() == UserType.PATIENT ) {
 			vbox.getChildren().add(addPatientCase(items, actionTarget));
-		}
+		//}
 		
 		list.setItems(items); // moved
 
