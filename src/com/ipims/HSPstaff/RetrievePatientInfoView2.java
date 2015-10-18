@@ -1,9 +1,8 @@
 package com.ipims.HSPstaff;
-//edited by Kevin George Not really done at all but it exists!!!
+//edited by Kevin George Not really done at all but it exists!!!!
 
 import com.ipims.views.*;
 import com.ipims.usersession.LoginViewController;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

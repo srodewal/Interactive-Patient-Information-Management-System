@@ -1,9 +1,8 @@
 package com.ipims.HSPstaff;
-//edited by Kevin George ( I kind of stole the LoginView and worked off of that to create something similar to the GUI examples provided in the SDD)
+//edited by Kevin George ( I kind of stole the LoginView and worked off of that to create something similar to the GUI examples provided in the SDD).
 
 import com.ipims.views.*;
 import com.ipims.usersession.LoginViewController;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
