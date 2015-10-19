@@ -1,11 +1,12 @@
 package com.ipims.database;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.models.HealthCondition;
@@ -157,6 +158,22 @@ public class DatabaseManager {
 		return INSTANCE;
 	}
 	
+	public  void close()
+	{
+		if(dbConnection != null)
+		{
+			try
+			{
+				dbConnection.close();
+			}
+			catch(Exception e)
+			{
+				logError(e.getMessage());
+			}
+		}
+		
+	}
+	
 	public  void newPatient(User patient, String password)
 	{
 		if(dbConnection != null)
@@ -253,31 +270,42 @@ public class DatabaseManager {
 			ResultSet rs = stat.executeQuery("select * from USER where userName=\"" +userName+ "\" and passwordHash=\""+password+"\";");
 
 	        while (rs.next()) {
-	        	
-	        	user = User.createUser(UserType.fromInteger( rs.getInt("type")));
-	        	user.setName(rs.getString("name"));
-	        	user.setUserName(rs.getString("userName"));
+	        	user = createUser(rs);
 	        }
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return user;
 	}
 	
-	public  void close()
-	{
-		if(dbConnection != null)
-		{
-			try
-			{
-				dbConnection.close();
-			}
-			catch(Exception e)
-			{
-				logError(e.getMessage());
-			}
-		}
+	public List<User> getPatientList() {
 		
+		List<User> userList = new ArrayList<>();
+		
+		try {
+			System.out.println("Trying to get user");
+			Statement stat = dbConnection.createStatement();
+			ResultSet rs = stat.executeQuery("select * from USER;");
+
+	        while (rs.next()) {
+	        	
+	        	User user = createUser(rs);
+	        	userList.add(user);
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userList;
 	}
+	
+	//=================== DB Helpers ==================
+	
+	private User createUser(ResultSet rs) throws SQLException {
+		User user = User.createUser(UserType.fromInteger( rs.getInt("type")));
+    	user.setName(rs.getString("name"));
+    	user.setUserName(rs.getString("userName"));
+    	return user;
+	}
+	
 }
