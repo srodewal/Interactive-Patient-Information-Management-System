@@ -66,15 +66,16 @@ public class HealthView extends BaseView {
 			HBox hbox2 = new HBox();
 			hbox2.setSpacing(10);
 
-			Label docLabel = new Label("Patient:");
+			Label PatientLabel = new Label("Patient:");
+			
+			PatientLabel.setTextFill(Color.BLACK);
+			PatientLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 
-			ComboBox<String> docComboBox = new ComboBox<String>();
-			docComboBox.getItems().addAll(
-					"cxv",
-					"ASD" 
-					);
+			TextField PatientTextField = new TextField();
 
-			hbox2.getChildren().addAll(docLabel, docComboBox);
+			PatientTextField.setMaxSize(250, 55);
+
+			hbox2.getChildren().addAll(PatientLabel, PatientTextField);
 			vbox.getChildren().add(hbox2);
 		//}
 

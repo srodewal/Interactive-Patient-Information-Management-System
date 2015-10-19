@@ -73,7 +73,7 @@ public class PatientCaseView extends BaseView{
 		
 		list.setItems(items); // moved
 
-		Text subTitle = new Text("View Prescriptions");
+		Text subTitle = new Text("View Patient Case");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
 
