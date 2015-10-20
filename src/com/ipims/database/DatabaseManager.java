@@ -78,9 +78,9 @@ public class DatabaseManager {
 							+ "passwordHash TEXT NOT NULL,"
 							+ "ssn TEXT NOT NULL,"
 							+ "type INTEGER NOT NULL,"
-							+ "dob TEXT NOT NULL"
-							+ "address TEXT NOT NULL"
-							+ "email TEXT NOT NULL"
+							+ "dob TEXT NOT NULL,"
+							+ "address TEXT NOT NULL,"
+							+ "email TEXT NOT NULL,"
 							+ "phoneNumber TEXT NOT NULL"
 							+ ")");
 					createUser.close();
