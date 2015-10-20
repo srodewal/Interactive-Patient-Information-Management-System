@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -38,6 +37,36 @@ public class RetrievePatientInfoView2 extends BaseView {
 
 		TextField userTextField = new TextField();
 		grid.add(userTextField, 1, 1);
+                
+                Label addressField = new Label("Address:");
+		grid.add(addressField, 0, 1);
+
+		TextField addressTextField = new TextField();
+		grid.add(addressTextField, 1, 1);
+                
+                Label Email = new Label("Email:");
+		grid.add(Email, 0, 1);
+
+		TextField emailField = new TextField();
+		grid.add(emailField, 1, 1);
+                
+                Label phoneNumber = new Label("Phone Number:");
+		grid.add(phoneNumber, 0, 1);
+
+		TextField phoneNumberField = new TextField();
+		grid.add(phoneNumberField, 1, 1);
+                
+                Label SSN = new Label("Social Security Number:");
+		grid.add(SSN, 0, 1);
+
+		TextField SSNField = new TextField();
+		grid.add(SSNField, 1, 1);
+                
+                Label HIP = new Label("Health Insurance Provider:");
+		grid.add(HIP, 0, 1);
+
+		TextField HIPField = new TextField();
+		grid.add(HIPField, 1, 1);
 
 		// Create Done Button
 
