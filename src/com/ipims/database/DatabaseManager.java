@@ -80,6 +80,9 @@ public class DatabaseManager {
 							+ "ssn TEXT NOT NULL,"
 							+ "type INTEGER NOT NULL,"
 							+ "dob TEXT NOT NULL"
+							+ "address TEXT NOT NULL"
+							+ "email TEXT NOT NULL"
+							+ "phoneNumber TEXT NOT NULL"
 							+ ")");
 					createUser.close();
 				}
@@ -180,13 +183,16 @@ public class DatabaseManager {
 		{
 			try
 			{
-				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob) VALUES (?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				insertPatient.setString(1, patient.getName());
 				insertPatient.setString(2, patient.getUserName());
 				insertPatient.setString(3, password);
 				insertPatient.setString(4, patient.getSsn());
 				insertPatient.setInt(5, patient.getUsertype().ordinal());
 				insertPatient.setString(6, patient.getDateOfBirth());
+				insertPatient.setString(7, patient.getAddress());
+				insertPatient.setString(8, patient.getEmail());
+				insertPatient.setString(9, patient.getPhoneNumber());
 				insertPatient.executeUpdate();
 				insertPatient.close();
 			}
@@ -309,6 +315,9 @@ public class DatabaseManager {
     	user.setPasswordHash(rs.getString("passwordHash"));
     	user.setSsn(rs.getString("ssn"));
     	user.setDateOfBirth(rs.getString("dob"));
+    	user.setAddress(rs.getString("address"));
+    	user.setEmail(rs.getString("email"));
+    	user.setPhoneNumber(rs.getString("phoneNumber"));
     	return user;
 	}
 	
