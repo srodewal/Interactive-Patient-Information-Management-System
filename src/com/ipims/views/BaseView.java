@@ -5,6 +5,7 @@ package com.ipims.views;
 
 
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -36,4 +37,7 @@ public class BaseView {
 		alert.showAndWait();
 	}
 	
+	protected void createScene(Parent root) {
+		currentScene = new Scene(root, 500, 700);
+	}
 }

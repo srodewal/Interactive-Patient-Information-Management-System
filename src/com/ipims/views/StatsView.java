@@ -103,7 +103,7 @@ public class StatsView extends BaseView {
 					parentController.goBack();
 				}
 		});
+		createScene(statsPane);
 		
-		currentScene = new Scene(statsPane, 600, 550);
 	}
 }

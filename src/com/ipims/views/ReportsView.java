@@ -75,7 +75,8 @@ public class ReportsView extends BaseView {
 		// to display success or error message
 		vbox.getChildren().add(actionTarget);
 		
-		currentScene = new Scene(vbox, 500, 700);
+		
+		createScene(vbox);
 	}
 
 	public VBox addReport(ObservableList<String> items, Text actionTarget) {

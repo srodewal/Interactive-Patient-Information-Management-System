@@ -108,8 +108,8 @@ public class Appointmentsview extends BaseView {
 				items.remove(index);
 			}
 		});
+		createScene(vbox);
 		
-		currentScene = new Scene(vbox, 500, 700);
 	}
 
 	public VBox addScheduleAppoinment(ObservableList<String> items, Text actionTarget) {

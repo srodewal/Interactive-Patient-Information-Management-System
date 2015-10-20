@@ -81,8 +81,8 @@ public class PatientCaseView extends BaseView{
 		
 		vbox.getChildren().addAll(list, actionTarget);
 		
+		createScene(vbox);
 		
-		currentScene = new Scene(vbox, 500, 700);
 	}
 
 	public VBox addPatientCase(ObservableList<String> items, Text actionTarget) {

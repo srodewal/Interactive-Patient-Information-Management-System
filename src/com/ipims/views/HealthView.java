@@ -94,8 +94,8 @@ public class HealthView extends BaseView {
 				"1. (History) Severe Chest Pain");
 		list.setItems(items);*/
 		vbox.getChildren().add(list);
-
-		currentScene = new Scene(vbox, 500, 700);
+		createScene(vbox);
+		
 	}
 
 	public VBox addMedicalHistory(ObservableList<String> items) {

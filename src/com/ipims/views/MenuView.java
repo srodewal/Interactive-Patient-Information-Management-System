@@ -64,7 +64,8 @@ public class MenuView extends BaseView {
 //		}
 
 		vbox.getChildren().add(logoutButton(parentController));
-		currentScene = new Scene(vbox, 300, 350);
+		
+		createScene(vbox);
 	}
 
 	private Button appoinmentButton(MenuViewController parentController) {

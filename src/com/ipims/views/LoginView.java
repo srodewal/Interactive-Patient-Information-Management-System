@@ -92,8 +92,8 @@ public class LoginView extends BaseView {
 			}
 		});
 
-
-		currentScene = new Scene(grid, 300, 275);
+		createScene(grid);
+		
 
 
 	}

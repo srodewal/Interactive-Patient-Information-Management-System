@@ -166,8 +166,8 @@ public class Registrationview extends BaseView {
 
 			}
 		});
-
-		currentScene = new Scene(registerPane, 600, 550);
+		createScene(registerPane);
+		
 	}
 	
 }
