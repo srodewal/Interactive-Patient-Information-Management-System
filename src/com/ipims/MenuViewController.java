@@ -4,6 +4,7 @@ package com.ipims;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController;
+import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.patientcase.PatientCaseViewController;
 import com.ipims.stats.StatsViewController;
@@ -68,6 +69,11 @@ public class MenuViewController {
 	public void handlePatientCase() {
 		PatientCaseViewController PatientCaseView = new PatientCaseViewController();
 		view.getStage().setScene(PatientCaseView.getScene());
+	}
+	
+	public void handleLabRecord() {
+		LabRecordViewController LabRecordView = new LabRecordViewController();
+		view.getStage().setScene(LabRecordView.getScene());
 	}
 
 }
