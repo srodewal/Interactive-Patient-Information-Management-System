@@ -41,7 +41,6 @@ public class MenuView extends BaseView {
 		
 		vbox.getChildren().add(appoinmentButton(parentController));
 		vbox.getChildren().add(updateHealthButton(parentController));
-		vbox.getChildren().add(labRecordButton(parentController));
 		vbox.getChildren().add(generateStatsButton(parentController));
 		vbox.getChildren().add(PrescribeMedButton(parentController));
 		vbox.getChildren().add(PatientCaseButton(parentController));
@@ -100,19 +99,6 @@ public class MenuView extends BaseView {
 		return updateHealthBtn;
 	}
 	
-	private Button labRecordButton(MenuViewController parentController) {
-		Button btn = new Button("Lab Records");
-		btn.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				// Pass the control of handling button clicks to the view controller
-				//parentController.handleHealthCondition();
-
-			}
-		});
-		return btn;
-	}
 	
 	private Button generateStatsButton(MenuViewController parentController) {
 		Button btn = new Button("Generate Statistical Reports");
