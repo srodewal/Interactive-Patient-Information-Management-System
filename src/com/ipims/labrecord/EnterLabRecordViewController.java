@@ -2,20 +2,21 @@ package com.ipims.labrecord;
 
 import com.ipims.MenuViewController;
 import com.ipims.usersession.UserSession;
-import com.ipims.views.LabRecordView;
+import com.ipims.views.EnterLabRecordView;
 
 import javafx.scene.Scene;
 
-public class LabRecordViewController {
+public class EnterLabRecordViewController {
 
-	private LabRecordView view;
+	
+	private EnterLabRecordView view;
 
 	//--------------- View Controller methods ---------------
 	//--------------------------------------------------------
 	
-public  LabRecordViewController() {
-	view = new LabRecordView();
-	view.createLabRecordView(UserSession.getInstance().getCurrentUser(), this);
+public  EnterLabRecordViewController() {
+	view = new EnterLabRecordView();
+	view.createEnterLabRecordView(UserSession.getInstance().getCurrentUser(), this);
 }
 
 public Scene getScene() {
@@ -28,8 +29,6 @@ public Scene getScene() {
          
 	}
 
-	
-	
-	
+
 	
 }

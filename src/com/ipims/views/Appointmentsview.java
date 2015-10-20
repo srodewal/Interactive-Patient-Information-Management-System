@@ -74,9 +74,9 @@ public class Appointmentsview extends BaseView {
 		final Text actionTarget = new Text();
 		
 		// Show schedule appointment if patient or HSP staff
-		if (user.getUsertype() == UserType.PATIENT ) {
+		//if (user.getUsertype() == UserType.PATIENT ) {
 			vbox.getChildren().add(addScheduleAppoinment(items, actionTarget));
-		}
+		//}
 		
 		list.setItems(items); // moved
 

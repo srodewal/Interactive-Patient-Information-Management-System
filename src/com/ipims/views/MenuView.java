@@ -45,7 +45,8 @@ public class MenuView extends BaseView {
 		vbox.getChildren().add(PrescribeMedButton(parentController));
 		vbox.getChildren().add(PatientCaseButton(parentController));
 		vbox.getChildren().add(LabRecordButton(parentController));
-		
+		vbox.getChildren().add(EnterLabRecordButton(parentController));
+
 		vbox.getChildren().add(ViewPatientInfoButton(parentController));
 		
 
@@ -160,6 +161,21 @@ public class MenuView extends BaseView {
 			}
 		});
 		return LabRecordBtn;
+	}
+	
+	private Button EnterLabRecordButton(MenuViewController parentController) {
+		
+		Button EnterLabRecordBtn = new Button("Enter Lab Record");
+		EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleEnterLabRecord();
+
+			}
+		});
+		return EnterLabRecordBtn;
 	}
 
 
