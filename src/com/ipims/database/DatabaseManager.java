@@ -13,7 +13,7 @@ import com.ipims.models.HealthCondition;
 public class DatabaseManager {
 	private static final DatabaseManager INSTANCE = new DatabaseManager();
 	
-	private static Connection dbConnection = null;
+	private Connection dbConnection = null;
 	
 	private static final int NUM_TABLES = 4;
 	
@@ -149,7 +149,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	private static void logError(String errMessage)
+	private void logError(String errMessage)
 	{
 		
 		Logger.getGlobal().log(Level.WARNING, errMessage);
@@ -160,7 +160,7 @@ public class DatabaseManager {
 		return INSTANCE;
 	}
 	
-	public static void close()
+	public void close()
 	{
 		if(dbConnection != null)
 		{
