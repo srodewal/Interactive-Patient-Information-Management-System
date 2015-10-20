@@ -11,6 +11,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+/**
+ * Base view to be inherited by all view classes.
+ * Call createScene method at the end that will create scene with a predefined width and height
+ * 
+ * @author jithin
+ *
+ */
 public class BaseView {
 
 	protected Scene currentScene;
@@ -29,6 +36,11 @@ public class BaseView {
 		return null;
 	}
 	
+	/**
+	 * Shows an alert with the message. 
+	 * 
+	 * @param message Message to be displayed.
+	 */
 	public void showErrorMessage(String message) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Error");
