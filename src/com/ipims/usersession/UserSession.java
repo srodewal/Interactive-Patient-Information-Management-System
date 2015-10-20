@@ -39,7 +39,6 @@ public class UserSession {
 	}
 	
 	public void login(String userName, String password) {
-		//loggedInUser = new Patient(userName, password);
 		loggedInUser = DatabaseManager.getInstance().getUser(userName, password);
 	}
 	
@@ -48,7 +47,6 @@ public class UserSession {
 	}
 	
 	public void register(User user, String password) {
-		loggedInUser = user;
 		DatabaseManager.getInstance().newPatient(user, password);
 	}
 }
