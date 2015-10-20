@@ -16,10 +16,36 @@ public class AppointmentManager {
 		return false;
 	}
 	
-	public List<Appointment> getAllAppointMent(Patient patient) {
+	public List<Appointment> listAppointmentForPatient(Patient patient) {
 		List<Appointment> appointmentList = new ArrayList<>(); 
 		
 		return appointmentList;
+	}
+	
+	public boolean scheduleAppointment(Appointment appointment) {
+		return false;
+	}
+	
+	public boolean updateAppointment(Appointment appointment) {
+		return false;
+	}
+	
+	public static List<Patient> listAllPatients() {
+		List<Patient> list = new ArrayList<>(); 
+		
+		return list;
+	}
+	
+	public static List<Patient> listAllDoctors() {
+		List<Patient> list = new ArrayList<>(); 
+		
+		return list;
+	}
+	
+	public static List<Patient> listAllCategories() {
+		List<Patient> list = new ArrayList<>(); 
+		
+		return list;
 	}
 
 }
