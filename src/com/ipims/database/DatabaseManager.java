@@ -21,7 +21,6 @@ public class DatabaseManager {
 	private DatabaseManager()
 	{
 
-		logError("Setting up db");
 		try
 		{
 			Class.forName("org.sqlite.JDBC");
