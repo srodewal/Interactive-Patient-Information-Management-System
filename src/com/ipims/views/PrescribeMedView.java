@@ -78,10 +78,20 @@ public class PrescribeMedView extends BaseView {
 		Text subTitle = new Text("View Prescriptions");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
+		
+		Button printBtn = new Button("Print");
+		printBtn.setOnAction(new EventHandler<ActionEvent>() {
 
+			@Override
+			public void handle(ActionEvent e) {
+				//prescribeMedViewController.goBack();
+				actionTarget.setFill(Color.GREEN);
+				actionTarget.setText("Print requested");
+			}
+		});
 
 		
-		vbox.getChildren().addAll(list, actionTarget);
+		vbox.getChildren().addAll(list, printBtn, actionTarget);
 		
 		createScene(vbox);
 		
