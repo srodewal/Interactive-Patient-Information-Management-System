@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.models.HealthCondition;
@@ -14,7 +14,7 @@ import com.ipims.models.HealthCondition;
 public class DatabaseManager {
 	private static final DatabaseManager INSTANCE = new DatabaseManager();
 	
-	private Connection dbConnection = null;
+	private static Connection dbConnection = null;
 	
 	private static final int NUM_TABLES = 4;
 	
@@ -79,7 +79,7 @@ public class DatabaseManager {
 							+ "passwordHash TEXT NOT NULL,"
 							+ "ssn TEXT NOT NULL,"
 							+ "type INTEGER NOT NULL,"
-							+ "dob DATE NOT NULL"
+							+ "dob TEXT NOT NULL"
 							+ ")");
 					createUser.close();
 				}
@@ -147,7 +147,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	private  void logError(String errMessage)
+	private static void logError(String errMessage)
 	{
 		
 		Logger.getGlobal().log(Level.WARNING, errMessage);
@@ -158,7 +158,7 @@ public class DatabaseManager {
 		return INSTANCE;
 	}
 	
-	public  void close()
+	public static void close()
 	{
 		if(dbConnection != null)
 		{
@@ -174,7 +174,7 @@ public class DatabaseManager {
 		
 	}
 	
-	public  void newPatient(User patient, String password)
+	public  void newPatient(Patient patient, String password)
 	{
 		if(dbConnection != null)
 		{
@@ -227,7 +227,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	public  void newHealthCondition(HealthCondition condition)
+	public void newHealthCondition(HealthCondition condition)
 	{
 		if(dbConnection != null)
 		{
@@ -266,12 +266,12 @@ public class DatabaseManager {
 		User user = null;
 		try {
 			System.out.println("Trying to get user");
-			Statement stat = dbConnection.createStatement();
-			ResultSet rs = stat.executeQuery("select * from USER where userName=\"" +userName+ "\" and passwordHash=\""+password+"\";");
-
-	        while (rs.next()) {
-	        	user = createUser(rs);
-	        }
+			PreparedStatement stat = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ? AND passwordHash = ?");
+			stat.setString(1, userName);
+			stat.setString(2, password);
+			ResultSet rs = stat.executeQuery();
+			
+			user = createUser(rs);
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
@@ -286,7 +286,7 @@ public class DatabaseManager {
 		try {
 			System.out.println("Trying to get user");
 			Statement stat = dbConnection.createStatement();
-			ResultSet rs = stat.executeQuery("select * from USER;");
+			ResultSet rs = stat.executeQuery("select * from USER WHERE type = " + UserType.PATIENT.ordinal() + ";");
 
 	        while (rs.next()) {
 	        	
@@ -305,6 +305,10 @@ public class DatabaseManager {
 		User user = User.createUser(UserType.fromInteger( rs.getInt("type")));
     	user.setName(rs.getString("name"));
     	user.setUserName(rs.getString("userName"));
+    	user.setUserId(rs.getInt("userId"));
+    	user.setPasswordHash(rs.getString("passwordHash"));
+    	user.setSsn(rs.getString("ssn"));
+    	user.setDateOfBirth(rs.getString("dob"));
     	return user;
 	}
 	
