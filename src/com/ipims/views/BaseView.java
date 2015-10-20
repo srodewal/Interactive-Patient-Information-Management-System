@@ -15,7 +15,8 @@ public class BaseView {
 
 	protected Scene currentScene;
 	
-
+	private static final int WIDTH = 500;
+	private static final int HEIGHT = 700;
 	
 	public Scene getCurrentScene() {
 		return currentScene;
@@ -38,6 +39,6 @@ public class BaseView {
 	}
 	
 	protected void createScene(Parent root) {
-		currentScene = new Scene(root, 500, 700);
+		currentScene = new Scene(root, WIDTH, HEIGHT);
 	}
 }
