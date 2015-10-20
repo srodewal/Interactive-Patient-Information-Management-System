@@ -46,6 +46,9 @@ public class MenuView extends BaseView {
 		vbox.getChildren().add(PrescribeMedButton(parentController));
 		vbox.getChildren().add(PatientCaseButton(parentController));
 		vbox.getChildren().add(LabRecordButton(parentController));
+		
+		vbox.getChildren().add(ViewPatientInfoButton(parentController));
+		
 
 //		if (user.getUsertype() == UserType.PATIENT) {
 //			
@@ -186,5 +189,18 @@ public class MenuView extends BaseView {
 			}
 		});
 		return logoutBtn;
+	}
+	
+	private Button ViewPatientInfoButton(MenuViewController parentController) {
+		Button vpBtn = new Button("View Patient Info");
+		vpBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleViewPatientInfo();
+			}
+		});
+		return vpBtn;
 	}
 }
