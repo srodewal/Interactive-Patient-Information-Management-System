@@ -1,4 +1,4 @@
-package labrecord;
+package com.ipims.labrecord;
 
 import com.ipims.models.LabRecord;
 import com.ipims.models.Patient;
