@@ -93,11 +93,19 @@ public class EnterLabRecordView extends BaseView{
 
 		HBox hbox2 = new HBox();
 		hbox2.setSpacing(10);
-		hbox2.setAlignment(Pos.CENTER_LEFT);
+		hbox2.setAlignment(Pos.CENTER_RIGHT);
 
 		HBox hbox3 = new HBox();
 		hbox3.setSpacing(10);
-		hbox3.setAlignment(Pos.CENTER_LEFT);
+		hbox3.setAlignment(Pos.CENTER_RIGHT);
+		
+		HBox hbox4 = new HBox();
+		hbox4.setSpacing(10);
+		hbox4.setAlignment(Pos.CENTER_RIGHT);
+		
+		HBox hbox5 = new HBox();
+		hbox5.setSpacing(10);
+		hbox5.setAlignment(Pos.CENTER_RIGHT);
 
 		Label PatientLabel = new Label("Patient: ");
 		PatientLabel.setTextFill(Color.WHITE);
@@ -108,20 +116,35 @@ public class EnterLabRecordView extends BaseView{
 		Label GlucoseLabel = new Label("Glucose:");
 		GlucoseLabel.setTextFill(Color.WHITE);
 		TextField GlucoseTextField = new TextField();
-		GlucoseTextField.setPromptText("Glucose");
+		GlucoseTextField.setPromptText("mg/L");
 		GlucoseTextField.setMaxSize(120, 5);
 		
 		Label SodiumLabel = new Label("Sodium:");
 		SodiumLabel.setTextFill(Color.WHITE);
 		TextField SodiumTextField = new TextField();
-		SodiumTextField.setPromptText("Sodium");
+		SodiumTextField.setPromptText("mmol/L");
 		SodiumTextField.setMaxSize(120, 5);
+		
+		Label CalciumLabel = new Label("Calcium:");
+		CalciumLabel.setTextFill(Color.WHITE);
+		TextField CalciumTextField = new TextField();
+		CalciumTextField.setPromptText("mg/dL");
+		CalciumTextField.setMaxSize(120, 5);
+
+		Label MagnesiumLabel = new Label("Magnesium:");
+		MagnesiumLabel.setTextFill(Color.WHITE);
+		TextField MagnesiumTextField = new TextField();
+		MagnesiumTextField.setPromptText("mg/dL");
+		MagnesiumTextField.setMaxSize(120, 5);
 		
 		hbox.getChildren().addAll(PatientLabel,PatientTextField);
 		hbox2.getChildren().addAll(GlucoseLabel,GlucoseTextField);
 		hbox3.getChildren().addAll(SodiumLabel, SodiumTextField);
-		
-		baseVbox.getChildren().addAll(hbox,hbox2,hbox3);
+		hbox4.getChildren().addAll(CalciumLabel, CalciumTextField);
+		hbox5.getChildren().addAll(MagnesiumLabel, MagnesiumTextField);
+
+
+		baseVbox.getChildren().addAll(hbox,hbox2,hbox3,hbox4,hbox5);
 				
 		
 		
@@ -136,8 +159,9 @@ public class EnterLabRecordView extends BaseView{
 				String enterLabRecordInfo = "Patient Name: "+PatientTextField.getText() + "\n";
 				enterLabRecordInfo += "Glucose Level: " + GlucoseTextField.getText() + "\n";
 				enterLabRecordInfo += "Sodium Level: " + SodiumTextField.getText() + "\n";
+				enterLabRecordInfo += "Calcium Level: " + CalciumTextField.getText() + "\n";
+				enterLabRecordInfo += "Magnesium Level: " + MagnesiumTextField.getText() + "\n";
 
-	
 				
 				if(PatientTextField.getText().equals("")) {
 					actionTarget.setFill(Color.RED);
