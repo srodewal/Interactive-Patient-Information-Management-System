@@ -57,8 +57,9 @@ public class Appointmentsview extends BaseView {
 				
 		// Show schedule appointment if patient or HSP staff
 		//if (user.getUsertype() == UserType.PATIENT ) {
+
 			vbox.getChildren().add(addScheduleAppoinment(null, parentController));
-		//}
+
 		
 
 		Text subTitle = new Text("Manage/View Appoinments");

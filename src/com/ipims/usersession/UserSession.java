@@ -47,7 +47,7 @@ public class UserSession {
 	}
 	
 	public void register(User user, String password) {
-		DatabaseManager.getInstance().newPatient(user, password);
+		DatabaseManager.getInstance().newUser(user, password);
 	}
 }
 

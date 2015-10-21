@@ -33,8 +33,8 @@ public class RetrievePatientInfoView1 extends BaseView {
 		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		grid.add(scenetitle, 0, 0, 2, 1);
 
-		Label userName = new Label("Patient Name:");
-		grid.add(userName, 0, 1);
+		Label patientName = new Label("Patient Name:");
+		grid.add(patientName, 0, 1);
 
 		TextField userTextField = new TextField();
 		grid.add(userTextField, 1, 1);

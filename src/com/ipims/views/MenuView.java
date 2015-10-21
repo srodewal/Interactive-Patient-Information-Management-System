@@ -41,10 +41,14 @@ public class MenuView extends BaseView {
 		
 		vbox.getChildren().add(appoinmentButton(parentController));
 		vbox.getChildren().add(updateHealthButton(parentController));
-		vbox.getChildren().add(labRecordButton(parentController));
 		vbox.getChildren().add(generateStatsButton(parentController));
 		vbox.getChildren().add(PrescribeMedButton(parentController));
 		vbox.getChildren().add(PatientCaseButton(parentController));
+		vbox.getChildren().add(LabRecordButton(parentController));
+		vbox.getChildren().add(EnterLabRecordButton(parentController));
+
+		vbox.getChildren().add(ViewPatientInfoButton(parentController));
+		
 
 //		if (user.getUsertype() == UserType.PATIENT) {
 //			
@@ -96,19 +100,6 @@ public class MenuView extends BaseView {
 		return updateHealthBtn;
 	}
 	
-	private Button labRecordButton(MenuViewController parentController) {
-		Button btn = new Button("Lab Records");
-		btn.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				// Pass the control of handling button clicks to the view controller
-				//parentController.handleHealthCondition();
-
-			}
-		});
-		return btn;
-	}
 	
 	private Button generateStatsButton(MenuViewController parentController) {
 		Button btn = new Button("Generate Statistical Reports");
@@ -155,6 +146,38 @@ public class MenuView extends BaseView {
 		});
 		return PatientCaseBtn;
 	}
+	
+	
+	private Button LabRecordButton(MenuViewController parentController) {
+		
+		Button LabRecordBtn = new Button("View Lab Record");
+		LabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleLabRecord();
+
+			}
+		});
+		return LabRecordBtn;
+	}
+	
+	private Button EnterLabRecordButton(MenuViewController parentController) {
+		
+		Button EnterLabRecordBtn = new Button("Enter Lab Record");
+		EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleEnterLabRecord();
+
+			}
+		});
+		return EnterLabRecordBtn;
+	}
+
 
 	private Button logoutButton(MenuViewController parentController) {
 		Button logoutBtn = new Button("Logout");
@@ -168,5 +191,18 @@ public class MenuView extends BaseView {
 			}
 		});
 		return logoutBtn;
+	}
+	
+	private Button ViewPatientInfoButton(MenuViewController parentController) {
+		Button vpBtn = new Button("View Patient Info");
+		vpBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleViewPatientInfo();
+			}
+		});
+		return vpBtn;
 	}
 }
