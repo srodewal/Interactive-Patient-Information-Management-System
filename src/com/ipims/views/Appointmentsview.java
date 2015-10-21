@@ -1,31 +1,23 @@
 package com.ipims.views;
 
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.List;
 
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.User;
-import com.ipims.models.User.UserType;
-import com.ipims.usersession.UserSession;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -62,57 +54,39 @@ public class Appointmentsview extends BaseView {
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
 		
-		ListView<String> list = new ListView<String>();
-		/*ObservableList<String> items = FXCollections.observableArrayList (
-				"1. Dr. John (Category: Eye) on 10/12/2015 at 14:35",
-				"2. Dr. John (Category: Eye) on 10/1/2015 at 10:00");*/
-		ObservableList<String> items = FXCollections.observableArrayList (
-			);
-		//list.setItems(items);
-		
-		// for success/error message
-		final Text actionTarget = new Text();
-		
+				
 		// Show schedule appointment if patient or HSP staff
-		if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addScheduleAppoinment(items, actionTarget));
-		}
+		//if (user.getUsertype() == UserType.PATIENT ) {
+			vbox.getChildren().add(addScheduleAppoinment(null, parentController));
+		//}
 		
-		list.setItems(items); // moved
 
 		Text subTitle = new Text("Manage/View Appoinments");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
 
 
-		
+		ListView<String> list = new ListView<String>();
+		list.setItems(parentController.getAppoinmentList());
+		list.getSelectionModel().selectedItemProperty().addListener(
+		        (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+		                System.out.println(newValue);
+		                int index = list.getSelectionModel().getSelectedIndex();
+		                parentController.didSelectItem(index);
+		    });
 		vbox.getChildren().add(list);
 		
-		Button cancelBtn = new Button("Cancel Appointment");
-		HBox hbBtn = new HBox(10);
-		//hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(cancelBtn);
-		vbox.getChildren().add(cancelBtn);
 		
-		// to display success or error message
-		vbox.getChildren().add(actionTarget);
-		
-		cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				// call destructor to remove appointment object
-				// remove currently selected appointment
-				int index = list.getSelectionModel().getSelectedIndex();
-				
-				items.remove(index);
-			}
-		});
+		// for success/error message
+				final Text actionTarget = new Text();
+				// to display success or error message
+				vbox.getChildren().add(actionTarget);
 		createScene(vbox);
 		
 	}
 
-	public VBox addScheduleAppoinment(ObservableList<String> items, Text actionTarget) {
+	
+	public VBox addScheduleAppoinment(Appointment appointment, AppointmentViewController parentController) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -192,35 +166,87 @@ public class Appointmentsview extends BaseView {
 
 		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
 		baseVbox.getChildren().add(hbox2);
+		
+		
+		
+		// Fill in values for update
+		if(appointment != null) {
+			title.setText("Update Appointment");
+			datePicker.setValue(LocalDate.now());
+			timeTextField.setText("12:23");
+			docComboBox.setValue("John");
+			catComboBox.setValue("Heart");
+			
+			// Add update and cancel buttons
+			//
+			HBox hbBtn = new HBox(10);
+			Button updateBtn = new Button("Update Appointment");
+			hbBtn.getChildren().add(updateBtn);
+			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
 
+				@Override
+				public void handle(ActionEvent e) {
+					
+					parentController.handleUpdateClick(null);
+				
+				}
+			});
+			
+			Button cancelBtn = new Button("Cancel Appointment");
+			hbBtn.getChildren().add(cancelBtn);
+			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-		Button scheduleAppBtn = new Button("Submit");
-		scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					parentController.handleAppointmentCancellation();
+					
+				
+				}
+			});
+			baseVbox.getChildren().add(hbBtn);
+			
+		} else {
+			Button scheduleAppBtn = new Button("Submit");
+			scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent e) {
+					
+				}
+			});
+
+			baseVbox.getChildren().add(scheduleAppBtn);
+		}
+		
+		return baseVbox;
+	}
+	
+	public void createUpdateAppoinmentView(Appointment appointment, AppointmentViewController parentController) {
+		VBox vbox = new VBox();
+		vbox.setPadding(new Insets(25));
+		vbox.setSpacing(8);
+
+		HBox hbox = new HBox();
+		hbox.setSpacing(10);
+		
+		Text title = new Text("Update Appoinment");
+		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		hbox.getChildren().add(title);
+
+		Button mainMenuBtn = new Button("Go Back");
+		mainMenuBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-				// Pass the control of handling button clicks to the view controller
-				//System.out.println(docComboBox.getValue()); // for testing
-				//Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), docComboBox.getAccessibleText(), UserSession.getInstance().getCurrentUser(), catComboBox.getAccessibleText());
-				String scheduledApp = "Dr. " + (String)docComboBox.getValue();
-				scheduledApp += " (Category: " + catComboBox.getValue() + " ) on ";
-				scheduledApp += datePicker.getValue() + " at ";
-				scheduledApp += timeTextField.getText();
-				//items.add(scheduledApp);
-				if(!items.contains(scheduledApp)) {
-					items.add(scheduledApp);
-					actionTarget.setFill(Color.GREEN);
-					actionTarget.setText("Appointment successfully scheduled!");
-				}
-				else {
-					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Appointment already scheduled!");
-				}
+				parentController.handleUpdateGoBack();
+
+
 			}
 		});
-
-		baseVbox.getChildren().add(scheduleAppBtn);
-
-		return baseVbox;
+		hbox.getChildren().add(mainMenuBtn);
+		vbox.getChildren().add(hbox);
+		
+		vbox.getChildren().add(addScheduleAppoinment(appointment, parentController));
+		createScene(vbox);
 	}
 }
