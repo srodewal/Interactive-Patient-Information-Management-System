@@ -37,6 +37,8 @@ public class User {
 	private String phoneNumber;
 	private String passwordHash;
 	private String insurance;
+	private String sex;
+	private String race;
 	private int userId;
 	
 	// added
@@ -45,6 +47,8 @@ public class User {
 	public User()
 	{ 
 		type = UserType.UNKNOWN;
+		sex = null;
+		race = null;
 	}
 
 	public static User createUser(UserType userType) {
@@ -161,6 +165,22 @@ public class User {
 
 	public void setInsurance(String insurance) {
 		this.insurance = insurance;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getRace() {
+		return race;
+	}
+
+	public void setRace(String race) {
+		this.race = race;
 	}
 	
 }

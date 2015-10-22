@@ -81,7 +81,9 @@ public class DatabaseManager {
 							+ "address TEXT NOT NULL,"
 							+ "email TEXT NOT NULL,"
 							+ "phoneNumber TEXT NOT NULL,"
-							+ "insurance TEXT NOT NULL"
+							+ "insurance TEXT NOT NULL,"
+							+ "sex TEXT,"
+							+ "race TEXT"
 							+ ")");
 					createUser.close();
 				}
@@ -150,8 +152,11 @@ public class DatabaseManager {
 					Statement createLabRecord = dbConnection.createStatement();
 					createLabRecord.executeUpdate("CREATE TABLE LabRecord("
 							+ "userId INTEGER PRIMARY KEY NOT NULL,"
-							+ "date TEXT NOT NULL,"
-							+ "result TEXT NOT NULL");
+							+ "glucose REAL NOT NULL,"
+							+ "sodium REAL NOT NULL,"
+							+ "magnesium REAL NOT NULL,"
+							+ "calcium REAL NOT NULL"
+							+ ")");
 					createLabRecord.close();
 				}
 				catch(Exception e)
@@ -160,11 +165,17 @@ public class DatabaseManager {
 					logError(e.getMessage());
 				}
 			}
-			if(!existingTables.contains("Insurance"))
+			if(!existingTables.contains("Prescription"))
 			{
 				try
 				{
-					
+					Statement createPrescription = dbConnection.createStatement();
+					createPrescription.executeUpdate("CREATE TABLE Prescription("
+							+ "userId INTEGER PRIMARY KEY NOT NULL,"
+							+ "date TEXT NOT NULL,"
+							+ "medicine TEXT NOT NULL"
+							+ ")");
+					createPrescription.close();
 				}
 				catch(Exception e)
 				{
@@ -212,7 +223,7 @@ public class DatabaseManager {
 		{
 			try
 			{
-				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance, sex, race) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				insertPatient.setString(1, user.getName());
 				insertPatient.setString(2, user.getUserName());
 				insertPatient.setString(3, password);
@@ -223,6 +234,8 @@ public class DatabaseManager {
 				insertPatient.setString(8, user.getEmail());
 				insertPatient.setString(9, user.getPhoneNumber());
 				insertPatient.setString(10, user.getInsurance());
+				insertPatient.setString(11, user.getSex());
+				insertPatient.setString(12, user.getRace());
 				insertPatient.executeUpdate();
 				insertPatient.close();
 			}
@@ -349,6 +362,8 @@ public class DatabaseManager {
     	user.setEmail(rs.getString("email"));
     	user.setPhoneNumber(rs.getString("phoneNumber"));
     	user.setInsurance(rs.getString("insurance"));
+    	user.setSex(rs.getString("sex"));
+    	user.setRace(rs.getString("race"));
     	return user;
 	}
 	
