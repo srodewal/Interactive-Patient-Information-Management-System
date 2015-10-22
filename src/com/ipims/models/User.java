@@ -41,6 +41,7 @@ public class User {
 	private String race;
 	private int userId;
 	
+	
 	// added
 	//public ArrayList<User> validUsers = new ArrayList<User>();
 	

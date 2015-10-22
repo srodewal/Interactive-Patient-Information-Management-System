@@ -147,7 +147,7 @@ public class Registrationview extends BaseView {
 					LocalDate date = datePicker.getValue();
 					patient.setDateOfBirth(date.toString());
 					
-					//insuranceProviderToDatabase = healthInsuranceTextField.getText();
+					patient.setInsurance(healthInsuranceTextField.getText());
 					patient.setEmail(emailTextField.getText());
 					patient.setPhoneNumber(phoneNumberTextField.getText());
 					parentController.handleRegister(patient, passwordTextField.getText());
