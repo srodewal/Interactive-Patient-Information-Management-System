@@ -1,9 +1,14 @@
 package com.ipims.views;
 
+
+import com.ipims.appointment.AppointmentViewController;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
+import com.ipims.models.Appointment;
+import com.ipims.models.LabRecord;
 import com.ipims.models.User;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,42 +55,48 @@ public class EnterLabRecordView extends BaseView{
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
 		
-		ListView<String> list = new ListView<String>();
-		/*ObservableList<String> items = FXCollections.observableArrayList (
-				"1. Gregg prescribed advil
-				*/
-		ObservableList<String> items = FXCollections.observableArrayList (
-			);
-		//list.setItems(items);
-		
-		// for success/error message
-		final Text actionTarget = new Text();
-		
 		// Show Patient Case if Doctor
-		//if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addEnterLabRecord(items, actionTarget));
-		//}
+				//if (user.getUsertype() == UserType.PATIENT ) {
+					vbox.getChildren().add(addEnterLabRecord(null, enterLabRecordViewController));
+				//}
 		
-		list.setItems(items); // moved
-
+					
 		Text subTitle = new Text("View Lab Record");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
-		vbox.getChildren().add(subTitle);
+		vbox.getChildren().add(subTitle);			
+					
+					
+		ListView<String> list = new ListView<String>();
 		
+		list.setItems(enterLabRecordViewController.getLabRecordList());
+		list.getSelectionModel().selectedItemProperty().addListener(
+		        (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+		                System.out.println(newValue);
+		                int index = list.getSelectionModel().getSelectedIndex();
+		                enterLabRecordViewController.didSelectItem(index);
+		    });
+		vbox.getChildren().add(list);
 		
-		vbox.getChildren().addAll(list, actionTarget);
+		// for success/error message
+		//final Text actionTarget = new Text();
 		
+				
 		createScene(vbox);
 		
 	}
 
-	public VBox addEnterLabRecord(ObservableList<String> items, Text actionTarget) {
+	public VBox addEnterLabRecord(LabRecord labrecord,  EnterLabRecordViewController enterLabRecordViewController) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
 		baseVbox.setSpacing(8);
 		baseVbox.setStyle("-fx-background-color: #336699;");
 		
+		Text title = new Text("Enter Lab Record");
+		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		title.setFill(Color.WHITE);
+
+		baseVbox.getChildren().add(title);
 		
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
@@ -147,38 +158,77 @@ public class EnterLabRecordView extends BaseView{
 		baseVbox.getChildren().addAll(hbox,hbox2,hbox3,hbox4,hbox5);
 				
 		
+				
+		// Fill in values for update
+		if(labrecord != null) {
+			title.setText("Update Appointment");
+			PatientTextField.setText("Gregg");
+			GlucoseTextField.setText("15mg");
+			SodiumTextField.setText("12mg");
+			CalciumTextField.setText("10mg");
+			MagnesiumTextField.setText("25mg");
+
+			
+			// Add update and cancel buttons
+			//
+			HBox hbBtn = new HBox(10);
+			Button updateBtn = new Button("Update Appointment");
+			hbBtn.getChildren().add(updateBtn);
+			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent e) {
+					
+					enterLabRecordViewController.handleUpdateClick(null);
+				
+				}
+			});
+			
+			Button cancelBtn = new Button("Cancel Appointment");
+			hbBtn.getChildren().add(cancelBtn);
+			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent e) {
+					enterLabRecordViewController.handleAppointmentCancellation();
+					
+				
+				}
+			});
+			baseVbox.getChildren().add(hbBtn);
+			
+		} else {
+			Button EnterLabRecordBtn = new Button("Submit");
+			EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent e) {
+					
+
+					String enterLabRecordInfo = "Patient Name: "+PatientTextField.getText() + "\n";
+					enterLabRecordInfo += "Glucose Level: " + GlucoseTextField.getText() + "\n";
+					enterLabRecordInfo += "Sodium Level: " + SodiumTextField.getText() + "\n";
+					enterLabRecordInfo += "Calcium Level: " + CalciumTextField.getText() + "\n";
+					enterLabRecordInfo += "Magnesium Level: " + MagnesiumTextField.getText() + "\n";
+
+					
+					/*if(PatientTextField.getText().equals("")) {
+						actionTarget.setFill(Color.RED);
+						actionTarget.setText("Error: No patient name entered!");
+					}
+					
+					else {
+						items.add(enterLabRecordInfo);
+						actionTarget.setFill(Color.GREEN);
+						actionTarget.setText("Success");
+					}*/
+					
+				}
+			});
+
+			baseVbox.getChildren().add(EnterLabRecordBtn);
+		}
 		
-		Button EnterLabRecordBtn = new Button("Submit");
-		EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				// Pass the control of handling button clicks to the view controller
-				
-				
-				String enterLabRecordInfo = "Patient Name: "+PatientTextField.getText() + "\n";
-				enterLabRecordInfo += "Glucose Level: " + GlucoseTextField.getText() + "\n";
-				enterLabRecordInfo += "Sodium Level: " + SodiumTextField.getText() + "\n";
-				enterLabRecordInfo += "Calcium Level: " + CalciumTextField.getText() + "\n";
-				enterLabRecordInfo += "Magnesium Level: " + MagnesiumTextField.getText() + "\n";
-
-				
-				if(PatientTextField.getText().equals("")) {
-					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Error: No patient name entered!");
-				}
-				
-				else {
-					items.add(enterLabRecordInfo);
-					actionTarget.setFill(Color.GREEN);
-					actionTarget.setText("Success");
-				}
-				
-			}
-		});
-
-		baseVbox.getChildren().add(EnterLabRecordBtn);
-
 		return baseVbox;
 	}
 
@@ -186,7 +236,34 @@ public class EnterLabRecordView extends BaseView{
 	
 	
 	
-	
+	public void createUpdateEnterLabRecordView(LabRecord labRecord, EnterLabRecordViewController enterLabRecordViewController) {
+		VBox vbox = new VBox();
+		vbox.setPadding(new Insets(25));
+		vbox.setSpacing(8);
+
+		HBox hbox = new HBox();
+		hbox.setSpacing(10);
+		
+		Text title = new Text("Update Appoinment");
+		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		hbox.getChildren().add(title);
+
+		Button mainMenuBtn = new Button("Go Back");
+		mainMenuBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				enterLabRecordViewController.handleUpdateGoBack();
+
+
+			}
+		});
+		hbox.getChildren().add(mainMenuBtn);
+		vbox.getChildren().add(hbox);
+		
+		vbox.getChildren().add(addEnterLabRecord(labRecord, enterLabRecordViewController));
+		createScene(vbox);
+	}
 	
 	
 	
