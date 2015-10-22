@@ -12,15 +12,15 @@ public class User {
 	    
 	    public static UserType fromInteger(int x) {
 	        switch(x) {
-	        case 1:
+	        case 0:
 	            return DOCTOR;
-	        case 2:
+	        case 1:
 	            return PATIENT;
-	        case 3:
+	        case 2:
 	            return HSPSTAFF;
-	        case 4:
+	        case 3:
 	            return NURSE;
-	        case 5:
+	        case 4:
 	            return LABSTAFF;
 	        }
 	        return UNKNOWN;
