@@ -15,7 +15,7 @@ public class DatabaseManager {
 	
 	private Connection dbConnection = null;
 	
-	private static final int NUM_TABLES = 4;
+	private static final int NUM_TABLES = 6;
 	
 	
 	private DatabaseManager()
@@ -80,7 +80,8 @@ public class DatabaseManager {
 							+ "dob TEXT NOT NULL,"
 							+ "address TEXT NOT NULL,"
 							+ "email TEXT NOT NULL,"
-							+ "phoneNumber TEXT NOT NULL"
+							+ "phoneNumber TEXT NOT NULL,"
+							+ "insurance TEXT NOT NULL"
 							+ ")");
 					createUser.close();
 				}
@@ -133,6 +134,36 @@ public class DatabaseManager {
 							+ "severity INTEGER NOT NULL,"
 							+ "pastOrCurrent INTEGER NOT NULL"
 							+ ")");
+					createHealthCondition.close();
+					
+				}
+				catch(Exception e)
+				{
+					logError("Could not write missing tables to database. Please check that the database exists and is valid.");
+					logError(e.getMessage());
+				}
+			}
+			if(!existingTables.contains("LabRecord"))
+			{
+				try
+				{
+					Statement createLabRecord = dbConnection.createStatement();
+					createLabRecord.executeUpdate("CREATE TABLE LabRecord("
+							+ "userId INTEGER PRIMARY KEY NOT NULL,"
+							+ "date TEXT NOT NULL,"
+							+ "result TEXT NOT NULL");
+					createLabRecord.close();
+				}
+				catch(Exception e)
+				{
+					logError("Could not write missing tables to database. Please check that the database exists and is valid.");
+					logError(e.getMessage());
+				}
+			}
+			if(!existingTables.contains("Insurance"))
+			{
+				try
+				{
 					
 				}
 				catch(Exception e)
@@ -181,7 +212,7 @@ public class DatabaseManager {
 		{
 			try
 			{
-				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				insertPatient.setString(1, user.getName());
 				insertPatient.setString(2, user.getUserName());
 				insertPatient.setString(3, password);
@@ -191,6 +222,7 @@ public class DatabaseManager {
 				insertPatient.setString(7, user.getAddress());
 				insertPatient.setString(8, user.getEmail());
 				insertPatient.setString(9, user.getPhoneNumber());
+				insertPatient.setString(10, user.getInsurance());
 				insertPatient.executeUpdate();
 				insertPatient.close();
 			}
@@ -316,6 +348,7 @@ public class DatabaseManager {
     	user.setAddress(rs.getString("address"));
     	user.setEmail(rs.getString("email"));
     	user.setPhoneNumber(rs.getString("phoneNumber"));
+    	user.setInsurance(rs.getString("insurance"));
     	return user;
 	}
 	

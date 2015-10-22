@@ -36,6 +36,7 @@ public class User {
 	private String email;
 	private String phoneNumber;
 	private String passwordHash;
+	private String insurance;
 	private int userId;
 	
 	// added
@@ -152,6 +153,14 @@ public class User {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public String getInsurance() {
+		return insurance;
+	}
+
+	public void setInsurance(String insurance) {
+		this.insurance = insurance;
 	}
 	
 }
