@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -85,6 +86,30 @@ public class Registrationview extends BaseView {
 		TextField healthInsuranceTextField = new TextField();
 		registerPane.add(healthInsuranceTextField, 1, 9);
 
+		Label Ethnicity = new Label("Gender:");
+		registerPane.add(Ethnicity, 0, 10);
+		ComboBox<String> EthnicityComboBox = new ComboBox<String>();
+		EthnicityComboBox.getItems().addAll(
+				"Caucasian",
+				"African American",
+				"American Indian",
+				"Pacific Islander",
+				"Hispanic",
+				"Other"
+				);
+		registerPane.add(EthnicityComboBox, 1, 10);
+
+		
+		Label Sex = new Label("Sex:");
+		registerPane.add(Sex, 0, 11);
+		ComboBox<String> SexComboBox = new ComboBox<String>();
+		SexComboBox.getItems().addAll(
+				"Male",
+				"Female"
+				);
+		registerPane.add(SexComboBox, 1, 11);
+		
+		
 		//Label pw = new Label("Password:");
 		//registerPane.add(pw, 0, 2);
 
@@ -95,17 +120,17 @@ public class Registrationview extends BaseView {
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btn);
-		registerPane.add(hbBtn, 1, 10);
+		registerPane.add(hbBtn, 1, 12);
 
 		Button btn2 = new Button("Back");
 		HBox hbBtn2 = new HBox(10);
 		hbBtn2.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn2.getChildren().add(btn2);
-		registerPane.add(hbBtn2, 1, 11);
+		registerPane.add(hbBtn2, 1, 13);
 
 
 		final Text actiontarget = new Text();
-		registerPane.add(actiontarget, 1, 12);
+		registerPane.add(actiontarget, 1, 14);
 
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -137,6 +162,12 @@ public class Registrationview extends BaseView {
 				else if(healthInsuranceTextField.getText().equals("")) {
 					parentController.handleError();
 				}
+				else if(EthnicityComboBox.getPromptText().equals("")) {
+					parentController.handleError();
+				}
+				else if(SexComboBox.getPromptText().equals("")) {
+					parentController.handleError();
+				}
 				else {
 			
 					User patient = new Patient();
@@ -146,6 +177,9 @@ public class Registrationview extends BaseView {
 					patient.setSsn(ssnNumberTextField.getText());
 					LocalDate date = datePicker.getValue();
 					patient.setDateOfBirth(date.toString());
+					patient.setRace(EthnicityComboBox.getPromptText());
+					patient.setSex(SexComboBox.getPromptText());
+
 					
 					patient.setInsurance(healthInsuranceTextField.getText());
 					patient.setEmail(emailTextField.getText());
