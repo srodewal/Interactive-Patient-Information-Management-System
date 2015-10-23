@@ -9,6 +9,7 @@ import com.ipims.patientcase.PatientCaseViewController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
@@ -27,6 +28,7 @@ public class MenuView extends BaseView {
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
 		vbox.setSpacing(8);
+		vbox.setAlignment(Pos.CENTER);
 
 		
 		Text scenetitle = new Text("Menu");
@@ -74,8 +76,8 @@ public class MenuView extends BaseView {
 
 	private Button appoinmentButton(MenuViewController parentController) {
 		Button scheduleAppBtn = new Button("Appointments");
+		
 		scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
