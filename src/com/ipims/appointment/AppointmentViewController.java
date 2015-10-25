@@ -25,9 +25,10 @@ public class AppointmentViewController {
 	//--------------- View Controller methods ---------------
 	//--------------------------------------------------------
 	public  AppointmentViewController() {
+		appManager = new AppointmentManager();
 		view = new Appointmentsview();
 		view.createAppointmentsView(UserSession.getInstance().getCurrentUser(), this);
-		appManager = new AppointmentManager();
+		
 	}
 
 	public Scene getScene() {
