@@ -6,6 +6,9 @@ import java.util.List;
 import com.ipims.models.Appointment;
 import com.ipims.models.Patient;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class AppointmentManager {
 	
 	public boolean confirmAppointment(Appointment appoinment) {
@@ -16,7 +19,7 @@ public class AppointmentManager {
 		return false;
 	}
 	
-	public List<Appointment> listAppointmentForPatient(Patient patient) {
+	public List<Appointment> getAppointmentForPatient(Patient patient) {
 		List<Appointment> appointmentList = new ArrayList<>(); 
 		
 		return appointmentList;
@@ -36,16 +39,21 @@ public class AppointmentManager {
 		return list;
 	}
 	
-	public static List<Patient> listAllDoctors() {
-		List<Patient> list = new ArrayList<>(); 
+	public static List<String> getAllDoctors() {
+		List<String> list = new ArrayList<>(); 
+		list.add("John");
+		list.add("Smith");
+		return list;
+	}
+	
+	public static List<String> getAllCategories() {
+		List<String> list = new ArrayList<>(); 
+		list.add("Heart");
+		list.add("Eye");
+		list.add("Ortho");
 		
 		return list;
 	}
 	
-	public static List<Patient> listAllCategories() {
-		List<Patient> list = new ArrayList<>(); 
-		
-		return list;
-	}
 
 }

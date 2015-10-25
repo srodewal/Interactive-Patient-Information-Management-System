@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.User;
+import com.ipims.models.User.UserType;
 
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -36,7 +37,7 @@ public class Appointmentsview extends BaseView {
 
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
-		
+
 		Text title = new Text("Appoinments");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		hbox.getChildren().add(title);
@@ -47,20 +48,20 @@ public class Appointmentsview extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				parentController.goBack();
-
-
 			}
 		});
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
-		
-				
+
+
 		// Show schedule appointment if patient or HSP staff
-		//if (user.getUsertype() == UserType.PATIENT ) {
+		if (user.getUsertype() == UserType.PATIENT || 
+				user.getUsertype() == UserType.HSPSTAFF) {
 
 			vbox.getChildren().add(addScheduleAppoinment(null, parentController));
+		}
 
-		
+
 
 		Text subTitle = new Text("Manage/View Appoinments");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -70,23 +71,18 @@ public class Appointmentsview extends BaseView {
 		ListView<String> list = new ListView<String>();
 		list.setItems(parentController.getAppoinmentList());
 		list.getSelectionModel().selectedItemProperty().addListener(
-		        (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-		                System.out.println(newValue);
-		                int index = list.getSelectionModel().getSelectedIndex();
-		                parentController.didSelectItem(index);
-		    });
+				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+					System.out.println(newValue);
+					int index = list.getSelectionModel().getSelectedIndex();
+
+					parentController.didSelectItem(index);
+				});
 		vbox.getChildren().add(list);
-		
-		
-		// for success/error message
-				final Text actionTarget = new Text();
-				// to display success or error message
-				vbox.getChildren().add(actionTarget);
 		createScene(vbox);
-		
+
 	}
 
-	
+
 	public VBox addScheduleAppoinment(Appointment appointment, AppointmentViewController parentController) {
 
 		VBox baseVbox = new VBox();
@@ -109,32 +105,32 @@ public class Appointmentsview extends BaseView {
 		DatePicker datePicker = new DatePicker();
 		datePicker.setPromptText("mm/dd/yyyy");
 		datePicker.setMaxSize(120, 5);
-		
+
 		// following code makes it impossible to schedule appointment in the past
 		LocalDate currentDate = LocalDate.now(); // current date
 		/*if(datePicker.isBefore(currentDate)) {
 		}*/
 		final Callback<DatePicker, DateCell> dayCellFactory = 
-	            new Callback<DatePicker, DateCell>() {
-	                @Override
-	                public DateCell call(final DatePicker datePicker) {
-	                    return new DateCell() {
-	                        @Override
-	                        public void updateItem(LocalDate item, boolean empty) {
-	                            super.updateItem(item, empty);
-	                           
-	                            if (item.isBefore(
-	                                    currentDate)
-	                                ) {
-	                                    setDisable(true);
-	                                    setStyle("-fx-background-color: #ffc0cb;");
-	                            }   
-	                    }
-	                };
-	            }
-	        };
-	        datePicker.setDayCellFactory(dayCellFactory);
-		
+				new Callback<DatePicker, DateCell>() {
+			@Override
+			public DateCell call(final DatePicker datePicker) {
+				return new DateCell() {
+					@Override
+					public void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (item.isBefore(
+								currentDate)
+								) {
+							setDisable(true);
+							setStyle("-fx-background-color: #ffc0cb;");
+						}   
+					}
+				};
+			}
+		};
+		datePicker.setDayCellFactory(dayCellFactory);
+
 
 		Label timeLabel = new Label("Time:");
 		timeLabel.setTextFill(Color.WHITE);
@@ -152,24 +148,18 @@ public class Appointmentsview extends BaseView {
 		docLabel.setTextFill(Color.WHITE);
 
 		ComboBox<String> docComboBox = new ComboBox<String>();
-		docComboBox.getItems().addAll(
-				"John",
-				"Bob" 
-				);
+		docComboBox.getItems().addAll(parentController.getDoctorList());
 
 		Label categoryLabel = new Label("Category:");
 		categoryLabel.setTextFill(Color.WHITE);
 		ComboBox<String> catComboBox = new ComboBox<String>();
-		catComboBox.getItems().addAll(
-				"Heart",
-				"Eye" 
-				);
+		catComboBox.getItems().addAll(parentController.getCategoryList());
 
 		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
 		baseVbox.getChildren().add(hbox2);
-		
-		
-		
+
+
+
 		// Fill in values for update
 		if(appointment != null) {
 			title.setText("Update Appointment");
@@ -177,7 +167,7 @@ public class Appointmentsview extends BaseView {
 			timeTextField.setText("12:23");
 			docComboBox.setValue("John");
 			catComboBox.setValue("Heart");
-			
+
 			// Add update and cancel buttons
 			//
 			HBox hbBtn = new HBox(10);
@@ -187,12 +177,12 @@ public class Appointmentsview extends BaseView {
 
 				@Override
 				public void handle(ActionEvent e) {
-					
+
 					parentController.handleUpdateClick(null);
-				
+
 				}
 			});
-			
+
 			Button cancelBtn = new Button("Cancel Appointment");
 			hbBtn.getChildren().add(cancelBtn);
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -200,28 +190,28 @@ public class Appointmentsview extends BaseView {
 				@Override
 				public void handle(ActionEvent e) {
 					parentController.handleAppointmentCancellation();
-					
-				
+
+
 				}
 			});
 			baseVbox.getChildren().add(hbBtn);
-			
+
 		} else {
 			Button scheduleAppBtn = new Button("Submit");
 			scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent e) {
-					
+
 				}
 			});
 
 			baseVbox.getChildren().add(scheduleAppBtn);
 		}
-		
+
 		return baseVbox;
 	}
-	
+
 	public void createUpdateAppoinmentView(Appointment appointment, AppointmentViewController parentController) {
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
@@ -229,7 +219,7 @@ public class Appointmentsview extends BaseView {
 
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
-		
+
 		Text title = new Text("Update Appoinment");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		hbox.getChildren().add(title);
@@ -241,12 +231,11 @@ public class Appointmentsview extends BaseView {
 			public void handle(ActionEvent e) {
 				parentController.handleUpdateGoBack();
 
-
 			}
 		});
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
-		
+
 		vbox.getChildren().add(addScheduleAppoinment(appointment, parentController));
 		createScene(vbox);
 	}
