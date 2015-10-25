@@ -1,6 +1,7 @@
 package com.ipims.views;
 
 import com.ipims.healthconditions.HealthViewController;
+import com.ipims.models.HealthCondition;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -80,10 +81,10 @@ public class HealthView extends BaseView {
 		//}
 
 		// Add Medical History box
-		vbox.getChildren().add(addMedicalHistory(items));
+		vbox.getChildren().add(addMedicalHistory(parentController, items, PatientTextField));
 
 		// Add Medical Condition box
-		vbox.getChildren().add(addMedicalCondition(parentController, items));
+		vbox.getChildren().add(addMedicalCondition(parentController, items, PatientTextField));
 
 		Text subTitle = new Text("View Health Conditions");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -98,7 +99,7 @@ public class HealthView extends BaseView {
 		
 	}
 
-	public VBox addMedicalHistory(ObservableList<String> items) {
+	public VBox addMedicalHistory(HealthViewController parentController, ObservableList<String> items, TextField PatientTextField) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -138,6 +139,16 @@ public class HealthView extends BaseView {
 				if(!conditionComboBox.equals(null)) {
 					String updatedHistory = "(History) " + conditionComboBox.getValue() + "\n" + commentsTextField.getText();
 					items.add(updatedHistory);
+					
+					// send to database
+					HealthCondition newHc = new HealthCondition();
+					newHc.setComments(commentsTextField.getText());
+					newHc.setHealthConcern(conditionComboBox.getValue());
+					//newHc.setHealthConditionId(0);
+					newHc.setCurrent(false); // determines if history or current condition
+					//newHc.setSeverity(0);
+					
+					//parentController.handleHc(, newHc);
 				}
 	
 			}
@@ -153,7 +164,7 @@ public class HealthView extends BaseView {
 		return baseVbox;
 	}
 
-	public VBox addMedicalCondition(HealthViewController parentController, ObservableList<String> items) {
+	public VBox addMedicalCondition(HealthViewController parentController, ObservableList<String> items, TextField PatientTextField) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -200,9 +211,21 @@ public class HealthView extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
-				if(!conditionComboBox.equals(null)) {
+				if(!conditionComboBox.equals(null) && !PatientTextField.getText().equals("")) {
+					System.out.println("Searching for patient"); // test
+	
 					String updatedCondition = "(Condition) " + conditionComboBox.getValue() + "\n" + commentsTextField.getText();
 					items.add(updatedCondition);
+					
+					// send to database
+					HealthCondition newHc = new HealthCondition();
+					newHc.setComments(commentsTextField.getText());
+					newHc.setHealthConcern(conditionComboBox.getValue());
+					//newHc.setHealthConditionId(0);
+					newHc.setCurrent(true); // determines if history or current condition
+					//newHc.setSeverity(0);
+					
+					//parentController.handleHc(, newHc);
 				}
 				
 				if(severity.isSelected()) {
@@ -213,7 +236,6 @@ public class HealthView extends BaseView {
 				if(conditionComboBox.getValue().equals("Chest Pain")) {
 					// send alert
 					parentController.sendAlert(); // alerts system to patient with "severe condition"
-
 				}
 
 			}

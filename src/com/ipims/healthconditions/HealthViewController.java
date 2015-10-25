@@ -3,6 +3,8 @@ package com.ipims.healthconditions;
 import java.awt.TextArea;
 
 import com.ipims.MenuViewController;
+import com.ipims.models.HealthCondition;
+import com.ipims.models.Patient;
 import com.ipims.usersession.UserSession;
 import com.ipims.views.HealthView;
 
@@ -45,6 +47,12 @@ private HealthView view;
 	public void sendAlert() {
 		view.showErrorMessage("Alert: Patient with severe condition needs attention.");
 	}
+	
+	public void handleHc(Patient currentPatient, HealthCondition newHc) {
+		HealthConditionManager newHcm = new HealthConditionManager();
+		newHcm.updateHealth(currentPatient, newHc);
+	}
+	
     
         
 	
