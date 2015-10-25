@@ -223,6 +223,7 @@ public class DatabaseManager {
 		{
 			try
 			{
+				System.out.println("Trying to create user");
 				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance, sex, race) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				insertPatient.setString(1, user.getName());
 				insertPatient.setString(2, user.getUserName());
@@ -319,8 +320,10 @@ public class DatabaseManager {
 			stat.setString(1, userName);
 			stat.setString(2, password);
 			ResultSet rs = stat.executeQuery();
+			if (rs.isClosed() == false) {
+				user = createUser(rs);
+			}
 			
-			user = createUser(rs);
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
