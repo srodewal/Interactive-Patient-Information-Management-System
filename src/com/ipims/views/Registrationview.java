@@ -86,7 +86,7 @@ public class Registrationview extends BaseView {
 		TextField healthInsuranceTextField = new TextField();
 		registerPane.add(healthInsuranceTextField, 1, 9);
 
-		Label Ethnicity = new Label("Gender:");
+		Label Ethnicity = new Label("Ethnicity:");
 		registerPane.add(Ethnicity, 0, 10);
 		ComboBox<String> EthnicityComboBox = new ComboBox<String>();
 		EthnicityComboBox.getItems().addAll(
