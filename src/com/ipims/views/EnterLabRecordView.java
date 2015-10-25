@@ -161,6 +161,8 @@ public class EnterLabRecordView extends BaseView{
 				
 		// Fill in values for update
 		if(labrecord != null) {
+			
+			
 			title.setText("Update Appointment");
 			PatientTextField.setText("Gregg");
 			GlucoseTextField.setText("15mg");
@@ -204,12 +206,17 @@ public class EnterLabRecordView extends BaseView{
 				@Override
 				public void handle(ActionEvent e) {
 					
+					int Calcium = Integer.parseInt(CalciumTextField.getText());
+					int Glucose = Integer.parseInt(GlucoseTextField.getText());
+					int Sodium = Integer.parseInt(SodiumTextField.getText());
+					int Magnesium = Integer.parseInt(MagnesiumTextField.getText());
 
+					
 					String enterLabRecordInfo = "Patient Name: "+PatientTextField.getText() + "\n";
-					enterLabRecordInfo += "Glucose Level: " + GlucoseTextField.getText() + "\n";
-					enterLabRecordInfo += "Sodium Level: " + SodiumTextField.getText() + "\n";
-					enterLabRecordInfo += "Calcium Level: " + CalciumTextField.getText() + "\n";
-					enterLabRecordInfo += "Magnesium Level: " + MagnesiumTextField.getText() + "\n";
+					enterLabRecordInfo += "Glucose Level: " + Glucose + "\n";
+					enterLabRecordInfo += "Sodium Level: " + Sodium + "\n";
+					enterLabRecordInfo += "Calcium Level: " + Calcium + "\n";
+					enterLabRecordInfo += "Magnesium Level: " + Magnesium + "\n";
 
 					
 					/*if(PatientTextField.getText().equals("")) {
