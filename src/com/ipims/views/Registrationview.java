@@ -162,10 +162,10 @@ public class Registrationview extends BaseView {
 				else if(healthInsuranceTextField.getText().equals("")) {
 					parentController.handleError();
 				}
-				else if(EthnicityComboBox.getPromptText().equals("")) {
+				else if(EthnicityComboBox.getValue().equals("")) {
 					parentController.handleError();
 				}
-				else if(SexComboBox.getPromptText().equals("")) {
+				else if(SexComboBox.getValue().equals("")) {
 					parentController.handleError();
 				}
 				else {
@@ -177,8 +177,8 @@ public class Registrationview extends BaseView {
 					patient.setSsn(ssnNumberTextField.getText());
 					LocalDate date = datePicker.getValue();
 					patient.setDateOfBirth(date.toString());
-					patient.setRace(EthnicityComboBox.getPromptText());
-					patient.setSex(SexComboBox.getPromptText());
+					patient.setRace(EthnicityComboBox.getValue());
+					patient.setSex(SexComboBox.getValue());
 
 					
 					patient.setInsurance(healthInsuranceTextField.getText());

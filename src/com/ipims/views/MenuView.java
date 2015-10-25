@@ -1,16 +1,13 @@
 package com.ipims.views;
 
 import com.ipims.MenuViewController;
-import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.models.User;
-import com.ipims.models.User.UserType;
-import com.ipims.patientcase.PatientCaseViewController;
+
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 
@@ -37,7 +34,7 @@ public class MenuView extends BaseView {
 		
 		//If the passed in user is patient, create the menu for patient.
 
-		Text welcomeTitle = new Text("Welcome User");
+		Text welcomeTitle = new Text("Welcome User: " + user.getName() + " (" + user.getUserTypeString() + ")");
 		welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(welcomeTitle);
 		

@@ -84,6 +84,38 @@ public class User {
 		return user;
 	}
 	
+	public String getUserTypeString() {
+		String user = "Unknown";
+		switch (this.getUsertype()) {
+		case DOCTOR:
+			user = "Doctor";
+			break;
+
+		case PATIENT:
+			user = "Patient";
+			break;
+			
+		case HSPSTAFF:
+			user = "HSPStaff";
+			break;
+			
+		case NURSE:
+			user = "Nurse";
+			break;
+			
+		case LABSTAFF:
+			user = "LabStaff";
+			break;
+			
+		case UNKNOWN:
+			break;
+		default:
+			break;
+		}
+		
+		return user;
+	}
+	
 	public UserType getUsertype() {
 		return type;
 	}
