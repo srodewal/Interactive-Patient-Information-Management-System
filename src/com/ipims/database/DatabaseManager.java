@@ -6,9 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.ipims.models.User;
+import com.ipims.models.*;
 import com.ipims.models.User.UserType;
-import com.ipims.models.HealthCondition;
 
 public class DatabaseManager {
 	private static final DatabaseManager INSTANCE = new DatabaseManager();
@@ -99,7 +98,7 @@ public class DatabaseManager {
 				{
 					Statement createDoctorCategory = dbConnection.createStatement();
 					createDoctorCategory.executeUpdate("CREATE TABLE DoctorCategory( userId INTEGER PRIMARY KEY NOT NULL,"
-							+ " categoryId INTEGER NOT NULL )");
+							+ " category TEXT NOT NULL )");
 					createDoctorCategory.close();
 				}
 				catch(Exception e)
@@ -114,8 +113,10 @@ public class DatabaseManager {
 				{
 					Statement createAppointment = dbConnection.createStatement();
 					createAppointment.executeUpdate("CREATE TABLE Appointment( patientId INTEGER PRIMARY KEY NOT NULL,"
-							+ " doctorId INT NOT NULL, "
-							+ "time DATETIME NOT NULL )");
+							+ "doctorId INT NOT NULL, "
+							+ "time TEXT NOT NULL,"
+							+ "date TEXT NOT NULL"
+							+ ")");
 					createAppointment.close();
 				}
 				catch(Exception e)
@@ -254,6 +255,7 @@ public class DatabaseManager {
 	
 	public  void newAppointment(int patientId, int doctorId, String time)
 	{
+		//TODO: match model
 		if(dbConnection != null)
 		{
 			try
@@ -312,10 +314,9 @@ public class DatabaseManager {
 	}
 	
 	
-	public User getUser(String userName, String password) {
+	public User getUser(String userName, String password) { //for login
 		User user = null;
 		try {
-			System.out.println("Trying to get user");
 			PreparedStatement stat = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ? AND passwordHash = ?");
 			stat.setString(1, userName);
 			stat.setString(2, password);
@@ -331,12 +332,35 @@ public class DatabaseManager {
 		return user;
 	}
 	
+	public User getUser(String userName) //for normal use
+	{
+		User user = null;
+		
+		try
+		{
+			PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ?");
+			userStatement.setString(1, userName);
+			
+			ResultSet rs = userStatement.executeQuery();
+			if(rs.isClosed() == false)
+			{
+				user = createUser(rs);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get user. Please check that the database has been set up properly.");
+			logError(e.getMessage());
+		}
+		
+		return user;
+	}
+	
 	public List<User> getPatientList() {
 		
 		List<User> userList = new ArrayList<>();
 		
 		try {
-			System.out.println("Trying to get user");
 			Statement stat = dbConnection.createStatement();
 			ResultSet rs = stat.executeQuery("select * from USER WHERE type = " + UserType.PATIENT.ordinal() + ";");
 
@@ -349,6 +373,84 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 		return userList;
+	}
+	
+	public List<Appointment> getAppointmentForPatient(Patient patient)
+	{
+		List<Appointment> appointmentList = new ArrayList<>();
+		
+		//TODO: complete once I'm sure about what the field in the model represent
+//		try
+//		{
+//			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE patientId = ?");
+//			getAppointments.setInt(1, patient.getUserId());
+//			
+//			ResultSet rs = getAppointments.executeQuery();
+//			
+//			while(rs.next())
+//			{
+//				Appointment appointment = new Appointment();
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logError("Could not get appointments. Please check the database has been set up correctly.");
+//			logError(e.getMessage());
+//		}
+		
+		return appointmentList;
+	}
+	
+	public List<Doctor> getAllDoctors()
+	{
+		List<Doctor> doctors = new ArrayList<>();
+		
+		try
+		{
+			Statement getDoctors = dbConnection.createStatement();
+			ResultSet rs = getDoctors.executeQuery("SELECT * FROM User JOIN DoctorCategory ON User.userId = DoctorCategory.userId;");
+			
+			while(rs.next())
+			{
+				Doctor doctor = (Doctor) createUser(rs);
+				doctor.setCategory(rs.getString("category"));
+				
+				doctors.add(doctor);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get doctors from the database. Please check that the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+		
+		return doctors;
+	}
+	
+	public List<HealthCondition> getPatientConditions(int patientId)
+	{
+		List<HealthCondition> conditions = new ArrayList<>();
+		//TODO: complete once I know what the fields in the model represent.
+//		try
+//		{
+//			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM HealthConditions WHERE userId = ?");
+//			getPatients.setInt(1, patientId);
+//			
+//			ResultSet rs = getPatients.executeQuery();
+//			
+//			while(rs.next())
+//			{
+//				HealthCondition condition = new HealthCondition();
+//				condition.set
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logError("Could not get patient conditions. Please check that the database has been set up properly.");
+//			logError(e.getMessage());
+//		}
+		
+		return conditions;
 	}
 	
 	//=================== DB Helpers ==================
