@@ -480,6 +480,30 @@ public class DatabaseManager {
 		return conditions;
 	}
 	
+	public List<LabRecord> getAllLabRecords()
+	{
+		ArrayList<LabRecord> records = new ArrayList<>();
+		//TODO: once I figure out how to spawn patient objects efficiently
+//		try
+//		{
+//			Statement getRecords = dbConnection.createStatement();
+//			
+//			ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord;");
+//			while(rs.next())
+//			{
+//				LabRecord record = new LabRecord();
+//				
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
+//			logError(e.getMessage());
+//		}
+		
+		return records;
+	}
+	
 	//=================== DB Helpers ==================
 	
 	private User createUser(ResultSet rs) throws SQLException {
