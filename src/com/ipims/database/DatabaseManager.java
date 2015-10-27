@@ -172,9 +172,11 @@ public class DatabaseManager {
 				{
 					Statement createPrescription = dbConnection.createStatement();
 					createPrescription.executeUpdate("CREATE TABLE Prescription("
-							+ "userId INTEGER PRIMARY KEY NOT NULL,"
+							+ "prescriptionId INTEGER PRIMARY KEY NOT NULL,"
+							+ "userId INTEGER NOT NULL,"
 							+ "date TEXT NOT NULL,"
-							+ "medicine TEXT NOT NULL"
+							+ "medicine TEXT NOT NULL,"
+							+ "pastOrCurrent INTEGER NOT NULL"
 							+ ")");
 					createPrescription.close();
 				}
