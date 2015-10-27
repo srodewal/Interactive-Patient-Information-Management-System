@@ -1,9 +1,13 @@
 package com.ipims.views;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ipims.appointment.AppointmentViewController;
+import com.ipims.database.DatabaseManager;
 import com.ipims.medication.PrescribeMedViewController;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -29,7 +33,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class PrescribeMedView extends BaseView {
-
+	private List<Patient> allPatients;
 	
 	public void createPrescribeMedView(User user, PrescribeMedViewController prescribeMedViewController) {
 
@@ -115,12 +119,19 @@ public class PrescribeMedView extends BaseView {
 
 		Label PatientLabel = new Label("Patient:");
 		PatientLabel.setTextFill(Color.WHITE);
-		TextField PatientTextField = new TextField();
+		/*TextField PatientTextField = new TextField();
 		PatientTextField.setPromptText("Patient Name");
 		PatientTextField.setMaxSize(120, 5);
+		*/
 		
-
-		
+		// get all patients
+		ComboBox<String> patientComboBox = new ComboBox<String>();
+		allPatients = new ArrayList<Patient>();
+		allPatients = DatabaseManager.getInstance().getAllPatients();
+		for(int i = 0; i < allPatients.size(); i++) {
+			patientComboBox.getItems().add(allPatients.get(i).getName());
+		}
+		// end get all patients
 
 		Label MedicationLabel = new Label("Medication:");
 		MedicationLabel.setTextFill(Color.WHITE);
@@ -128,7 +139,7 @@ public class PrescribeMedView extends BaseView {
 		MedicationTextField.setPromptText("Medication");
 		MedicationTextField.setMaxSize(110, 5);
 
-		hbox.getChildren().addAll(PatientLabel,PatientTextField, MedicationLabel, MedicationTextField);
+		hbox.getChildren().addAll(PatientLabel, patientComboBox, MedicationLabel, MedicationTextField);
 		baseVbox.getChildren().add(hbox);
 
 		HBox hbox2 = new HBox();
@@ -142,9 +153,10 @@ public class PrescribeMedView extends BaseView {
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
 				
-				
-				String prescribeMed = PatientTextField.getText() + " prescribed " + MedicationTextField.getText();
-				if(MedicationTextField.getText().equals("") || PatientTextField.getText().equals("")) {
+				int temp = patientComboBox.getSelectionModel().getSelectedIndex();
+				String patientName = allPatients.get(temp).getName();
+				String prescribeMed = patientName + " prescribed " + MedicationTextField.getText();
+				if(MedicationTextField.getText().equals("")) {
 					actionTarget.setFill(Color.RED);
 					actionTarget.setText("Error: Unable to Prescribe Medication!");
 				}

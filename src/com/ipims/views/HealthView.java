@@ -77,15 +77,15 @@ public class HealthView extends BaseView {
 			PatientLabel.setTextFill(Color.BLACK);
 			PatientLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 
-			//TextField PatientTextField = new TextField();
-
-			//PatientTextField.setMaxSize(250, 55);
+			
+			// get all patients
 			ComboBox<String> patientComboBox = new ComboBox<String>();
 			List<Patient> allPatients = new ArrayList<Patient>();
 			allPatients = DatabaseManager.getInstance().getAllPatients();
 			for(int i = 0; i < allPatients.size(); i++) {
 				patientComboBox.getItems().add(allPatients.get(i).getName());
 			}
+			// end get all patients
 
 			hbox2.getChildren().addAll(PatientLabel, patientComboBox);
 			vbox.getChildren().add(hbox2);
