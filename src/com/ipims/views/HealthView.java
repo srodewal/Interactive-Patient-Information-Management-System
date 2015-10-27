@@ -1,7 +1,12 @@
 package com.ipims.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController;
 import com.ipims.models.HealthCondition;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -76,12 +81,11 @@ public class HealthView extends BaseView {
 
 			//PatientTextField.setMaxSize(250, 55);
 			ComboBox<String> patientComboBox = new ComboBox<String>();
-			patientComboBox.getItems().addAll(
-					"Test1",
-					"Test2",
-					"Test3",
-					"Test4"
-					);
+			List<Patient> allPatients = new ArrayList<Patient>();
+			allPatients = DatabaseManager.getInstance().getAllPatients();
+			for(int i = 0; i < allPatients.size(); i++) {
+				patientComboBox.getItems().add(allPatients.get(i).getName());
+			}
 
 			hbox2.getChildren().addAll(PatientLabel, patientComboBox);
 			vbox.getChildren().add(hbox2);
