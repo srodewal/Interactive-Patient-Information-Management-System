@@ -427,6 +427,33 @@ public class DatabaseManager {
 		return doctors;
 	}
 	
+	public List<Patient> getAllPatients()
+	{
+		List<Patient> patients = new ArrayList<>();
+		
+		try
+		{
+			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM User WHERE type = ?");
+			getPatients.setInt(1, UserType.PATIENT.ordinal());
+			ResultSet rs = getPatients.executeQuery();
+			
+			while(rs.next())
+			{
+				Patient patient = (Patient) createUser(rs);
+				//patient.setCategory(rs.getString("username"));
+				
+				patients.add(patient);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get patients from the database. Please check that the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+		
+		return patients;
+	}
+	
 	public List<HealthCondition> getPatientConditions(int patientId)
 	{
 		List<HealthCondition> conditions = new ArrayList<>();

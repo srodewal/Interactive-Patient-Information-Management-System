@@ -72,19 +72,26 @@ public class HealthView extends BaseView {
 			PatientLabel.setTextFill(Color.BLACK);
 			PatientLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 
-			TextField PatientTextField = new TextField();
+			//TextField PatientTextField = new TextField();
 
-			PatientTextField.setMaxSize(250, 55);
+			//PatientTextField.setMaxSize(250, 55);
+			ComboBox<String> patientComboBox = new ComboBox<String>();
+			patientComboBox.getItems().addAll(
+					"Test1",
+					"Test2",
+					"Test3",
+					"Test4"
+					);
 
-			hbox2.getChildren().addAll(PatientLabel, PatientTextField);
+			hbox2.getChildren().addAll(PatientLabel, patientComboBox);
 			vbox.getChildren().add(hbox2);
 		//}
 
 		// Add Medical History box
-		vbox.getChildren().add(addMedicalHistory(parentController, items, PatientTextField));
+		vbox.getChildren().add(addMedicalHistory(parentController, items));
 
 		// Add Medical Condition box
-		vbox.getChildren().add(addMedicalCondition(parentController, items, PatientTextField));
+		vbox.getChildren().add(addMedicalCondition(parentController, items));
 
 		Text subTitle = new Text("View Health Conditions");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -99,7 +106,7 @@ public class HealthView extends BaseView {
 		
 	}
 
-	public VBox addMedicalHistory(HealthViewController parentController, ObservableList<String> items, TextField PatientTextField) {
+	public VBox addMedicalHistory(HealthViewController parentController, ObservableList<String> items) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -164,7 +171,7 @@ public class HealthView extends BaseView {
 		return baseVbox;
 	}
 
-	public VBox addMedicalCondition(HealthViewController parentController, ObservableList<String> items, TextField PatientTextField) {
+	public VBox addMedicalCondition(HealthViewController parentController, ObservableList<String> items) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -211,7 +218,9 @@ public class HealthView extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
-				if(!conditionComboBox.equals(null) && !PatientTextField.getText().equals("")) {
+				//if(!conditionComboBox.equals(null) && !PatientTextField.getText().equals("")) 
+				if(!conditionComboBox.equals(null))
+				{
 					System.out.println("Searching for patient"); // test
 	
 					String updatedCondition = "(Condition) " + conditionComboBox.getValue() + "\n" + commentsTextField.getText();
