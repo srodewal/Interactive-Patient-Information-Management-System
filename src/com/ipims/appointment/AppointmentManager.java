@@ -3,11 +3,12 @@ package com.ipims.appointment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
+import com.ipims.models.Doctor;
 import com.ipims.models.Patient;
+import com.ipims.models.User;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class AppointmentManager {
 	
@@ -33,16 +34,22 @@ public class AppointmentManager {
 		return false;
 	}
 	
-	public static List<Patient> listAllPatients() {
-		List<Patient> list = new ArrayList<>(); 
+	public static List<String> getAllDoctors() {
+		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
+		List<String> list = new ArrayList<>(); 
+		for (Doctor doc : docList){
+			list.add(doc.getName());
+		}
 		
 		return list;
 	}
 	
-	public static List<String> getAllDoctors() {
+	public static List<String> getAllPatients() {
+		List<User> patientList = DatabaseManager.getInstance().getPatientList();
 		List<String> list = new ArrayList<>(); 
-		list.add("John");
-		list.add("Smith");
+		for (User user : patientList){
+			list.add(user.getName());
+		}
 		return list;
 	}
 	
@@ -53,6 +60,16 @@ public class AppointmentManager {
 		list.add("Ortho");
 		
 		return list;
+	}
+	
+	public static Patient getPatientAtIndex(int index) {
+		List<User> patientList = DatabaseManager.getInstance().getPatientList();
+		return (Patient)patientList.get(index);
+	}
+	
+	public static Doctor getDoctorAtIndex(int index) {
+		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
+		return (Doctor)docList.get(index);
 	}
 	
 

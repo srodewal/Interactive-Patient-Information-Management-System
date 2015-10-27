@@ -2,6 +2,7 @@ package com.ipims;
 
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Doctor;
+import com.ipims.models.HSPStaff;
 import com.ipims.models.Nurse;
 import com.ipims.usersession.LoginViewController;
 import com.ipims.usersession.UserSession;
@@ -94,9 +95,9 @@ public class IPIMSApplication extends Application {
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 
-		if (DatabaseManager.getInstance().getUser("hsp", "test") == null) {
-			user.setName("hsp");
-			user.setUserName("hsp");
+		if (DatabaseManager.getInstance().getUser("nurse2", "test") == null) {
+			user.setName("nurse2");
+			user.setUserName("nurse2");
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 
@@ -107,6 +108,25 @@ public class IPIMSApplication extends Application {
 	}
 
 	private void preFillHSPStaff() {
+		HSPStaff user = new HSPStaff();
+		user.setName("HSP");
+		user.setUserName("hsp1");
+		user.setAddress("asdad");
+		user.setDateOfBirth("12/2/1978");
+		user.setSsn("2324234");
+		user.setPhoneNumber("34435345");
+		user.setEmail("Asda");
+		user.setInsurance("insurance");
+		user.setSex("Male");
+		user.setRace("Other");
+		if (DatabaseManager.getInstance().getUser("hsp1", "test") == null) {
+			DatabaseManager.getInstance().newUser(user, "test");
+		}
 
+		if (DatabaseManager.getInstance().getUser("hsp2", "test") == null) {
+			user.setName("hsp2");
+			user.setUserName("hsp2");
+			DatabaseManager.getInstance().newUser(user, "test");
+		}
 	}
 }

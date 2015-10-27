@@ -36,6 +36,7 @@ public class AppointmentViewController {
 	}
 
 	public ObservableList<String> getAppoinmentList () {
+		
 		List<Appointment> appointmentList = getListOfAppointment();
 		List<String> stringAppList = new ArrayList<>();
 		for (int i = 0; i < appointmentList.size(); i++) {
@@ -75,6 +76,13 @@ public class AppointmentViewController {
 		items.addAll(AppointmentManager.getAllDoctors());
 		return items;
 	}
+	
+	public ObservableList<String> getPatientList() {
+		ObservableList<String> items = FXCollections.observableArrayList();
+		items.addAll(AppointmentManager.getAllPatients());
+		return items;
+	}
+
 
 	public void goBack() {
 		MenuViewController menu = new MenuViewController();
@@ -106,6 +114,10 @@ public class AppointmentViewController {
 
 	public void handleUpdateClick(Appointment updatedAppointment) {
 		handleUpdateGoBack();
+	}
+	
+	public void handleSubmitClick(Appointment newAppoinment) {
+		
 	}
 
 	public void handleAppointmentCancellation() {

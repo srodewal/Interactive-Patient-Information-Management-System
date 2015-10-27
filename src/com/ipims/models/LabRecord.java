@@ -8,7 +8,7 @@ public class LabRecord {
 	private int Sodium;
 	private int Calcium;
 	private int Magnesium;
-	
+	private int appointmentId = -1;
 	
 	
 	
@@ -16,43 +16,65 @@ public class LabRecord {
 		return Patient;
 	}
 	
-	public void setPatient(){
-		this.Patient = Patient;
-	}
 	
-	public int getGlucose(){
+
+	public int getLabRecordId() {
+		return appointmentId;
+	}
+
+	public void setLabRecordId(int id) {
+		this.appointmentId = id;
+	}
+
+
+
+	public int getGlucose() {
 		return Glucose;
 	}
-	
-	public void setGlucose(){
-		this.Glucose = Glucose;
+
+
+
+	public void setGlucose(int glucose) {
+		Glucose = glucose;
 	}
-	
-	public int getSodium(){
+
+
+
+	public int getSodium() {
 		return Sodium;
 	}
-	
-	public void setSodium(){
-		this.Sodium = Sodium;
+
+
+
+	public void setSodium(int sodium) {
+		Sodium = sodium;
 	}
-	
-	public int getCalcium(){
+
+
+
+	public int getCalcium() {
 		return Calcium;
 	}
-	
-	public void setCalcium(){
-		this.Calcium = Calcium;
+
+
+
+	public void setCalcium(int calcium) {
+		Calcium = calcium;
 	}
-	
-	public int getMagnesium(){
+
+
+
+	public int getMagnesium() {
 		return Magnesium;
 	}
-	
-	public void setMagnesium(){
-		this.Magnesium = Magnesium;
+
+
+
+	public void setMagnesium(int magnesium) {
+		Magnesium = magnesium;
 	}
 	
 	
-	
+
 	
 }

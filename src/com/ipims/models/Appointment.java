@@ -6,15 +6,27 @@ public class Appointment {
 	
 	private LocalDate date;
 	private String time;
-	private String doctor;
+	private User doctor;
 	private User patient;
 	private String category;
-	public Appointment(LocalDate localDate, String time, String doctor, User patient, String category) {
+	private int appointmentId = -1;
+	
+	public Appointment(LocalDate localDate, String time, User doctor, User patient, String category) {
 		this.date = localDate;
 		this.time = time;
 		this.doctor = doctor;
 		this.patient = patient;
 		this.category = category;
+		
+	}
+	
+	public Appointment(int id, LocalDate localDate, String time, User doctor, User patient, String category) {
+		this.date = localDate;
+		this.time = time;
+		this.doctor = doctor;
+		this.patient = patient;
+		this.category = category;
+		this.appointmentId = id;
 	}
 	
 	public LocalDate getDate() {
@@ -25,7 +37,7 @@ public class Appointment {
 		return time;
 	}
 	
-	public String getDoctor() {
+	public User getDoctor() {
 		return doctor;
 	}
 	
@@ -35,5 +47,9 @@ public class Appointment {
 	
 	public String getCategory() {
 		return category;
+	}
+	
+	public int getAppointmentId() {
+		return appointmentId;
 	}
 }

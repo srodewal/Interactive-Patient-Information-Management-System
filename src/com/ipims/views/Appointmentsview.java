@@ -6,6 +6,7 @@ import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
+import com.ipims.usersession.UserSession;
 
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -119,9 +120,7 @@ public class Appointmentsview extends BaseView {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item.isBefore(
-								currentDate)
-								) {
+						if (item.isBefore(currentDate)) {
 							setDisable(true);
 							setStyle("-fx-background-color: #ffc0cb;");
 						}   
@@ -156,9 +155,17 @@ public class Appointmentsview extends BaseView {
 		catComboBox.getItems().addAll(parentController.getCategoryList());
 
 		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
+		
+		if (UserSession.getInstance().getCurrentUser().getUsertype() != UserType.PATIENT) {
+			Label patientLabel = new Label("Patient:");
+			patientLabel.setTextFill(Color.WHITE);
+			ComboBox<String> catPatientBox = new ComboBox<String>();
+			catPatientBox.getItems().addAll(parentController.getPatientList());
+			
+			hbox2.getChildren().add(patientLabel);
+			hbox2.getChildren().add(catPatientBox);
+		}
 		baseVbox.getChildren().add(hbox2);
-
-
 
 		// Fill in values for update
 		if(appointment != null) {
@@ -191,7 +198,6 @@ public class Appointmentsview extends BaseView {
 				public void handle(ActionEvent e) {
 					parentController.handleAppointmentCancellation();
 
-
 				}
 			});
 			baseVbox.getChildren().add(hbBtn);
@@ -202,7 +208,9 @@ public class Appointmentsview extends BaseView {
 
 				@Override
 				public void handle(ActionEvent e) {
-
+					
+					Appointment newApp = new Appointment(null, null, null, null, null);
+					parentController.handleSubmitClick(newApp);
 				}
 			});
 
