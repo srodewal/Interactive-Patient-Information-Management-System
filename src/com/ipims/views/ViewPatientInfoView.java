@@ -1,7 +1,12 @@
 package com.ipims.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController; // should be taken out
 import com.ipims.hsp.ViewPatientInfoViewController;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 
 import javafx.collections.FXCollections;
@@ -41,8 +46,18 @@ public class ViewPatientInfoView extends BaseView {
 			titleLabel.setTextFill(Color.BLACK);
 			titleLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 			
-			TextField PatientTextField = new TextField();
+			/*TextField PatientTextField = new TextField();
 			PatientTextField.setMaxSize(250, 55);
+			*/
+			
+			// get all patients
+			ComboBox<String> patientComboBox = new ComboBox<String>();
+			List<Patient> allPatients = new ArrayList<Patient>();
+			allPatients = DatabaseManager.getInstance().getAllPatients();
+			for(int i = 0; i < allPatients.size(); i++) {
+				patientComboBox.getItems().add(allPatients.get(i).getName());
+			}
+			// end get all patients
 
 			Button mainMenuBtn = new Button("Menu");
 			mainMenuBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -80,7 +95,7 @@ public class ViewPatientInfoView extends BaseView {
 			HBox patientHbox = new HBox();
 			patientHbox.setSpacing(10);
 			
-			patientHbox.getChildren().addAll(PatientLabel, PatientTextField, submitBtn);
+			patientHbox.getChildren().addAll(PatientLabel, patientComboBox, submitBtn);
 			
 			vbox.getChildren().add(patientHbox);
 			vbox.getChildren().add(list);
@@ -91,7 +106,8 @@ public class ViewPatientInfoView extends BaseView {
 				@Override
 				public void handle(ActionEvent e) {
 					items.clear();
-					PatientTextField.clear();
+					//PatientTextField.clear();
+					patientComboBox.getSelectionModel().clearSelection();
 					actionTarget.setFill(Color.GREEN);
 					actionTarget.setText("Button pressed! List cleared.");
 				}

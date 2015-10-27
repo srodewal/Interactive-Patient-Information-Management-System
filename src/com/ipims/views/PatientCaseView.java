@@ -1,7 +1,12 @@
 package com.ipims.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController;
 import com.ipims.medication.PrescribeMedViewController;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.patientcase.PatientCaseViewController;
@@ -97,12 +102,21 @@ public class PatientCaseView extends BaseView{
 
 		Label PatientLabel = new Label("Patient:");
 		PatientLabel.setTextFill(Color.WHITE);
-		TextField PatientTextField = new TextField();
-		PatientTextField.setPromptText("Patient Name");
-		PatientTextField.setMaxSize(120, 5);
+		//TextField PatientTextField = new TextField();
+		//PatientTextField.setPromptText("Patient Name");
+	    //PatientTextField.setMaxSize(120, 5);
+		
+		// get all patients
+		ComboBox<String> patientComboBox = new ComboBox<String>();
+		List<Patient> allPatients = new ArrayList<Patient>();
+		allPatients = DatabaseManager.getInstance().getAllPatients();
+		for(int i = 0; i < allPatients.size(); i++) {
+			patientComboBox.getItems().add(allPatients.get(i).getName());
+		}
+		// end get all patients
 
 		
-		hbox.getChildren().addAll(PatientLabel,PatientTextField);
+		hbox.getChildren().addAll(PatientLabel, patientComboBox);
 		baseVbox.getChildren().add(hbox);
 
 
@@ -116,7 +130,7 @@ public class PatientCaseView extends BaseView{
 				
 				String patientCaseInfo = "Medical History:--------\nHealth Condition:-------";
 				
-				if(PatientTextField.getText().equals("")) {
+				if(patientComboBox.equals(null)) {
 					actionTarget.setFill(Color.RED);
 					actionTarget.setText("Error: No patient name entered!");
 				}
