@@ -167,7 +167,7 @@ public class PrescribeMedView extends BaseView {
 					
 					// send to database
 					Prescription newMed = new Prescription();
-					newMed.setCurrent(true);
+					//newMed.setCurrent(true);
 					String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 					newMed.setDate(date);
 					newMed.setPrescriptionText(MedicationTextField.getText());
@@ -189,6 +189,9 @@ public class PrescribeMedView extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
+				
+				// clear list
+				items.clear();
 				
 				// show all prescriptions for patient
 				List<Prescription> allMeds = new ArrayList<Prescription>();
