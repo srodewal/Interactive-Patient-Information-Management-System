@@ -30,27 +30,37 @@ public class StatsView extends BaseView {
 
 		Button patientPopulations = new Button("Analysis of patient populations");
 		HBox ppBtn = new HBox(10);
+                ppBtn.setAlignment(Pos.CENTER);
 		ppBtn.getChildren().add(patientPopulations);
+                patientPopulations.setPrefSize(190, 10);
 		statsPane.add(ppBtn, 1, 1);
 
 		Button healthOutcomes = new Button("Analysis of health outcomes");
 		HBox hoBtn = new HBox(10);
+                hoBtn.setAlignment(Pos.CENTER);
 		hoBtn.getChildren().add(healthOutcomes);
+                healthOutcomes.setPrefSize(190, 10);
 		statsPane.add(hoBtn, 1, 2);
 		
 		Button trackingAdmission = new Button("Tracking of the admission rates");
 		HBox taBtn = new HBox(10);
+                taBtn.setAlignment(Pos.CENTER);
 		taBtn.getChildren().add(trackingAdmission);
+                trackingAdmission.setPrefSize(190, 10);
 		statsPane.add(taBtn, 1, 3);
 		
 		Button typePatients = new Button("Analysis of type of patients");
 		HBox tpBtn = new HBox(10);
+                tpBtn.setAlignment(Pos.CENTER);
 		tpBtn.getChildren().add(typePatients);
+                typePatients.setPrefSize(190, 10);
 		statsPane.add(tpBtn, 1, 4);
 		
 		Button backBtn = new Button("Back to Menu");
 		HBox bBtn = new HBox(10);
+                bBtn.setAlignment(Pos.CENTER);
 		bBtn.getChildren().add(backBtn);
+                backBtn.setPrefSize(190, 10);
 		statsPane.add(bBtn, 1, 5);
 
 		final Text actiontarget = new Text();
