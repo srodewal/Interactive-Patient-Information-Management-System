@@ -9,7 +9,20 @@ public class LabRecord {
 	private float Calcium;
 	private float Magnesium;
 	private int appointmentId = -1;
+	private String Patient;
 	
+	
+	
+	
+	
+	public String getPatient(){
+		return Patient;
+	}
+	
+	public void setPatient(String patient)
+	{
+		Patient = patient;
+	}
 	
 	
 	public int getPatientId(){

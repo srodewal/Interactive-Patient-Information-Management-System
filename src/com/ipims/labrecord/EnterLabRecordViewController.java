@@ -46,8 +46,13 @@ public Scene getScene() {
 	
 	public ObservableList<String> getLabRecordList () {
 		ObservableList<String> items = FXCollections.observableArrayList (
+			
+			// Get Lab Record values from data base	after user has entered it in for chosen patient
+
+				
 			"Patient:-----\nGlucose Level:-----\nSodium Level:----\nCalcium level:-----\nMagnesium Level:----",
 			"Patient:-----\nGlucose Level:-----\nSodium Level:----\nCalcium level:-----\nMagnesium Level:----");
+		
 		return items;
 	}
 	
@@ -70,3 +75,4 @@ public Scene getScene() {
 
 	
 }
+

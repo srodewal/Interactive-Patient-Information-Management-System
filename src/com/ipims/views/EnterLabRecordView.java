@@ -1,12 +1,16 @@
 package com.ipims.views;
 
 
+import com.ipims.Helper;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.labrecord.EnterLabRecordViewController;
+import com.ipims.labrecord.LabRecordManager;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.LabRecord;
 import com.ipims.models.User;
+import com.ipims.models.User.UserType;
+import com.ipims.usersession.UserSession;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,6 +20,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -118,11 +123,16 @@ public class EnterLabRecordView extends BaseView{
 		hbox5.setSpacing(10);
 		hbox5.setAlignment(Pos.CENTER_RIGHT);
 
-		Label PatientLabel = new Label("Patient: ");
-		PatientLabel.setTextFill(Color.WHITE);
-		TextField PatientTextField = new TextField();
-		PatientTextField.setPromptText("Patient Name");
-		PatientTextField.setMaxSize(120, 5);
+		
+		ComboBox<String> catPatientBox = new ComboBox<String>();
+		if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.PATIENT) {
+			Label patientLabel = new Label("Patient:");
+			patientLabel.setTextFill(Color.WHITE);
+			catPatientBox.getItems().addAll(Helper.getPatientList());
+			
+			hbox.getChildren().add(patientLabel);
+			hbox.getChildren().add(catPatientBox);
+		}
 		
 		Label GlucoseLabel = new Label("Glucose:");
 		GlucoseLabel.setTextFill(Color.WHITE);
@@ -148,7 +158,6 @@ public class EnterLabRecordView extends BaseView{
 		MagnesiumTextField.setPromptText("mg/dL");
 		MagnesiumTextField.setMaxSize(120, 5);
 		
-		hbox.getChildren().addAll(PatientLabel,PatientTextField);
 		hbox2.getChildren().addAll(GlucoseLabel,GlucoseTextField);
 		hbox3.getChildren().addAll(SodiumLabel, SodiumTextField);
 		hbox4.getChildren().addAll(CalciumLabel, CalciumTextField);
@@ -162,13 +171,17 @@ public class EnterLabRecordView extends BaseView{
 		// Fill in values for update
 		if(labrecord != null) {
 			
+			//PULL LAB_RECORD FROM DATABASE 
+			//THEN DISPLAY SPECIFIC FIELDS IN UPDATE SCREEN
 			
-			title.setText("Update Appointment");
-			PatientTextField.setText("Gregg");
-			GlucoseTextField.setText("15mg");
-			SodiumTextField.setText("12mg");
-			CalciumTextField.setText("10mg");
-			MagnesiumTextField.setText("25mg");
+			//String glucose = String.valueOf(labrecord.getGlucose());       ConvertToString
+			
+			//title.setText("Update Appointment");
+			//PatientTextField.setText("Gregg");
+			//GlucoseTextField.setText("13 mg);
+			//SodiumTextField.setText("12 mg");
+			//CalciumTextField.setText("14 mg");
+			//MagnesiumTextField.setText("25 mg");
 
 			
 			// Add update and cancel buttons
@@ -203,6 +216,7 @@ public class EnterLabRecordView extends BaseView{
 			Button EnterLabRecordBtn = new Button("Submit");
 			EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
+				@SuppressWarnings("null")
 				@Override
 				public void handle(ActionEvent e) {
 					
@@ -210,14 +224,18 @@ public class EnterLabRecordView extends BaseView{
 					int Glucose = Integer.parseInt(GlucoseTextField.getText());
 					int Sodium = Integer.parseInt(SodiumTextField.getText());
 					int Magnesium = Integer.parseInt(MagnesiumTextField.getText());
+				
+					//Add user inputs to labRecord model class variables
+
+					labrecord.setPatient(catPatientBox.getValue());
+					labrecord.setGlucose(Glucose);
+					labrecord.setSodium(Sodium);
+					labrecord.setCalcium(Calcium);
+					labrecord.setMagnesium(Magnesium);
 
 					
-					String enterLabRecordInfo = "Patient Name: "+PatientTextField.getText() + "\n";
-					enterLabRecordInfo += "Glucose Level: " + Glucose + "\n";
-					enterLabRecordInfo += "Sodium Level: " + Sodium + "\n";
-					enterLabRecordInfo += "Calcium Level: " + Calcium + "\n";
-					enterLabRecordInfo += "Magnesium Level: " + Magnesium + "\n";
-
+					// ADD LAB_RECORD TO DATABASE
+					
 					
 					/*if(PatientTextField.getText().equals("")) {
 						actionTarget.setFill(Color.RED);
@@ -271,6 +289,8 @@ public class EnterLabRecordView extends BaseView{
 		vbox.getChildren().add(addEnterLabRecord(labRecord, enterLabRecordViewController));
 		createScene(vbox);
 	}
+
+	
 	
 	
 	
