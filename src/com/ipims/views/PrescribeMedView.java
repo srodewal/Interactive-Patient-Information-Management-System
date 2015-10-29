@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ipims.Helper;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.medication.PrescribeMedViewController;
+import com.ipims.models.Doctor;
 import com.ipims.models.Patient;
 import com.ipims.models.Prescription;
 import com.ipims.models.User;
@@ -78,13 +80,6 @@ public class PrescribeMedView extends BaseView {
 		
 		list.setItems(items); // moved
 		
-		// print all prescriptions for patient
-		ArrayList<Prescription> allMeds = new ArrayList<Prescription>();
-		//allMeds = DatabaseManager.getInstance().getAllPrescriptions();
-		for(int i = 0; i < allMeds.size(); i++) {
-			String currMedication = allMeds.get(i).getPrescriptionText() + "prescribed on: " + allMeds.get(i).getDate();
-			items.add(currMedication);
-		}
 
 		Text subTitle = new Text("View Prescriptions");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -152,7 +147,6 @@ public class PrescribeMedView extends BaseView {
 		HBox hbox2 = new HBox();
 		hbox2.setSpacing(10);
 
-
 		Button PrescribeMedBtn = new Button("Submit");
 		PrescribeMedBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -177,7 +171,7 @@ public class PrescribeMedView extends BaseView {
 					String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 					newMed.setDate(date);
 					newMed.setPrescriptionText(MedicationTextField.getText());
-					//DatabaseManager.getInstance().newPrescription(newMed);
+					DatabaseManager.getInstance().newPrescription(newMed);
 					
 					actionTarget.setFill(Color.GREEN);
 					actionTarget.setText("Medication Prescribed!");
@@ -188,8 +182,34 @@ public class PrescribeMedView extends BaseView {
 				}
 			}
 		});
+		
+		Button showMedBtn = new Button("View");
+		showMedBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-		baseVbox.getChildren().add(PrescribeMedBtn);
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				
+				// show all prescriptions for patient
+				List<Prescription> allMeds = new ArrayList<Prescription>();
+				Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+				allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
+				for(int i = 0; i < allMeds.size(); i++) {
+					String currMedication = allMeds.get(i).getPrescriptionText() + "prescribed on: " + allMeds.get(i).getDate();
+					items.add(currMedication);
+				}
+				
+				actionTarget.setFill(Color.GREEN);
+				actionTarget.setText("Viewing!");
+				
+			}
+		});
+
+		HBox buttons = new HBox();
+		buttons.setSpacing(10);
+		buttons.getChildren().addAll(PrescribeMedBtn, showMedBtn);
+		
+		baseVbox.getChildren().add(buttons);
 
 		return baseVbox;
 	}
