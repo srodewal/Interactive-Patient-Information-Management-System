@@ -3,20 +3,23 @@ package com.ipims.models;
 
 public class LabRecord {
 	
-	private String Patient;
-	private int Glucose;
-	private int Sodium;
-	private int Calcium;
-	private int Magnesium;
+	private int patientId;
+	private float Glucose;
+	private float Sodium;
+	private float Calcium;
+	private float Magnesium;
 	private int appointmentId = -1;
 	
 	
 	
-	public String getPatient(){
-		return Patient;
+	public int getPatientId(){
+		return patientId;
 	}
 	
-	
+	public void setPatientId(int id)
+	{
+		patientId = id;
+	}
 
 	public int getLabRecordId() {
 		return appointmentId;
@@ -28,49 +31,49 @@ public class LabRecord {
 
 
 
-	public int getGlucose() {
+	public float getGlucose() {
 		return Glucose;
 	}
 
 
 
-	public void setGlucose(int glucose) {
+	public void setGlucose(float glucose) {
 		Glucose = glucose;
 	}
 
 
 
-	public int getSodium() {
+	public float getSodium() {
 		return Sodium;
 	}
 
 
 
-	public void setSodium(int sodium) {
+	public void setSodium(float sodium) {
 		Sodium = sodium;
 	}
 
 
 
-	public int getCalcium() {
+	public float getCalcium() {
 		return Calcium;
 	}
 
 
 
-	public void setCalcium(int calcium) {
+	public void setCalcium(float calcium) {
 		Calcium = calcium;
 	}
 
 
 
-	public int getMagnesium() {
+	public float getMagnesium() {
 		return Magnesium;
 	}
 
 
 
-	public void setMagnesium(int magnesium) {
+	public void setMagnesium(float magnesium) {
 		Magnesium = magnesium;
 	}
 	

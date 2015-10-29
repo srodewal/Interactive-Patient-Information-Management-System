@@ -155,7 +155,8 @@ public class DatabaseManager {
 				{
 					Statement createLabRecord = dbConnection.createStatement();
 					createLabRecord.executeUpdate("CREATE TABLE LabRecord("
-							+ "userId INTEGER PRIMARY KEY NOT NULL,"
+							+ "recordId INTEGER PRIMARY KEY NOT NULL"
+							+ "userId INTEGER NOT NULL,"
 							+ "glucose REAL NOT NULL,"
 							+ "sodium REAL NOT NULL,"
 							+ "magnesium REAL NOT NULL,"
@@ -260,7 +261,6 @@ public class DatabaseManager {
 	
 	public  void newAppointment(Appointment appoinment)
 	{
-		//TODO: match model
 		if(dbConnection != null)
 		{
 			try
@@ -320,6 +320,25 @@ public class DatabaseManager {
 		}
 	}
 	
+	public void newLabRecord(LabRecord record)
+	{
+		try
+		{
+			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium) VALUES (?, ?, ?, ?, ?");
+			insertRecord.setInt(1, record.getPatientId());
+			insertRecord.setFloat(2, record.getGlucose());
+			insertRecord.setFloat(3, record.getCalcium());
+			insertRecord.setFloat(4, record.getMagnesium());
+			insertRecord.setFloat(5, record.getSodium());
+			
+			insertRecord.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			logError("Could not add lab record to the database. Please check that the database has been set up properly.");
+			logError(e.getMessage());
+		}
+	}
 	
 	public User getUser(String userName, String password) { //for login
 		User user = null;
@@ -490,23 +509,28 @@ public class DatabaseManager {
 	public List<LabRecord> getAllLabRecords()
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
-		//TODO: once I figure out how to spawn patient objects efficiently
-//		try
-//		{
-//			Statement getRecords = dbConnection.createStatement();
-//			
-//			ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord;");
-//			while(rs.next())
-//			{
-//				LabRecord record = new LabRecord();
-//				
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
-//			logError(e.getMessage());
-//		}
+		try
+		{
+			Statement getRecords = dbConnection.createStatement();
+			
+			ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord;");
+			while(rs.next())
+			{
+				LabRecord record = new LabRecord();
+				record.setPatientId(rs.getInt("userId"));
+				record.setLabRecordId(rs.getInt("recordId"));
+				record.setGlucose(rs.getFloat("glucose"));
+				record.setSodium(rs.getFloat("sodium"));
+				record.setCalcium(rs.getFloat("calcium"));
+				record.setMagnesium(rs.getFloat("magnesium"));
+				records.add(record);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
+			logError(e.getMessage());
+		}
 		
 		return records;
 	}
