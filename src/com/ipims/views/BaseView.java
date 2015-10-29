@@ -24,7 +24,7 @@ public class BaseView {
 
 	protected Scene currentScene;
 	
-	private static final int WIDTH = 500;
+	private static final int WIDTH = 600;
 	private static final int HEIGHT = 700;
 	
 	public Scene getCurrentScene() {

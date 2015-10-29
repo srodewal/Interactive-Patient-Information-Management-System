@@ -4,6 +4,7 @@ import com.ipims.database.DatabaseManager;
 import com.ipims.models.Doctor;
 import com.ipims.models.HSPStaff;
 import com.ipims.models.Nurse;
+import com.ipims.models.Patient;
 import com.ipims.usersession.LoginViewController;
 import com.ipims.usersession.UserSession;
 
@@ -38,6 +39,7 @@ public class IPIMSApplication extends Application {
 		preFillNurse();
 		preFillCategory();
 		preFillHSPStaff();
+		preFillPatient();
 
 	}
 
@@ -128,5 +130,24 @@ public class IPIMSApplication extends Application {
 			user.setUserName("hsp2");
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
+	}
+	
+	private void preFillPatient() {
+		Patient user = new Patient();
+		user.setName("Jithin");
+		user.setUserName("j");
+		user.setAddress("asdad");
+		user.setDateOfBirth("12/2/1978");
+		user.setSsn("2324234");
+		user.setPhoneNumber("34435345");
+		user.setEmail("Asda");
+		user.setInsurance("insurance");
+		user.setSex("Male");
+		user.setRace("Other");
+		if (DatabaseManager.getInstance().getUser("j", "j") == null) {
+			DatabaseManager.getInstance().newUser(user, "j");
+		}
+
+		
 	}
 }

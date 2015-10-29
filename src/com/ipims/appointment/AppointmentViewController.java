@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ipims.MenuViewController;
+import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
 import com.ipims.models.Patient;
 import com.ipims.models.User;
@@ -28,7 +29,7 @@ public class AppointmentViewController {
 		appManager = new AppointmentManager();
 		view = new Appointmentsview();
 		view.createAppointmentsView(UserSession.getInstance().getCurrentUser(), this);
-		
+
 	}
 
 	public Scene getScene() {
@@ -36,7 +37,7 @@ public class AppointmentViewController {
 	}
 
 	public ObservableList<String> getAppoinmentList () {
-		
+
 		List<Appointment> appointmentList = getListOfAppointment();
 		List<String> stringAppList = new ArrayList<>();
 		for (int i = 0; i < appointmentList.size(); i++) {
@@ -48,40 +49,24 @@ public class AppointmentViewController {
 	}
 
 	private List<Appointment>getListOfAppointment() {
-		
+
 		// If patient logs in, get the list of appointments for that patient
 		// If HSP, Nurse or Doctor logs in, get the list all appointments
 		//
 		List<Appointment> appointmentList = null;
-		
+
 		if(UserSession.getInstance().getCurrentUser().getUsertype() == UserType.PATIENT) {
 			Patient patient = (Patient)UserSession.getInstance().getCurrentUser();
 			appointmentList = appManager.getAppointmentForPatient(patient);
-			
+
 		} else {
 			appointmentList = appManager.getAppointmentForPatient(null);
 		}
-		
+
 		return appointmentList;
 	}
 
-	public ObservableList<String> getCategoryList() {
-		ObservableList<String> items = FXCollections.observableArrayList();
-		items.addAll(AppointmentManager.getAllCategories());
-		return items;
-	}
-
-	public ObservableList<String> getDoctorList() {
-		ObservableList<String> items = FXCollections.observableArrayList();
-		items.addAll(AppointmentManager.getAllDoctors());
-		return items;
-	}
 	
-	public ObservableList<String> getPatientList() {
-		ObservableList<String> items = FXCollections.observableArrayList();
-		items.addAll(AppointmentManager.getAllPatients());
-		return items;
-	}
 
 
 	public void goBack() {
@@ -115,9 +100,9 @@ public class AppointmentViewController {
 	public void handleUpdateClick(Appointment updatedAppointment) {
 		handleUpdateGoBack();
 	}
-	
+
 	public void handleSubmitClick(Appointment newAppoinment) {
-		
+		DatabaseManager.getInstance().newAppointment(newAppoinment);
 	}
 
 	public void handleAppointmentCancellation() {

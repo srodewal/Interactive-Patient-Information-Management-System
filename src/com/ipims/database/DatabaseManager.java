@@ -112,8 +112,11 @@ public class DatabaseManager {
 				try
 				{
 					Statement createAppointment = dbConnection.createStatement();
-					createAppointment.executeUpdate("CREATE TABLE Appointment( patientId INTEGER PRIMARY KEY NOT NULL,"
-							+ "doctorId INT NOT NULL, "
+					createAppointment.executeUpdate("CREATE TABLE Appointment( "
+							+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+							+ "patientId INTEGER NOT NULL,"
+							+ "doctorId INTEGER NOT NULL,"
+							+ "category TEXT,"
 							+ "time TEXT NOT NULL,"
 							+ "date TEXT NOT NULL"
 							+ ")");
@@ -226,7 +229,7 @@ public class DatabaseManager {
 		{
 			try
 			{
-				System.out.println("Trying to create user");
+				System.out.println("Trying to create user " + user.getName() + " " + user.getUsertype().ordinal());
 				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance, sex, race) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				insertPatient.setString(1, user.getName());
 				insertPatient.setString(2, user.getUserName());
@@ -255,17 +258,19 @@ public class DatabaseManager {
 		}
 	}
 	
-	public  void newAppointment(int patientId, int doctorId, String time)
+	public  void newAppointment(Appointment appoinment)
 	{
 		//TODO: match model
 		if(dbConnection != null)
 		{
 			try
 			{
-				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointment VALUES (?,?,?)");
-				insertAppointment.setInt(1, patientId);
-				insertAppointment.setInt(2, doctorId);
-				insertAppointment.setString(3, time);
+				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointment (patientId, doctorId, category, time, date) VALUES (?,?,?,?,?)");
+				insertAppointment.setInt(1, appoinment.getPatient().getUserId());
+				insertAppointment.setInt(2, appoinment.getDoctor().getUserId());
+				insertAppointment.setString(3, appoinment.getCategory());
+				insertAppointment.setString(4, appoinment.getTime());
+				insertAppointment.setString(5, appoinment.getDate().toString());
 				insertAppointment.executeUpdate();
 				insertAppointment.close();
 			}
@@ -410,7 +415,7 @@ public class DatabaseManager {
 		try
 		{
 			Statement getDoctors = dbConnection.createStatement();
-			ResultSet rs = getDoctors.executeQuery("SELECT * FROM User JOIN DoctorCategory ON User.userId = DoctorCategory.userId;");
+			ResultSet rs = getDoctors.executeQuery("SELECT * FROM User LEFT OUTER JOIN DoctorCategory ON User.userId = DoctorCategory.userId AND User.type=0");
 			
 			while(rs.next())
 			{
@@ -509,6 +514,7 @@ public class DatabaseManager {
 	//=================== DB Helpers ==================
 	
 	private User createUser(ResultSet rs) throws SQLException {
+		System.out.println("Found user " + rs.getString("name") + " " + rs.getInt("type"));
 		User user = User.createUser(UserType.fromInteger( rs.getInt("type")));
     	user.setName(rs.getString("name"));
     	user.setUserName(rs.getString("userName"));

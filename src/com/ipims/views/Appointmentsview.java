@@ -2,8 +2,12 @@ package com.ipims.views;
 
 import java.time.LocalDate;
 
+import com.ipims.Helper;
+import com.ipims.appointment.AppointmentManager;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.Appointment;
+import com.ipims.models.Doctor;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
@@ -147,20 +151,20 @@ public class Appointmentsview extends BaseView {
 		docLabel.setTextFill(Color.WHITE);
 
 		ComboBox<String> docComboBox = new ComboBox<String>();
-		docComboBox.getItems().addAll(parentController.getDoctorList());
+		docComboBox.getItems().addAll(Helper.getDoctorList());
 
 		Label categoryLabel = new Label("Category:");
 		categoryLabel.setTextFill(Color.WHITE);
 		ComboBox<String> catComboBox = new ComboBox<String>();
-		catComboBox.getItems().addAll(parentController.getCategoryList());
+		catComboBox.getItems().addAll(Helper.getCategoryList());
 
 		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
 		
+		ComboBox<String> catPatientBox = new ComboBox<String>();
 		if (UserSession.getInstance().getCurrentUser().getUsertype() != UserType.PATIENT) {
 			Label patientLabel = new Label("Patient:");
 			patientLabel.setTextFill(Color.WHITE);
-			ComboBox<String> catPatientBox = new ComboBox<String>();
-			catPatientBox.getItems().addAll(parentController.getPatientList());
+			catPatientBox.getItems().addAll(Helper.getPatientList());
 			
 			hbox2.getChildren().add(patientLabel);
 			hbox2.getChildren().add(catPatientBox);
@@ -209,7 +213,15 @@ public class Appointmentsview extends BaseView {
 				@Override
 				public void handle(ActionEvent e) {
 					
-					Appointment newApp = new Appointment(null, null, null, null, null);
+					Doctor doctor = Helper.getDoctorAtIndex(docComboBox.getSelectionModel().getSelectedIndex());
+					Patient patient = null;
+					if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.PATIENT) {
+						patient = (Patient)UserSession.getInstance().getCurrentUser();
+					} else {
+						 patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
+					}
+					
+					Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
 					parentController.handleSubmitClick(newApp);
 				}
 			});
@@ -219,6 +231,8 @@ public class Appointmentsview extends BaseView {
 
 		return baseVbox;
 	}
+	
+
 
 	public void createUpdateAppoinmentView(Appointment appointment, AppointmentViewController parentController) {
 		VBox vbox = new VBox();

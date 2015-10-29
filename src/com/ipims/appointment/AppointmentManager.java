@@ -21,8 +21,7 @@ public class AppointmentManager {
 	}
 	
 	public List<Appointment> getAppointmentForPatient(Patient patient) {
-		List<Appointment> appointmentList = new ArrayList<>(); 
-		
+		List<Appointment> appointmentList = DatabaseManager.getInstance().getAppointmentForPatient(patient); 
 		return appointmentList;
 	}
 	
@@ -34,43 +33,7 @@ public class AppointmentManager {
 		return false;
 	}
 	
-	public static List<String> getAllDoctors() {
-		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
-		List<String> list = new ArrayList<>(); 
-		for (Doctor doc : docList){
-			list.add(doc.getName());
-		}
-		
-		return list;
-	}
 	
-	public static List<String> getAllPatients() {
-		List<User> patientList = DatabaseManager.getInstance().getPatientList();
-		List<String> list = new ArrayList<>(); 
-		for (User user : patientList){
-			list.add(user.getName());
-		}
-		return list;
-	}
-	
-	public static List<String> getAllCategories() {
-		List<String> list = new ArrayList<>(); 
-		list.add("Heart");
-		list.add("Eye");
-		list.add("Ortho");
-		
-		return list;
-	}
-	
-	public static Patient getPatientAtIndex(int index) {
-		List<User> patientList = DatabaseManager.getInstance().getPatientList();
-		return (Patient)patientList.get(index);
-	}
-	
-	public static Doctor getDoctorAtIndex(int index) {
-		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
-		return (Doctor)docList.get(index);
-	}
 	
 
 }

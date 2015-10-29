@@ -1,28 +1,18 @@
 package com.ipims.views;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import com.ipims.database.DatabaseManager;
-import com.ipims.healthconditions.HealthViewController;
-import com.ipims.medication.PrescribeMedViewController;
-import com.ipims.models.Patient;
+import com.ipims.Helper;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.patientcase.PatientCaseViewController;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,6 +22,7 @@ import javafx.scene.text.Text;
 
 public class PatientCaseView extends BaseView{
 
+	private ListView<String> list;
 	
 	public void createPatientCaseView(User user, PatientCaseViewController patientCaseViewController) {
 
@@ -60,37 +51,27 @@ public class PatientCaseView extends BaseView{
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
 		
-		ListView<String> list = new ListView<String>();
-		/*ObservableList<String> items = FXCollections.observableArrayList (
-				"1. Gregg prescribed advil
-				*/
-		ObservableList<String> items = FXCollections.observableArrayList (
-			);
-		//list.setItems(items);
+		this.list = new ListView<String>();
+		
 		
 		// for success/error message
 		final Text actionTarget = new Text();
 		
-		// Show Patient Case if Doctor
-		//if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addPatientCase(items, actionTarget));
-		//}
+		// Show Patient Case if Doctor/HSP
+		if (user.getUsertype() != UserType.PATIENT ) {
+			vbox.getChildren().add(addPatientCaseTopView(patientCaseViewController));
+		}
 		
-		list.setItems(items); // moved
 
-		Text subTitle = new Text("View Patient Case");
+		Text subTitle = new Text("Patient Case");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
-
-
-		
-		vbox.getChildren().addAll(list, actionTarget);
-		
+		vbox.getChildren().addAll(this.list, actionTarget);
 		createScene(vbox);
 		
 	}
 
-	public VBox addPatientCase(ObservableList<String> items, Text actionTarget) {
+	public VBox addPatientCaseTopView(PatientCaseViewController patientCaseViewController) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -100,55 +81,39 @@ public class PatientCaseView extends BaseView{
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
 
-		Label PatientLabel = new Label("Patient:");
-		PatientLabel.setTextFill(Color.WHITE);
-		//TextField PatientTextField = new TextField();
-		//PatientTextField.setPromptText("Patient Name");
-	    //PatientTextField.setMaxSize(120, 5);
+		Label patientLabel = new Label("Patient:");
+		patientLabel.setTextFill(Color.WHITE);
 		
 		// get all patients
 		ComboBox<String> patientComboBox = new ComboBox<String>();
-		List<Patient> allPatients = new ArrayList<Patient>();
-		allPatients = DatabaseManager.getInstance().getAllPatients();
-		for(int i = 0; i < allPatients.size(); i++) {
-			patientComboBox.getItems().add(allPatients.get(i).getName());
-		}
+		patientComboBox.getItems().addAll(Helper.getPatientList());
 		// end get all patients
 
 		
-		hbox.getChildren().addAll(PatientLabel, patientComboBox);
+		hbox.getChildren().addAll(patientLabel, patientComboBox);
 		baseVbox.getChildren().add(hbox);
 
 
-		Button PatientCaseBtn = new Button("Submit");
-		PatientCaseBtn.setOnAction(new EventHandler<ActionEvent>() {
+		Button patientCaseBtn = new Button("Submit");
+		patientCaseBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-				// Pass the control of handling button clicks to the view controller
 				
-				
-				String patientCaseInfo = "Medical History:--------\nHealth Condition:-------";
-				
-				if(patientComboBox.equals(null)) {
-					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Error: No patient name entered!");
-				}
-				
-				else {
-					items.add(patientCaseInfo);
-					actionTarget.setFill(Color.GREEN);
-					actionTarget.setText("Success");
-				}
+				patientCaseViewController.patientSelected(Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex()));
 				
 			}
 		});
 
-		baseVbox.getChildren().add(PatientCaseBtn);
+		baseVbox.getChildren().add(patientCaseBtn);
 
 		return baseVbox;
 	}
 
+	public void refreshListView(String data) {
+		this.list.getItems().clear();
+		this.list.getItems().add(data);
+	}
 	
 }
 
