@@ -340,6 +340,32 @@ public class DatabaseManager {
 		}
 	}
 	
+	public void newPrescription(Prescription prescription)
+	{
+		try
+		{
+			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent) VALUES (?, ?, ?, ?)");
+			insertPrescription.setInt(1, prescription.getUserId());
+			insertPrescription.setString(2, prescription.getDate());
+			insertPrescription.setString(3, prescription.getPrescriptionText());
+			if(prescription.isCurrent())
+			{
+				insertPrescription.setInt(4, 1);
+			}
+			else
+			{
+				insertPrescription.setInt(4, 0);
+			}
+			
+			insertPrescription.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			logError("Could not add prescription the the database. Please check that the database has been set up properly.");
+			logError(e.getMessage());
+		}
+	}
+	
 	public User getUser(String userName, String password) { //for login
 		User user = null;
 		try {
@@ -425,6 +451,45 @@ public class DatabaseManager {
 //		}
 		
 		return appointmentList;
+	}
+	
+	public List<Prescription> getPrescriptionsForPatient(int patientId)
+	{
+		List<Prescription> prescriptions = new ArrayList<>();
+		
+		try
+		{
+			PreparedStatement getPrescriptions = dbConnection.prepareStatement("SELECT * FROM Prescription WHERE userId = ?");
+			getPrescriptions.setInt(1, patientId);
+			
+			ResultSet rs = getPrescriptions.executeQuery();
+			while(rs.next())
+			{
+				Prescription prescription = new Prescription();
+				prescription.setPrescriptionId(rs.getInt("prescriptionId"));
+				prescription.setUserId(patientId);
+				prescription.setDate(rs.getString("date"));
+				prescription.setPrescriptionText(rs.getString("medicine"));
+				
+				if(rs.getInt("pastOrCurrent") == 0)
+				{
+					prescription.setCurrent(false);
+				}
+				else
+				{
+					prescription.setCurrent(true);
+				}
+				
+				prescriptions.add(prescription);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get prescriptions. Please check the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+		
+		return prescriptions;
 	}
 	
 	public List<Doctor> getAllDoctors()
