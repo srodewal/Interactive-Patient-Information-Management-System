@@ -1,13 +1,16 @@
 package com.ipims.views;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.models.Patient;
+import com.ipims.models.Prescription;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -62,12 +65,8 @@ public class PrescribeMedView extends BaseView {
 		vbox.getChildren().add(hbox);
 		
 		ListView<String> list = new ListView<String>();
-		/*ObservableList<String> items = FXCollections.observableArrayList (
-				"1. Gregg prescribed advil
-				*/
 		ObservableList<String> items = FXCollections.observableArrayList (
 			);
-		//list.setItems(items);
 		
 		// for success/error message
 		final Text actionTarget = new Text();
@@ -78,6 +77,14 @@ public class PrescribeMedView extends BaseView {
 		//}
 		
 		list.setItems(items); // moved
+		
+		// print all prescriptions for patient
+		ArrayList<Prescription> allMeds = new ArrayList<Prescription>();
+		//allMeds = DatabaseManager.getInstance().getAllPrescriptions();
+		for(int i = 0; i < allMeds.size(); i++) {
+			String currMedication = allMeds.get(i).getPrescriptionText() + "prescribed on: " + allMeds.get(i).getDate();
+			items.add(currMedication);
+		}
 
 		Text subTitle = new Text("View Prescriptions");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -161,7 +168,17 @@ public class PrescribeMedView extends BaseView {
 					actionTarget.setText("Error: Unable to Prescribe Medication!");
 				}
 				else if(!items.contains(prescribeMed)) {
+					// add to visible list
 					items.add(prescribeMed);
+					
+					// send to database
+					Prescription newMed = new Prescription();
+					newMed.setCurrent(true);
+					String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+					newMed.setDate(date);
+					newMed.setPrescriptionText(MedicationTextField.getText());
+					//DatabaseManager.getInstance().newPrescription(newMed);
+					
 					actionTarget.setFill(Color.GREEN);
 					actionTarget.setText("Medication Prescribed!");
 				}
