@@ -125,14 +125,14 @@ public class EnterLabRecordView extends BaseView{
 
 		
 		ComboBox<String> catPatientBox = new ComboBox<String>();
-		if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.PATIENT) {
+		//if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.LABSTAFF) {
 			Label patientLabel = new Label("Patient:");
 			patientLabel.setTextFill(Color.WHITE);
 			catPatientBox.getItems().addAll(Helper.getPatientList());
 			
 			hbox.getChildren().add(patientLabel);
 			hbox.getChildren().add(catPatientBox);
-		}
+		//}
 		
 		Label GlucoseLabel = new Label("Glucose:");
 		GlucoseLabel.setTextFill(Color.WHITE);
@@ -171,8 +171,8 @@ public class EnterLabRecordView extends BaseView{
 		// Fill in values for update
 		if(labrecord != null) {
 			
-			//PULL LAB_RECORD FROM DATABASE 
-			//THEN DISPLAY SPECIFIC FIELDS IN UPDATE SCREEN
+			//PULL LAB_RECORD FROM DATABASE Using index of labrecord chosen
+			//THEN DISPLAY SPECIFIC FIELDS FROM LABRECORD OBJECT PULLED
 			
 			//String glucose = String.valueOf(labrecord.getGlucose());       ConvertToString
 			
@@ -187,25 +187,37 @@ public class EnterLabRecordView extends BaseView{
 			// Add update and cancel buttons
 			//
 			HBox hbBtn = new HBox(10);
-			Button updateBtn = new Button("Update Appointment");
+			Button updateBtn = new Button("Update Lab Record");
 			hbBtn.getChildren().add(updateBtn);
 			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent e) {
 					
+					
+					
+					// USE UPDATE FUNCTION FROM DATABASE TO UPDATE LABRECORD
+					
 					enterLabRecordViewController.handleUpdateClick(null);
+					
+					
+					
+					
 				
 				}
 			});
 			
-			Button cancelBtn = new Button("Cancel Appointment");
+			Button cancelBtn = new Button("Delete Lab Record");
 			hbBtn.getChildren().add(cancelBtn);
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent e) {
-					enterLabRecordViewController.handleAppointmentCancellation();
+					
+					
+					// USE DELETE FUNCTION FROM DATABASE TO DELETE LABRECORD
+					
+					enterLabRecordViewController.handleLabRecordDeletion();
 					
 				
 				}

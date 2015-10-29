@@ -1,5 +1,6 @@
 package com.ipims.views;
 
+import com.ipims.Helper;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.LabRecord;
@@ -14,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -105,14 +107,17 @@ public class LabRecordView extends BaseView {
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
 
-		Label PatientLabel = new Label("Patient:");
-		PatientLabel.setTextFill(Color.WHITE);
-		TextField PatientTextField = new TextField();
-		PatientTextField.setPromptText("Patient Name");
-		PatientTextField.setMaxSize(120, 5);
+		ComboBox<String> catPatientBox = new ComboBox<String>();
+		//if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.LABSTAFF) {
+			Label patientLabel = new Label("Patient:");
+			patientLabel.setTextFill(Color.WHITE);
+			catPatientBox.getItems().addAll(Helper.getPatientList());
+			
+			hbox.getChildren().add(patientLabel);
+			hbox.getChildren().add(catPatientBox);
+		//}
 
 		
-		hbox.getChildren().addAll(PatientLabel,PatientTextField);
 		baseVbox.getChildren().add(hbox);
 
 
@@ -188,7 +193,7 @@ public class LabRecordView extends BaseView {
 			//
 			
 			HBox hbBtn = new HBox(10);
-			Button updateBtn = new Button("Update Appointment");
+			Button updateBtn = new Button("Update Lab Record");
 			hbBtn.getChildren().add(updateBtn);
 			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -200,13 +205,13 @@ public class LabRecordView extends BaseView {
 				}
 			});
 			
-			Button cancelBtn = new Button("Cancel Appointment");
+			Button cancelBtn = new Button("Delete Lab Record");
 			hbBtn.getChildren().add(cancelBtn);
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent e) {
-					LabRecordViewController.handleAppointmentCancellation();
+					LabRecordViewController.handleLabRecordDeletion();
 					
 				
 				}

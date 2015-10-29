@@ -68,7 +68,7 @@ public Scene getScene() {
 	}
 	
 	
-	public void handleAppointmentCancellation() {
+	public void handleLabRecordDeletion() {
 		handleUpdateGoBack();
 	}
 
