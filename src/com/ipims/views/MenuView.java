@@ -73,6 +73,8 @@ public class MenuView extends BaseView {
 
 	private Button appoinmentButton(MenuViewController parentController) {
 		Button scheduleAppBtn = new Button("Appointments");
+                scheduleAppBtn.setPrefSize(190, 10);
+                
 		
 		scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -87,6 +89,7 @@ public class MenuView extends BaseView {
 
 	private Button updateHealthButton(MenuViewController parentController) {
 		Button updateHealthBtn = new Button("Health Condition(s)/Concern(s)");
+                updateHealthBtn.setPrefSize(190, 10);
 		updateHealthBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -102,6 +105,7 @@ public class MenuView extends BaseView {
 	
 	private Button generateStatsButton(MenuViewController parentController) {
 		Button btn = new Button("Generate Statistical Reports");
+                btn.setPrefSize(190, 10);
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -119,6 +123,7 @@ public class MenuView extends BaseView {
 	private Button PrescribeMedButton(MenuViewController parentController) {
 		
 		Button PrescribeMedBtn = new Button("Prescribe Medication(s)");
+                PrescribeMedBtn.setPrefSize(190, 10);
 		PrescribeMedBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -134,6 +139,7 @@ public class MenuView extends BaseView {
 	private Button PatientCaseButton(MenuViewController parentController) {
 		
 		Button PatientCaseBtn = new Button("View Patient Case");
+                PatientCaseBtn.setPrefSize(190, 10);
 		PatientCaseBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -150,6 +156,7 @@ public class MenuView extends BaseView {
 	private Button LabRecordButton(MenuViewController parentController) {
 		
 		Button LabRecordBtn = new Button("View Lab Record");
+                LabRecordBtn.setPrefSize(190, 10);
 		LabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -165,6 +172,7 @@ public class MenuView extends BaseView {
 	private Button EnterLabRecordButton(MenuViewController parentController) {
 		
 		Button EnterLabRecordBtn = new Button("Enter Lab Record");
+                EnterLabRecordBtn.setPrefSize(190, 10);
 		EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -180,6 +188,7 @@ public class MenuView extends BaseView {
 
 	private Button logoutButton(MenuViewController parentController) {
 		Button logoutBtn = new Button("Logout");
+                logoutBtn.setPrefSize(190, 10);
 		logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -194,6 +203,7 @@ public class MenuView extends BaseView {
 	
 	private Button ViewPatientInfoButton(MenuViewController parentController) {
 		Button vpBtn = new Button("View Patient Info");
+                vpBtn.setPrefSize(190, 10);
 		vpBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
