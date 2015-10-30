@@ -13,6 +13,7 @@ import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -34,6 +35,7 @@ import javafx.util.Callback;
 
 public class Appointmentsview extends BaseView {
 
+	private ListView<String> listView;
 	public void createAppointmentsView(User user, AppointmentViewController parentController) {
 
 		VBox vbox = new VBox();
@@ -73,16 +75,16 @@ public class Appointmentsview extends BaseView {
 		vbox.getChildren().add(subTitle);
 
 
-		ListView<String> list = new ListView<String>();
-		list.setItems(parentController.getAppoinmentList());
-		list.getSelectionModel().selectedItemProperty().addListener(
+		listView = new ListView<String>();
+		listView.setItems(parentController.getAppoinmentList());
+		listView.getSelectionModel().selectedItemProperty().addListener(
 				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
 					System.out.println(newValue);
-					int index = list.getSelectionModel().getSelectedIndex();
+					int index = listView.getSelectionModel().getSelectedIndex();
 
 					parentController.didSelectItem(index);
 				});
-		vbox.getChildren().add(list);
+		vbox.getChildren().add(listView);
 		createScene(vbox);
 
 	}
@@ -159,13 +161,13 @@ public class Appointmentsview extends BaseView {
 		catComboBox.getItems().addAll(Helper.getCategoryList());
 
 		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
-		
+
 		ComboBox<String> catPatientBox = new ComboBox<String>();
 		if (UserSession.getInstance().getCurrentUser().getUsertype() != UserType.PATIENT) {
 			Label patientLabel = new Label("Patient:");
 			patientLabel.setTextFill(Color.WHITE);
 			catPatientBox.getItems().addAll(Helper.getPatientList());
-			
+
 			hbox2.getChildren().add(patientLabel);
 			hbox2.getChildren().add(catPatientBox);
 		}
@@ -174,11 +176,14 @@ public class Appointmentsview extends BaseView {
 		// Fill in values for update
 		if(appointment != null) {
 			title.setText("Update Appointment");
-			datePicker.setValue(LocalDate.now());
-			timeTextField.setText("12:23");
-			docComboBox.setValue("John");
-			catComboBox.setValue("Heart");
+			datePicker.setValue(appointment.getDate());
+			timeTextField.setText(appointment.getTime());
+			docComboBox.setValue(appointment.getDoctor().getName());
+			catComboBox.setValue(appointment.getCategory());
 
+			if (catPatientBox != null) {
+				catPatientBox.setValue(appointment.getPatient().getName());
+			}
 			// Add update and cancel buttons
 			//
 			HBox hbBtn = new HBox(10);
@@ -188,8 +193,17 @@ public class Appointmentsview extends BaseView {
 
 				@Override
 				public void handle(ActionEvent e) {
+					Doctor doctor = Helper.getDoctorAtIndex(docComboBox.getSelectionModel().getSelectedIndex());
+					Patient patient = null;
+					if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.PATIENT) {
+						patient = (Patient)UserSession.getInstance().getCurrentUser();
+					} else {
+						patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
+					}
 
-					parentController.handleUpdateClick(null);
+					Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
+
+					parentController.handleUpdateClick(newApp);
 
 				}
 			});
@@ -212,15 +226,15 @@ public class Appointmentsview extends BaseView {
 
 				@Override
 				public void handle(ActionEvent e) {
-					
+
 					Doctor doctor = Helper.getDoctorAtIndex(docComboBox.getSelectionModel().getSelectedIndex());
 					Patient patient = null;
 					if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.PATIENT) {
 						patient = (Patient)UserSession.getInstance().getCurrentUser();
 					} else {
-						 patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
+						patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
 					}
-					
+
 					Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
 					parentController.handleSubmitClick(newApp);
 				}
@@ -231,7 +245,7 @@ public class Appointmentsview extends BaseView {
 
 		return baseVbox;
 	}
-	
+
 
 
 	public void createUpdateAppoinmentView(Appointment appointment, AppointmentViewController parentController) {
@@ -260,5 +274,10 @@ public class Appointmentsview extends BaseView {
 
 		vbox.getChildren().add(addScheduleAppoinment(appointment, parentController));
 		createScene(vbox);
+	}
+
+	public void refreshList(ObservableList<String>list) {
+		listView.getItems().clear();
+		listView.getItems().addAll(list);
 	}
 }

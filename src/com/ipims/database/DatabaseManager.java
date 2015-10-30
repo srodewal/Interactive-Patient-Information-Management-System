@@ -1,6 +1,8 @@
 package com.ipims.database;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,12 +13,12 @@ import com.ipims.models.User.UserType;
 
 public class DatabaseManager {
 	private static final DatabaseManager INSTANCE = new DatabaseManager();
-	
+
 	private Connection dbConnection = null;
-	
+
 	private static final int NUM_TABLES = 6;
-	
-	
+
+
 	private DatabaseManager()
 	{
 
@@ -32,7 +34,7 @@ public class DatabaseManager {
 			logError(e.getMessage());
 		}
 	}
-	
+
 	private  void checkTables()
 	{
 		if(dbConnection != null)
@@ -46,7 +48,7 @@ public class DatabaseManager {
 				{
 					existingTables.add(tables.getString(3));
 				}
-				
+
 				if(existingTables.size() != NUM_TABLES)
 				{
 					fixTables(existingTables);
@@ -59,7 +61,7 @@ public class DatabaseManager {
 			}
 		}
 	}
-	
+
 	private  void fixTables(HashSet<String> existingTables)
 	{
 		if(dbConnection != null)
@@ -112,7 +114,7 @@ public class DatabaseManager {
 				try
 				{
 					Statement createAppointment = dbConnection.createStatement();
-					createAppointment.executeUpdate("CREATE TABLE Appointment( "
+					createAppointment.executeUpdate("CREATE TABLE Appointments( "
 							+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "patientId INTEGER NOT NULL,"
 							+ "doctorId INTEGER NOT NULL,"
@@ -141,7 +143,7 @@ public class DatabaseManager {
 							+ "pastOrCurrent INTEGER NOT NULL"
 							+ ")");
 					createHealthCondition.close();
-					
+
 				}
 				catch(Exception e)
 				{
@@ -196,18 +198,18 @@ public class DatabaseManager {
 			logError("Could not write missing tables to database. Please check that the database exists and is valid.");
 		}
 	}
-	
+
 	private void logError(String errMessage)
 	{
-		
+
 		Logger.getGlobal().log(Level.WARNING, errMessage);
 	}
-	
+
 	public static DatabaseManager getInstance()
 	{
 		return INSTANCE;
 	}
-	
+
 	public void close()
 	{
 		if(dbConnection != null)
@@ -221,9 +223,9 @@ public class DatabaseManager {
 				logError(e.getMessage());
 			}
 		}
-		
+
 	}
-	
+
 	public  void newUser(User user, String password)
 	{
 		if(dbConnection != null)
@@ -258,14 +260,14 @@ public class DatabaseManager {
 			logError("Cannot insert new patient as there is no current database connection.");
 		}
 	}
-	
+
 	public  void newAppointment(Appointment appoinment)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
-				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointment (patientId, doctorId, category, time, date) VALUES (?,?,?,?,?)");
+				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointments (patientId, doctorId, category, time, date) VALUES (?,?,?,?,?)");
 				insertAppointment.setInt(1, appoinment.getPatient().getUserId());
 				insertAppointment.setInt(2, appoinment.getDoctor().getUserId());
 				insertAppointment.setString(3, appoinment.getCategory());
@@ -285,7 +287,34 @@ public class DatabaseManager {
 			logError("Cannot insert new appointment as there is no current database connection.");
 		}
 	}
-	
+
+	public void updateAppoinemt(Appointment oldAppoinment, Appointment updatedAppoinment) {
+		if(dbConnection != null)
+		{
+			try
+			{
+				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE Appointments SET patientId = ?, doctorId = ?, category = ?, time = ?, date = ? WHERE id = ?");
+				updateAppointment.setInt(1, updatedAppoinment.getPatient().getUserId());
+				updateAppointment.setInt(2, updatedAppoinment.getDoctor().getUserId());
+				updateAppointment.setString(3, updatedAppoinment.getCategory());
+				updateAppointment.setString(4, updatedAppoinment.getTime());
+				updateAppointment.setString(5, updatedAppoinment.getDate().toString());
+				updateAppointment.setInt(6, oldAppoinment.getAppointmentId());
+				updateAppointment.executeUpdate();
+				updateAppointment.close();
+			}
+			catch(Exception e)
+			{
+				logError("Cannot update the appointment. Check that inputs are correct and the datbase has been set up properly.");
+				logError(e.getMessage());
+			}
+		}
+		else
+		{
+			logError("Cannot update appoinment as there is no current database connection.");
+		}
+	}
+
 	public void newHealthCondition(HealthCondition condition)
 	{
 		if(dbConnection != null)
@@ -319,7 +348,7 @@ public class DatabaseManager {
 			logError("Cannot insert new health condition as there is no current database connection.");
 		}
 	}
-	
+
 	public void newLabRecord(LabRecord record)
 	{
 		try
@@ -330,7 +359,7 @@ public class DatabaseManager {
 			insertRecord.setFloat(3, record.getCalcium());
 			insertRecord.setFloat(4, record.getMagnesium());
 			insertRecord.setFloat(5, record.getSodium());
-			
+
 			insertRecord.executeUpdate();
 		}
 		catch(Exception e)
@@ -339,7 +368,7 @@ public class DatabaseManager {
 			logError(e.getMessage());
 		}
 	}
-	
+
 	public void newPrescription(Prescription prescription)
 	{
 		try
@@ -360,7 +389,7 @@ public class DatabaseManager {
 			{
 				insertPrescription.setInt(4, 0);
 			}
-			
+
 			insertPrescription.executeUpdate();
 		}
 		catch(Exception e)
@@ -369,7 +398,7 @@ public class DatabaseManager {
 			logError(e.getMessage());
 		}
 	}
-	
+
 	public User getUser(String userName, String password) { //for login
 		User user = null;
 		try {
@@ -380,23 +409,23 @@ public class DatabaseManager {
 			if (rs.isClosed() == false) {
 				user = createUser(rs);
 			}
-			
+
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		return user;
 	}
-	
-	public User getUser(String userName) //for normal use
+
+	public User getUser(int userId) //for normal use
 	{
 		User user = null;
-		
+
 		try
 		{
-			PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ?");
-			userStatement.setString(1, userName);
-			
+			PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userId = ?");
+			userStatement.setInt(1, userId);
+
 			ResultSet rs = userStatement.executeQuery();
 			if(rs.isClosed() == false)
 			{
@@ -408,64 +437,131 @@ public class DatabaseManager {
 			logError("Could not get user. Please check that the database has been set up properly.");
 			logError(e.getMessage());
 		}
-		
+
 		return user;
 	}
-	
+
+	public User getUser(String userName) //for normal use
+	{
+		User user = null;
+
+		try
+		{
+			PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ?");
+			userStatement.setString(1, userName);
+
+			ResultSet rs = userStatement.executeQuery();
+			if(rs.isClosed() == false)
+			{
+				user = createUser(rs);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get user. Please check that the database has been set up properly.");
+			logError(e.getMessage());
+		}
+
+		return user;
+	}
+
 	public List<User> getPatientList() {
-		
+
 		List<User> userList = new ArrayList<>();
-		
+
 		try {
 			Statement stat = dbConnection.createStatement();
 			ResultSet rs = stat.executeQuery("select * from USER WHERE type = " + UserType.PATIENT.ordinal() + ";");
 
-	        while (rs.next()) {
-	        	
-	        	User user = createUser(rs);
-	        	userList.add(user);
-	        }
+			while (rs.next()) {
+
+				User user = createUser(rs);
+				userList.add(user);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return userList;
 	}
-	
+
 	public List<Appointment> getAppointmentForPatient(Patient patient)
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
-		
-		//TODO: complete once I'm sure about what the field in the model represent
-//		try
-//		{
-//			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE patientId = ?");
-//			getAppointments.setInt(1, patient.getUserId());
-//			
-//			ResultSet rs = getAppointments.executeQuery();
-//			
-//			while(rs.next())
-//			{
-//				Appointment appointment = new Appointment();
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logError("Could not get appointments. Please check the database has been set up correctly.");
-//			logError(e.getMessage());
-//		}
-		
+		try
+		{
+
+			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE patientId = ?");
+			getAppointments.setInt(1, patient.getUserId());
+
+			ResultSet rs = getAppointments.executeQuery();
+
+			while(rs.next())
+			{
+				Appointment appointment = createAppoinment(rs);
+				appointmentList.add(appointment);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get appointments. Please check the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+
 		return appointmentList;
 	}
-	
+
+	public List<Appointment> getAllAppointments()
+	{
+		List<Appointment> appointmentList = new ArrayList<>();
+		try
+		{
+
+			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments");
+			ResultSet rs = getAppointments.executeQuery();
+
+			while(rs.next())
+			{
+				Appointment appointment = createAppoinment(rs);
+				appointmentList.add(appointment);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get appointments. Please check the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+
+		return appointmentList;
+	}
+
+	public void deleteAppoinment(Appointment appoinment) {
+		try
+		{
+			System.out.println("Deleting appoinment with id " + appoinment.getAppointmentId() + " ****");
+			PreparedStatement delApp = dbConnection.prepareStatement("DELETE FROM Appointments WHERE id = ?");
+			delApp.setInt(1, appoinment.getAppointmentId());
+			delApp.executeUpdate();
+			delApp.close();
+
+
+		}
+		catch(Exception e)
+		{
+			logError("Could not delete the appoinment");
+			logError(e.getMessage());
+		}
+
+	}
+
 	public List<Prescription> getPrescriptionsForPatient(int patientId)
 	{
 		List<Prescription> prescriptions = new ArrayList<>();
-		
+
 		try
 		{
 			PreparedStatement getPrescriptions = dbConnection.prepareStatement("SELECT * FROM Prescription WHERE userId = ?");
 			getPrescriptions.setInt(1, patientId);
-			
+
 			ResultSet rs = getPrescriptions.executeQuery();
 			while(rs.next())
 			{
@@ -474,7 +570,7 @@ public class DatabaseManager {
 				prescription.setUserId(patientId);
 				prescription.setDate(rs.getString("date"));
 				prescription.setPrescriptionText(rs.getString("medicine"));
-				
+
 				if(rs.getInt("pastOrCurrent") == 0)
 				{
 					prescription.setCurrent(false);
@@ -483,7 +579,7 @@ public class DatabaseManager {
 				{
 					prescription.setCurrent(true);
 				}
-				
+
 				prescriptions.add(prescription);
 			}
 		}
@@ -492,24 +588,24 @@ public class DatabaseManager {
 			logError("Could not get prescriptions. Please check the database has been set up correctly.");
 			logError(e.getMessage());
 		}
-		
+
 		return prescriptions;
 	}
-	
+
 	public List<Doctor> getAllDoctors()
 	{
 		List<Doctor> doctors = new ArrayList<>();
-		
+
 		try
 		{
 			Statement getDoctors = dbConnection.createStatement();
 			ResultSet rs = getDoctors.executeQuery("SELECT * FROM User LEFT OUTER JOIN DoctorCategory ON User.userId = DoctorCategory.userId AND User.type=0");
-			
+
 			while(rs.next())
 			{
 				Doctor doctor = (Doctor) createUser(rs);
 				doctor.setCategory(rs.getString("category"));
-				
+
 				doctors.add(doctor);
 			}
 		}
@@ -518,25 +614,25 @@ public class DatabaseManager {
 			logError("Could not get doctors from the database. Please check that the database has been set up correctly.");
 			logError(e.getMessage());
 		}
-		
+
 		return doctors;
 	}
-	
+
 	public List<Patient> getAllPatients()
 	{
 		List<Patient> patients = new ArrayList<>();
-		
+
 		try
 		{
 			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM User WHERE type = ?");
 			getPatients.setInt(1, UserType.PATIENT.ordinal());
 			ResultSet rs = getPatients.executeQuery();
-			
+
 			while(rs.next())
 			{
 				Patient patient = (Patient) createUser(rs);
 				//patient.setCategory(rs.getString("username"));
-				
+
 				patients.add(patient);
 			}
 		}
@@ -545,43 +641,43 @@ public class DatabaseManager {
 			logError("Could not get patients from the database. Please check that the database has been set up correctly.");
 			logError(e.getMessage());
 		}
-		
+
 		return patients;
 	}
-	
+
 	public List<HealthCondition> getPatientConditions(int patientId)
 	{
 		List<HealthCondition> conditions = new ArrayList<>();
 		//TODO: complete once I know what the fields in the model represent.
-//		try
-//		{
-//			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM HealthConditions WHERE userId = ?");
-//			getPatients.setInt(1, patientId);
-//			
-//			ResultSet rs = getPatients.executeQuery();
-//			
-//			while(rs.next())
-//			{
-//				HealthCondition condition = new HealthCondition();
-//				condition.set
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logError("Could not get patient conditions. Please check that the database has been set up properly.");
-//			logError(e.getMessage());
-//		}
-		
+		//		try
+		//		{
+		//			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM HealthConditions WHERE userId = ?");
+		//			getPatients.setInt(1, patientId);
+		//			
+		//			ResultSet rs = getPatients.executeQuery();
+		//			
+		//			while(rs.next())
+		//			{
+		//				HealthCondition condition = new HealthCondition();
+		//				condition.set
+		//			}
+		//		}
+		//		catch(Exception e)
+		//		{
+		//			logError("Could not get patient conditions. Please check that the database has been set up properly.");
+		//			logError(e.getMessage());
+		//		}
+
 		return conditions;
 	}
-	
+
 	public List<LabRecord> getAllLabRecords()
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
 		try
 		{
 			Statement getRecords = dbConnection.createStatement();
-			
+
 			ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord;");
 			while(rs.next())
 			{
@@ -600,28 +696,44 @@ public class DatabaseManager {
 			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
 			logError(e.getMessage());
 		}
-		
+
 		return records;
 	}
-	
+
 	//=================== DB Helpers ==================
-	
+
 	private User createUser(ResultSet rs) throws SQLException {
 		System.out.println("Found user " + rs.getString("name") + " " + rs.getInt("type"));
 		User user = User.createUser(UserType.fromInteger( rs.getInt("type")));
-    	user.setName(rs.getString("name"));
-    	user.setUserName(rs.getString("userName"));
-    	user.setUserId(rs.getInt("userId"));
-    	user.setPasswordHash(rs.getString("passwordHash"));
-    	user.setSsn(rs.getString("ssn"));
-    	user.setDateOfBirth(rs.getString("dob"));
-    	user.setAddress(rs.getString("address"));
-    	user.setEmail(rs.getString("email"));
-    	user.setPhoneNumber(rs.getString("phoneNumber"));
-    	user.setInsurance(rs.getString("insurance"));
-    	user.setSex(rs.getString("sex"));
-    	user.setRace(rs.getString("race"));
-    	return user;
+		user.setName(rs.getString("name"));
+		user.setUserName(rs.getString("userName"));
+		user.setUserId(rs.getInt("userId"));
+		user.setPasswordHash(rs.getString("passwordHash"));
+		user.setSsn(rs.getString("ssn"));
+		user.setDateOfBirth(rs.getString("dob"));
+		user.setAddress(rs.getString("address"));
+		user.setEmail(rs.getString("email"));
+		user.setPhoneNumber(rs.getString("phoneNumber"));
+		user.setInsurance(rs.getString("insurance"));
+		user.setSex(rs.getString("sex"));
+		user.setRace(rs.getString("race"));
+		return user;
 	}
-	
+
+	private Appointment createAppoinment(ResultSet rs) throws SQLException {
+		System.out.println("Found Appoinment");
+		int appoinmentId = rs.getInt("id");
+		int patientId = rs.getInt("patientId");
+		int doctorId = rs.getInt("doctorId");
+		String category = rs.getString("category");
+		String time = rs.getString("time");
+		String date = rs.getString("date");
+		Patient patient = (Patient)getUser(patientId);
+		Doctor doc = (Doctor)getUser(doctorId);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localdate = LocalDate.parse(date, formatter);
+		return new Appointment(appoinmentId, localdate, time, doc, patient, category);
+
+	}
+
 }

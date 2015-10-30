@@ -22,6 +22,7 @@ public class AppointmentViewController {
 
 	private Appointmentsview view;
 	private AppointmentManager appManager;
+	private Appointment currentlySelectedApp;
 
 	//--------------- View Controller methods ---------------
 	//--------------------------------------------------------
@@ -42,7 +43,9 @@ public class AppointmentViewController {
 		List<String> stringAppList = new ArrayList<>();
 		for (int i = 0; i < appointmentList.size(); i++) {
 			Appointment app = appointmentList.get(i);
-			stringAppList.add("" + i +". Dr. "+app.getDoctor()+" (Category: "+ app.getCategory()+") on "+app.getDate()+" on "+ app.getTime());
+			int index = i+1;
+			stringAppList.add("" + index +". Dr. "+app.getDoctor().getName() 
+					+" (Category: "+ app.getCategory()+") on "+ app.getDate()+" at "+ app.getTime());
 		}
 		ObservableList<String> items = FXCollections.observableArrayList (stringAppList);
 		return items;
@@ -66,7 +69,7 @@ public class AppointmentViewController {
 		return appointmentList;
 	}
 
-	
+
 
 
 	public void goBack() {
@@ -77,6 +80,7 @@ public class AppointmentViewController {
 	public void didSelectItem(int index) {
 
 		User user = UserSession.getInstance().getCurrentUser();
+		List<Appointment> list = getListOfAppointment();
 
 		// Only Patient or HSP staff can update
 		//
@@ -84,7 +88,8 @@ public class AppointmentViewController {
 				user.getUsertype() == UserType.HSPSTAFF) {
 
 			Appointmentsview updateView = new Appointmentsview();
-			updateView.createUpdateAppoinmentView(new Appointment(LocalDate.now(), "12:23", null, null, ""), this);
+			currentlySelectedApp = list.get(index);
+			updateView.createUpdateAppoinmentView(currentlySelectedApp, this);
 			view.getStage().setScene(updateView.getCurrentScene());
 			view = updateView;
 		}
@@ -98,15 +103,22 @@ public class AppointmentViewController {
 	}
 
 	public void handleUpdateClick(Appointment updatedAppointment) {
+		appManager.updateAppointment(currentlySelectedApp, updatedAppointment);
+		currentlySelectedApp = null;
 		handleUpdateGoBack();
+		view.showErrorMessage("Appoinment updated.");
 	}
 
 	public void handleSubmitClick(Appointment newAppoinment) {
-		DatabaseManager.getInstance().newAppointment(newAppoinment);
+		appManager.newAppointment(newAppoinment);
+		view.refreshList(getAppoinmentList());
 	}
 
 	public void handleAppointmentCancellation() {
+		appManager.deleteAppoinment(currentlySelectedApp);
+		currentlySelectedApp = null;
 		handleUpdateGoBack();
+		view.showErrorMessage("Appoinment cancelled!!");
 	}
 
 

@@ -58,11 +58,13 @@ public class IPIMSApplication extends Application {
 		user.setRace("Other");
 
 		if (DatabaseManager.getInstance().getUser("johnc", "test") == null) {
+			user.setCategory(Helper.getAllCategories().get(1));
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 
 		if (DatabaseManager.getInstance().getUser("tom", "test") == null) {
 			user.setName("Tom T");
+			user.setCategory(Helper.getAllCategories().get(0));
 			user.setUserName("tom");
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
@@ -70,12 +72,14 @@ public class IPIMSApplication extends Application {
 		if (DatabaseManager.getInstance().getUser("will", "test") == null) {
 			user.setName("Will");
 			user.setUserName("will");
+			user.setCategory(Helper.getAllCategories().get(3));
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 
 		if (DatabaseManager.getInstance().getUser("smith", "test") == null) {
 			user.setName("Smith");
 			user.setUserName("smith");
+			user.setCategory(Helper.getAllCategories().get(2));
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 	}

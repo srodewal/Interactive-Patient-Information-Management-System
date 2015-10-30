@@ -56,7 +56,7 @@ public class Helper {
 		list.add("Heart");
 		list.add("Eye");
 		list.add("Ortho");
-		
+		list.add("Dental");
 		return list;
 	}
 	
