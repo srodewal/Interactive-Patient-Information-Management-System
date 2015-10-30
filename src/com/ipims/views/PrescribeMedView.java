@@ -167,9 +167,11 @@ public class PrescribeMedView extends BaseView {
 					
 					// send to database
 					Prescription newMed = new Prescription();
-					//newMed.setCurrent(true);
+					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+					newMed.setUserId(tempPatient.getUserId());
+					newMed.setCurrent(true);
 					String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-					newMed.setDate(date);
+					newMed.setDate(""); // date
 					newMed.setPrescriptionText(MedicationTextField.getText());
 					DatabaseManager.getInstance().newPrescription(newMed);
 					
@@ -197,6 +199,7 @@ public class PrescribeMedView extends BaseView {
 				List<Prescription> allMeds = new ArrayList<Prescription>();
 				Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
 				allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
+				System.out.println("List " + tempPatient.getUserId() + "\n");
 				for(int i = 0; i < allMeds.size(); i++) {
 					String currMedication = allMeds.get(i).getPrescriptionText() + "prescribed on: " + allMeds.get(i).getDate();
 					items.add(currMedication);

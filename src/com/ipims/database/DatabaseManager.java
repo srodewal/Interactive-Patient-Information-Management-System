@@ -344,7 +344,11 @@ public class DatabaseManager {
 	{
 		try
 		{
+			System.out.println("p1");
+			// this statement ->
 			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent) VALUES (?, ?, ?, ?)");
+			System.out.println("p2");
+			System.out.println("Setup " + prescription.getUserId() + "\n");
 			insertPrescription.setInt(1, prescription.getUserId());
 			insertPrescription.setString(2, prescription.getDate());
 			insertPrescription.setString(3, prescription.getPrescriptionText());
