@@ -10,7 +10,6 @@ import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
-import com.ipims.views.Appointmentsview;
 import com.ipims.views.HealthView;
 
 import javafx.collections.FXCollections;
@@ -78,7 +77,11 @@ public class HealthViewController {
 			} else {
 				str += " (History) : ";
 			}
-			str+= app.getHealthConcern()+" Comments: "+ app.getComments();
+			str+= app.getHealthConcern();
+			
+			if (app.getComments() != null) {
+				str += " || Comments: "+ app.getComments();
+			}
 			resultList.add(str);
 		}
 		ObservableList<String> items = FXCollections.observableArrayList (resultList);
