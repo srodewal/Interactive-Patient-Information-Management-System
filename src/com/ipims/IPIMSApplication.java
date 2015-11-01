@@ -3,6 +3,7 @@ package com.ipims;
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Doctor;
 import com.ipims.models.HSPStaff;
+import com.ipims.models.LabStaff;
 import com.ipims.models.Nurse;
 import com.ipims.models.Patient;
 import com.ipims.usersession.LoginViewController;
@@ -40,9 +41,29 @@ public class IPIMSApplication extends Application {
 		preFillCategory();
 		preFillHSPStaff();
 		preFillPatient();
+		preFillLabStaff();
 
 	}
 
+	private void preFillLabStaff() {
+		LabStaff user = new LabStaff();
+		user.setName("Lab Guy");
+		user.setUserName("lab");
+		user.setAddress("asdad");
+		user.setDateOfBirth("12/2/1978");
+		user.setSsn("2324234");
+		user.setPhoneNumber("34435345");
+		user.setEmail("Asda");
+		user.setInsurance("insurance");
+		user.setSex("Male");
+		user.setRace("Other");
+		if (DatabaseManager.getInstance().getUser("lab", "test") == null) {
+			DatabaseManager.getInstance().newUser(user, "test");
+		}
+
+		
+	}
+	
 	private void preFillDoctor() {
 
 		Doctor user = new Doctor();

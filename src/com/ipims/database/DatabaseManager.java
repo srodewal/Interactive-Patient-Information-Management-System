@@ -158,7 +158,7 @@ public class DatabaseManager {
 				{
 					Statement createLabRecord = dbConnection.createStatement();
 					createLabRecord.executeUpdate("CREATE TABLE LabRecord("
-							+ "recordId INTEGER PRIMARY KEY NOT NULL"
+							+ "recordId INTEGER PRIMARY KEY NOT NULL,"
 							+ "userId INTEGER NOT NULL,"
 							+ "glucose REAL NOT NULL,"
 							+ "sodium REAL NOT NULL,"
