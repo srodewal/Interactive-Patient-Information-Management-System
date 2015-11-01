@@ -728,7 +728,8 @@ public class DatabaseManager {
 		return conditions;
 	}
 
-	public List<LabRecord> getAllLabRecords(int patientId)
+	// get all lab records for specified patient
+	public List<LabRecord> getLabRecordsForPatient(int patientId)
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
 		try
@@ -763,6 +764,35 @@ public class DatabaseManager {
 		return records;
 	}
 
+	// get all lab records for every patient
+	public List<LabRecord> getAllLabRecord()
+	{
+		ArrayList<LabRecord> records = new ArrayList<>();
+		try
+		{	
+			PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord");		
+			ResultSet rs = getRecords.executeQuery();
+			
+			while(rs.next())
+			{
+				LabRecord record = new LabRecord();
+				record.setPatientId(rs.getInt("userId"));
+				record.setLabRecordId(rs.getInt("recordId"));
+				record.setGlucose(rs.getFloat("glucose"));
+				record.setSodium(rs.getFloat("sodium"));
+				record.setCalcium(rs.getFloat("calcium"));
+				record.setMagnesium(rs.getFloat("magnesium"));
+				records.add(record);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
+			logError(e.getMessage());
+		}
+
+		return records;
+	}
 	//=================== DB Helpers ==================
 
 	private User createUser(ResultSet rs) throws SQLException {

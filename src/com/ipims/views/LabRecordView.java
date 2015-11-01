@@ -256,7 +256,7 @@ public class LabRecordView extends BaseView {
 				
 				// show all lab records for patient
 				List<LabRecord> lrList = new ArrayList<LabRecord>();
-				lrList = DatabaseManager.getInstance().getAllLabRecords(tempPatient.getUserId());
+				lrList = DatabaseManager.getInstance().getLabRecordsForPatient(tempPatient.getUserId());
 				//System.out.println("List " + tempPatient.getUserId() + "\n");
 				for(int i = 0; i < lrList.size(); i++) {
 					String lrInfo = "Calcium: " + Float.toString(lrList.get(i).getCalcium());
