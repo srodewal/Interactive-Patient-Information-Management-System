@@ -202,10 +202,10 @@ public class EnterLabRecordView extends BaseView{
 					// setting lab record in database
 					Patient tempPatient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
 					
-					labrecord.setCalcium(Integer.valueOf(CalciumTextField.getText()));
-					labrecord.setGlucose(Integer.valueOf(GlucoseTextField.getText()));
-					labrecord.setMagnesium(Integer.valueOf(MagnesiumTextField.getText()));
-					labrecord.setSodium(Integer.valueOf(SodiumTextField.getText()));
+					labrecord.setCalcium(Float.valueOf(CalciumTextField.getText()));
+					labrecord.setGlucose(Float.valueOf(GlucoseTextField.getText()));
+					labrecord.setMagnesium(Float.valueOf(MagnesiumTextField.getText()));
+					labrecord.setSodium(Float.valueOf(SodiumTextField.getText()));
 					//labrecord.setPatient(tempPatient);
 					labrecord.setPatientId(tempPatient.getUserId());
 
