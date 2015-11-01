@@ -40,13 +40,12 @@ public class MenuView extends BaseView {
 		
 		vbox.getChildren().add(appoinmentButton(parentController));
 		vbox.getChildren().add(updateHealthButton(parentController));
-		vbox.getChildren().add(generateStatsButton(parentController));
 		vbox.getChildren().add(PrescribeMedButton(parentController));
 		vbox.getChildren().add(PatientCaseButton(parentController));
+		vbox.getChildren().add(ViewPatientInfoButton(parentController));
 		vbox.getChildren().add(LabRecordButton(parentController));
 		vbox.getChildren().add(EnterLabRecordButton(parentController));
-
-		vbox.getChildren().add(ViewPatientInfoButton(parentController));
+		vbox.getChildren().add(generateStatsButton(parentController));
 		
 
 //		if (user.getUsertype() == UserType.PATIENT) {
@@ -138,7 +137,7 @@ public class MenuView extends BaseView {
 	
 	private Button PatientCaseButton(MenuViewController parentController) {
 		
-		Button PatientCaseBtn = new Button("View Patient Case");
+		Button PatientCaseBtn = new Button("Access Patient Case");
                 PatientCaseBtn.setPrefSize(190, 10);
 		PatientCaseBtn.setOnAction(new EventHandler<ActionEvent>() {
 

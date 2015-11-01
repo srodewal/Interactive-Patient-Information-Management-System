@@ -156,24 +156,26 @@ public class PrescribeMedView extends BaseView {
 				
 				int temp = patientComboBox.getSelectionModel().getSelectedIndex();
 				String patientName = allPatients.get(temp).getName();
-				String prescribeMed = patientName + " prescribed " + MedicationTextField.getText();
+				LocalDate currentDate = LocalDate.now(); // current date
+				String prescribeMed = patientName + " prescribed " + MedicationTextField.getText() + " on: " + currentDate.toString();
+				
 				if(MedicationTextField.getText().equals("")) {
 					actionTarget.setFill(Color.RED);
 					actionTarget.setText("Error: Unable to Prescribe Medication!");
 				}
 				else if(!items.contains(prescribeMed)) {
-					// add to visible list
-					items.add(prescribeMed);
 					
 					// send to database
 					Prescription newMed = new Prescription();
 					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
 					newMed.setUserId(tempPatient.getUserId());
 					newMed.setCurrent(true);
-					String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-					newMed.setDate(""); // date
+					newMed.setDate(currentDate.toString()); // set date prescribed on
 					newMed.setPrescriptionText(MedicationTextField.getText());
 					DatabaseManager.getInstance().newPrescription(newMed);
+					
+					// add to visible list
+					items.add(prescribeMed);
 					
 					actionTarget.setFill(Color.GREEN);
 					actionTarget.setText("Medication Prescribed!");
@@ -201,7 +203,7 @@ public class PrescribeMedView extends BaseView {
 				allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
 				System.out.println("List " + tempPatient.getUserId() + "\n");
 				for(int i = 0; i < allMeds.size(); i++) {
-					String currMedication = allMeds.get(i).getPrescriptionText() + "prescribed on: " + allMeds.get(i).getDate();
+					String currMedication = allMeds.get(i).getPrescriptionText() + " prescribed on: " + allMeds.get(i).getDate();
 					items.add(currMedication);
 				}
 				
