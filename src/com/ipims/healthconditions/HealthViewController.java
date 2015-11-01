@@ -10,6 +10,7 @@ import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
+import com.ipims.views.Appointmentsview;
 import com.ipims.views.HealthView;
 
 import javafx.collections.FXCollections;
@@ -21,7 +22,8 @@ public class HealthViewController {
 	private HealthView view;
 	private HealthConditionManager manager;
 	private Patient currentlySelectedPerson;
-	
+	private HealthCondition currentlySelectedCond;
+
 	public HealthViewController() {
 		this.manager = new HealthConditionManager();
 		User user = UserSession.getInstance().getCurrentUser();
@@ -31,7 +33,7 @@ public class HealthViewController {
 		this.view = new HealthView();
 		this.view.createHealthview(UserSession.getInstance().getCurrentUser(), this);
 	}
-	
+
 	public Scene getScene() {
 		return this.view.getCurrentScene();
 	}
@@ -69,7 +71,7 @@ public class HealthViewController {
 		for (int i = 0; i < list.size(); i++) {
 			HealthCondition app = list.get(i);
 			int index = i+1;
-			
+
 			String str = "" + index +".";
 			if (app.isCurrent()) {
 				str += " (HealthCondition) : ";
@@ -82,20 +84,57 @@ public class HealthViewController {
 		ObservableList<String> items = FXCollections.observableArrayList (resultList);
 		return items;
 	}
-	
+
 	public void patientAtIndexSelected(int index) {
 		this.currentlySelectedPerson = Helper.getPatientAtIndex(index);
 		this.view.refreshList(getWholeHealthConditionObsList());
 	}
-	
 
 	public void handleSubmitHc(HealthCondition newHc) {
-		manager.saveHealthCondition(this.currentlySelectedPerson, newHc);
+		newHc.setPatientId(currentlySelectedPerson.getUserId());
+		manager.saveHealthCondition(newHc);
 		this.view.showErrorMessage("Condition saved.");
 		this.view.refreshList(getWholeHealthConditionObsList());
 	}
 
+	public void handleHealthConditionAtIndexSelected(int index) {
+		
+		List<HealthCondition> list = manager.getPatientHealthList(this.currentlySelectedPerson);
+		this.currentlySelectedCond = list.get(index);
+		HealthView updateView = new HealthView();
 
+
+		if (currentlySelectedCond.isCurrent()) {
+			updateView.createUpdateHealthCondition(this, currentlySelectedCond);
+		} else {
+			updateView.createUpdateHealthHistory(this, currentlySelectedCond);
+		}
+		view.getStage().setScene(updateView.getCurrentScene());
+		view = updateView;
+		System.out.println("View updated");
+	}
+
+	public void handleDeleteHealthCondition() {
+		manager.deleteHealthCondition(this.currentlySelectedCond);
+		handleUpdateGoBack();
+	}
+
+	public void handleUpdateHealthCondition(HealthCondition updatedCondition) {
+		manager.updateHealthCondition(currentlySelectedCond, updatedCondition);
+		handleUpdateGoBack();
+	}
+
+	public void handleCancelUpdate() {
+		handleUpdateGoBack();
+	}
+
+	public void handleUpdateGoBack() {
+		currentlySelectedCond = null;
+		HealthView newView = new HealthView();
+		view.createHealthview(this.currentlySelectedPerson, this);
+		view.getStage().setScene(newView.getCurrentScene());
+		view = newView;
+	}
 
 
 }

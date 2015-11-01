@@ -79,9 +79,9 @@ public class Appointmentsview extends BaseView {
 		listView.setItems(parentController.getAppoinmentList());
 		listView.getSelectionModel().selectedItemProperty().addListener(
 				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+					
 					System.out.println(newValue);
 					int index = listView.getSelectionModel().getSelectedIndex();
-
 					parentController.didSelectItem(index);
 				});
 		vbox.getChildren().add(listView);

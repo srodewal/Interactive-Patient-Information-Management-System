@@ -320,15 +320,43 @@ public class DatabaseManager {
 			logError("Cannot update appoinment as there is no current database connection.");
 		}
 	}
+	
+	
+	public void updateHealthCondition(HealthCondition oldCond, HealthCondition updatedCond) {
+		if(dbConnection != null)
+		{
+			try
+			{
+				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE HealthCondtion SET userId = ?, healthConcerns = ?, comments = ?, severity = ?, isCurrent = ? WHERE id = ?");
+				updateAppointment.setInt(1, updatedCond.getPatientId());
+				updateAppointment.setString(2, updatedCond.getHealthConcern());
+				updateAppointment.setString(3, updatedCond.getComments());
+				updateAppointment.setInt(4, updatedCond.getSeverity());
+				updateAppointment.setInt(5, updatedCond.isCurrent()?1:0);
+				updateAppointment.setInt(6, oldCond.getHealthConditionId());
+				updateAppointment.executeUpdate();
+				updateAppointment.close();
+			}
+			catch(Exception e)
+			{
+				logError("Cannot update the Health Condition. Check that inputs are correct and the datbase has been set up properly.");
+				logError(e.getMessage());
+			}
+		}
+		else
+		{
+			logError("Cannot update health condition as there is no current database connection.");
+		}
+	}
 
-	public void newHealthCondition(HealthCondition condition, Patient patient)
+	public void newHealthCondition(HealthCondition condition)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
 				PreparedStatement insertHealthCondition = dbConnection.prepareStatement("INSERT INTO HealthCondition (userId,healthConcerns,comments,severity,isCurrent) VALUES(?, ?, ?, ?, ?)");
-				insertHealthCondition.setInt(1, patient.getUserId());
+				insertHealthCondition.setInt(1, condition.getPatientId());
 				insertHealthCondition.setString(2, condition.getHealthConcern());
 				insertHealthCondition.setString(3, condition.getComments());
 				insertHealthCondition.setInt(4, condition.getSeverity());
@@ -558,6 +586,25 @@ public class DatabaseManager {
 		}
 
 	}
+	
+	public void deleteHealthCondition(HealthCondition condition) {
+		try
+		{
+			System.out.println("Deleting Condition with id " + condition.getHealthConditionId() + " ****");
+			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM HealthCondition WHERE id = ?");
+			stat.setInt(1, condition.getHealthConditionId());
+			stat.executeUpdate();
+			stat.close();
+
+
+		}
+		catch(Exception e)
+		{
+			logError("Could not delete the condition");
+			logError(e.getMessage());
+		}
+
+	}
 
 	public List<Prescription> getPrescriptionsForPatient(int patientId)
 	{
@@ -668,7 +715,7 @@ public class DatabaseManager {
 				healthCondition.setComments(rs.getString("comments"));
 				healthCondition.setSeverity(rs.getInt("severity"));
 				healthCondition.setCurrent(rs.getInt("isCurrent")==1);
-				
+				healthCondition.setPatientId(rs.getInt("userId"));
 				conditions.add(healthCondition);
 			}
 		}
