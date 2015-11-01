@@ -1,5 +1,6 @@
 package com.ipims.models;
 
+import java.time.LocalDate;
 
 public class LabRecord {
 	
@@ -8,9 +9,8 @@ public class LabRecord {
 	private float Sodium;
 	private float Calcium;
 	private float Magnesium;
-	private int appointmentId = -1;
+	private int LabRecordId = -1;
 	private String Patient;
-	
 	
 	
 	
@@ -35,11 +35,11 @@ public class LabRecord {
 	}
 
 	public int getLabRecordId() {
-		return appointmentId;
+		return LabRecordId;
 	}
 
 	public void setLabRecordId(int id) {
-		this.appointmentId = id;
+		this.LabRecordId = id;
 	}
 
 

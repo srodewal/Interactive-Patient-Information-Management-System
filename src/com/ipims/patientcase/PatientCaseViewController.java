@@ -55,7 +55,7 @@ public class PatientCaseViewController {
 
 		if (this.selectedPatient != null) {
 			List<HealthCondition> healthList = healthManager.getPatientHealthList(selectedPatient);
-			List<LabRecord> recordList = labRecordManager.getLabRecordsofPatient(selectedPatient);
+			List<LabRecord> recordList = labRecordManager.getLabRecordForPatient(selectedPatient);
 
 			String healthConditionInfo = "Health Condition: \n";
 			String healthHistoryInfo = "Health History: \n";
