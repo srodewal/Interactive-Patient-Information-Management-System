@@ -117,7 +117,7 @@ public class DatabaseManager {
 					createAppointment.executeUpdate("CREATE TABLE Appointments( "
 							+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "patientId INTEGER NOT NULL,"
-							+ "doctorId INTEGER NOT NULL,"
+							+ "doctorId INTEGER,"
 							+ "category TEXT,"
 							+ "time TEXT NOT NULL,"
 							+ "date TEXT NOT NULL"
@@ -136,11 +136,12 @@ public class DatabaseManager {
 				{
 					Statement createHealthCondition = dbConnection.createStatement();
 					createHealthCondition.executeUpdate("CREATE TABLE HealthCondition("
-							+ "userId INTEGER PRIMARY KEY NOT NULL,"
+							+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+							+ "userId INTEGER NOT NULL,"
 							+ "healthConcerns TEXT NOT NULL,"
-							+ "comments TEXT NOT NULL,"
+							+ "comments TEXT,"
 							+ "severity INTEGER NOT NULL,"
-							+ "pastOrCurrent INTEGER NOT NULL"
+							+ "isCurrent INTEGER NOT NULL"
 							+ ")");
 					createHealthCondition.close();
 
@@ -269,7 +270,12 @@ public class DatabaseManager {
 			{
 				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointments (patientId, doctorId, category, time, date) VALUES (?,?,?,?,?)");
 				insertAppointment.setInt(1, appoinment.getPatient().getUserId());
-				insertAppointment.setInt(2, appoinment.getDoctor().getUserId());
+				if (appoinment.getDoctor() != null) {
+					insertAppointment.setInt(2, appoinment.getDoctor().getUserId());
+				} else {
+					insertAppointment.setNull(2, java.sql.Types.INTEGER);
+				}
+				
 				insertAppointment.setString(3, appoinment.getCategory());
 				insertAppointment.setString(4, appoinment.getTime());
 				insertAppointment.setString(5, appoinment.getDate().toString());
@@ -315,14 +321,14 @@ public class DatabaseManager {
 		}
 	}
 
-	public void newHealthCondition(HealthCondition condition)
+	public void newHealthCondition(HealthCondition condition, Patient patient)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
-				PreparedStatement insertHealthCondition = dbConnection.prepareStatement("INSERT INTO HealthCondition VALUES(?, ?, ?, ?, ?)");
-				insertHealthCondition.setInt(1, condition.getHealthConditionId());
+				PreparedStatement insertHealthCondition = dbConnection.prepareStatement("INSERT INTO HealthCondition (userId,healthConcerns,comments,severity,isCurrent) VALUES(?, ?, ?, ?, ?)");
+				insertHealthCondition.setInt(1, patient.getUserId());
 				insertHealthCondition.setString(2, condition.getHealthConcern());
 				insertHealthCondition.setString(3, condition.getComments());
 				insertHealthCondition.setInt(4, condition.getSeverity());
@@ -645,28 +651,32 @@ public class DatabaseManager {
 		return patients;
 	}
 
-	public List<HealthCondition> getPatientConditions(int patientId)
+	public List<HealthCondition> getPatientConditions(Patient patient)
 	{
 		List<HealthCondition> conditions = new ArrayList<>();
-		//TODO: complete once I know what the fields in the model represent.
-		//		try
-		//		{
-		//			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM HealthConditions WHERE userId = ?");
-		//			getPatients.setInt(1, patientId);
-		//			
-		//			ResultSet rs = getPatients.executeQuery();
-		//			
-		//			while(rs.next())
-		//			{
-		//				HealthCondition condition = new HealthCondition();
-		//				condition.set
-		//			}
-		//		}
-		//		catch(Exception e)
-		//		{
-		//			logError("Could not get patient conditions. Please check that the database has been set up properly.");
-		//			logError(e.getMessage());
-		//		}
+		try
+		{
+
+			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM HealthCondition WHERE userId = ?");
+			getAppointments.setInt(1, patient.getUserId());
+
+			ResultSet rs = getAppointments.executeQuery();
+			while(rs.next()) {
+				HealthCondition healthCondition  = new HealthCondition();				
+				healthCondition.setHealthConditionId(rs.getInt("id"));
+				healthCondition.setHealthConcern(rs.getString("healthConcerns"));
+				healthCondition.setComments(rs.getString("comments"));
+				healthCondition.setSeverity(rs.getInt("severity"));
+				healthCondition.setCurrent(rs.getInt("isCurrent")==1);
+				
+				conditions.add(healthCondition);
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get patient condition. Please check the database has been set up correctly.");
+			logError(e.getMessage());
+		}
 
 		return conditions;
 	}

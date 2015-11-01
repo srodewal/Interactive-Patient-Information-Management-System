@@ -44,8 +44,13 @@ public class AppointmentViewController {
 		for (int i = 0; i < appointmentList.size(); i++) {
 			Appointment app = appointmentList.get(i);
 			int index = i+1;
-			stringAppList.add("" + index +". Dr. "+app.getDoctor().getName() 
-					+" (Category: "+ app.getCategory()+") on "+ app.getDate()+" at "+ app.getTime());
+			
+			String str = "" + index +".";
+			if (app.getDoctor() != null) {
+				str += ". Dr. "+app.getDoctor().getName();
+			} 
+			str+= " (Category: "+ app.getCategory()+") on "+ app.getDate()+" at "+ app.getTime();
+			stringAppList.add(str);
 		}
 		ObservableList<String> items = FXCollections.observableArrayList (stringAppList);
 		return items;

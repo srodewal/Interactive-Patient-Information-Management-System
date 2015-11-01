@@ -178,7 +178,8 @@ public class Appointmentsview extends BaseView {
 			title.setText("Update Appointment");
 			datePicker.setValue(appointment.getDate());
 			timeTextField.setText(appointment.getTime());
-			docComboBox.setValue(appointment.getDoctor().getName());
+			if (appointment.getDoctor() != null)
+				docComboBox.setValue(appointment.getDoctor().getName());
 			catComboBox.setValue(appointment.getCategory());
 
 			if (catPatientBox != null) {

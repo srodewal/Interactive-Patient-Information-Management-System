@@ -5,9 +5,9 @@ public class HealthCondition {
 	private int healthConditionId;
 	private String healthConcern;
 	private String comments;
-	private int severity;
+	private int severity = 0;
 	private boolean current;
-	private Patient currPatient;
+	
 	
 	public int getHealthConditionId() {
 		return healthConditionId;
@@ -49,13 +49,5 @@ public class HealthCondition {
 		this.current = pastOrCurrent;
 	}
 	
-	// these may be unneeded
-	public void setPatient(Patient currPatient) {
-		this.currPatient = currPatient;
-	}
-	
-	public Patient getPatient() {
-		return currPatient;
-	}
 	
 }

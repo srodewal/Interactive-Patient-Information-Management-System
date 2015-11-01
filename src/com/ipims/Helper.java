@@ -31,17 +31,17 @@ public class Helper {
 		items.addAll(Helper.getAllPatients());
 		return items;
 	}
-	
+
 	public static List<String> getAllDoctors() {
 		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
 		List<String> list = new ArrayList<>(); 
 		for (Doctor doc : docList){
 			list.add(doc.getName());
 		}
-		
+
 		return list;
 	}
-	
+
 	public static List<String> getAllPatients() {
 		List<User> patientList = DatabaseManager.getInstance().getPatientList();
 		List<String> list = new ArrayList<>(); 
@@ -50,7 +50,7 @@ public class Helper {
 		}
 		return list;
 	}
-	
+
 	public static List<String> getAllCategories() {
 		List<String> list = new ArrayList<>(); 
 		list.add("Heart");
@@ -59,14 +59,20 @@ public class Helper {
 		list.add("Dental");
 		return list;
 	}
-	
+
 	public static Patient getPatientAtIndex(int index) {
-		List<User> patientList = DatabaseManager.getInstance().getPatientList();
-		return (Patient)patientList.get(index);
+		if(index>=0) {
+			List<User> patientList = DatabaseManager.getInstance().getPatientList();
+			return (Patient)patientList.get(index);
+		}
+		return null;
 	}
-	
+
 	public static Doctor getDoctorAtIndex(int index) {
-		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
-		return (Doctor)docList.get(index);
+		if(index>=0) {
+			List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
+			return (Doctor)docList.get(index);
+		}
+		return null;
 	}
 }

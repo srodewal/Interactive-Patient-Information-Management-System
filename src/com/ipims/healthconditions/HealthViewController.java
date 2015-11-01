@@ -1,60 +1,102 @@
 package com.ipims.healthconditions;
 
-import java.awt.TextArea;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.ipims.Helper;
 import com.ipims.MenuViewController;
 import com.ipims.models.HealthCondition;
 import com.ipims.models.Patient;
+import com.ipims.models.User;
+import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
 import com.ipims.views.HealthView;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class HealthViewController {
 
-private HealthView view;
+	private HealthView view;
+	private HealthConditionManager manager;
+	private Patient currentlySelectedPerson;
 	
 	public HealthViewController() {
-		view = new HealthView();
-		view.createHealthview(UserSession.getInstance().getCurrentUser(), this);
+		this.manager = new HealthConditionManager();
+		User user = UserSession.getInstance().getCurrentUser();
+		if (user.getUsertype() == UserType.PATIENT) {
+			this.currentlySelectedPerson = (Patient)user;
+		}
+		this.view = new HealthView();
+		this.view.createHealthview(UserSession.getInstance().getCurrentUser(), this);
 	}
+	
 	public Scene getScene() {
-		return view.getCurrentScene();
+		return this.view.getCurrentScene();
 	}
-	
-	
+
+
 	public void goBack() {
-		 MenuViewController menu = new MenuViewController();
-        view.getStage().setScene(menu.getScene());
-        
+		MenuViewController menu = new MenuViewController();
+		this.view.getStage().setScene(menu.getScene());
+
+	}
+
+	public   List<String> getHealthHistoryObsList() {
+		List<String> items = new ArrayList<>();
+		List<HealthCondition> healthList = HealthConditionManager.getHealthHistoryList();
+		for (HealthCondition healthCondition : healthList) {
+			items.add(healthCondition.getHealthConcern());
+		}
+		return items;
+	}
+
+	public  List<String> getHealthConditionObsList() {
+		List<String> items = new ArrayList<>();
+		List<HealthCondition> healthList = HealthConditionManager.getHealthConditions();
+		for (HealthCondition healthCondition : healthList) {
+			items.add(healthCondition.getHealthConcern());
+		}
+
+		return items;
+	}
+
+	public ObservableList<String> getWholeHealthConditionObsList () {
+
+		List<HealthCondition> list = manager.getPatientHealthList(this.currentlySelectedPerson);
+		List<String> resultList = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			HealthCondition app = list.get(i);
+			int index = i+1;
+			
+			String str = "" + index +".";
+			if (app.isCurrent()) {
+				str += " (HealthCondition) : ";
+			} else {
+				str += " (History) : ";
+			}
+			str+= app.getHealthConcern()+" Comments: "+ app.getComments();
+			resultList.add(str);
+		}
+		ObservableList<String> items = FXCollections.observableArrayList (resultList);
+		return items;
 	}
 	
-	public void sendAlert() {
-		view.showErrorMessage("Alert: Patient with severe condition needs attention.");
+	public void patientAtIndexSelected(int index) {
+		this.currentlySelectedPerson = Helper.getPatientAtIndex(index);
+		this.view.refreshList(getWholeHealthConditionObsList());
 	}
 	
-	public void handleHc(Patient currentPatient, HealthCondition newHc) {
-		HealthConditionManager newHcm = new HealthConditionManager();
-		newHcm.updateHealth(currentPatient, newHc);
+
+	public void handleSubmitHc(HealthCondition newHc) {
+		manager.saveHealthCondition(this.currentlySelectedPerson, newHc);
+		this.view.showErrorMessage("Condition saved.");
+		this.view.refreshList(getWholeHealthConditionObsList());
 	}
-	
-    
-        
-	
+
+
+
+
 }
 
