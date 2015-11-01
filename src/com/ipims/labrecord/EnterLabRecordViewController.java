@@ -30,9 +30,10 @@ public class EnterLabRecordViewController {
 	//--------------------------------------------------------
 	
 public  EnterLabRecordViewController() {
+	labManager = new LabRecordManager();
 	view = new EnterLabRecordView();
 	view.createEnterLabRecordView(UserSession.getInstance().getCurrentUser(), this);
-	labManager = new LabRecordManager();
+	
 
 }
 
