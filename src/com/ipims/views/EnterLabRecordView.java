@@ -8,6 +8,7 @@ import com.ipims.labrecord.LabRecordManager;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.LabRecord;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
@@ -35,6 +36,8 @@ public class EnterLabRecordView extends BaseView{
 
 	public void createEnterLabRecordView(User user, EnterLabRecordViewController enterLabRecordViewController) {
 
+		LabRecord newRecord = new LabRecord();
+		
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
 		vbox.setSpacing(8);
@@ -62,7 +65,7 @@ public class EnterLabRecordView extends BaseView{
 		
 		// Show Patient Case if Doctor
 				//if (user.getUsertype() == UserType.PATIENT ) {
-					vbox.getChildren().add(addEnterLabRecord(null, enterLabRecordViewController));
+					vbox.getChildren().add(addEnterLabRecord(newRecord, enterLabRecordViewController));
 				//}
 		
 					
@@ -167,7 +170,6 @@ public class EnterLabRecordView extends BaseView{
 		baseVbox.getChildren().addAll(hbox,hbox2,hbox3,hbox4,hbox5);
 				
 		
-				
 		// Fill in values for update
 		if(labrecord != null) {
 			
@@ -193,17 +195,20 @@ public class EnterLabRecordView extends BaseView{
 
 				@Override
 				public void handle(ActionEvent e) {
-					
-					
-					
 					// USE UPDATE FUNCTION FROM DATABASE TO UPDATE LABRECORD
 					
 					enterLabRecordViewController.handleUpdateClick(null);
 					
+					// setting lab record in database
+					Patient tempPatient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
 					
-					
-					
-				
+					labrecord.setCalcium(Integer.valueOf(CalciumTextField.getText()));
+					labrecord.setGlucose(Integer.valueOf(GlucoseTextField.getText()));
+					labrecord.setMagnesium(Integer.valueOf(MagnesiumTextField.getText()));
+					labrecord.setSodium(Integer.valueOf(SodiumTextField.getText()));
+					//labrecord.setPatient(tempPatient);
+					labrecord.setPatientId(tempPatient.getUserId());
+
 				}
 			});
 			

@@ -4,6 +4,7 @@ import com.ipims.Helper;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.LabRecord;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.patientcase.PatientCaseViewController;
 
@@ -231,6 +232,18 @@ public class LabRecordView extends BaseView {
 				//GET LAB RECORD
 				
 				String labRecordInfo = "Lab Record Information:Blood Pressure\nGlucose\netc...";
+				
+				// setting lab record in database
+				Patient tempPatient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
+				
+				/*labrecord.setCalcium(Integer.valueOf(CalciumTextField.getText()));
+				labrecord.setGlucose(Integer.valueOf(GlucoseTextField.getText()));
+				labrecord.setMagnesium(Integer.valueOf(MagnesiumTextField.getText()));
+				labrecord.setSodium(Integer.valueOf(SodiumTextField.getText()));
+				//labrecord.setPatient(tempPatient);
+				labrecord.setPatientId(tempPatient.getUserId());
+				*/
+				LabRecord tempRecord = new LabRecord();
 				
 				
 				
