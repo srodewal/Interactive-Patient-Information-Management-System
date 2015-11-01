@@ -115,23 +115,24 @@ public class HealthViewController {
 	}
 
 	public void handleDeleteHealthCondition() {
+		
 		manager.deleteHealthCondition(this.currentlySelectedCond);
 		handleUpdateGoBack();
 	}
 
 	public void handleUpdateHealthCondition(HealthCondition updatedCondition) {
+		
+		updatedCondition.setPatientId(currentlySelectedCond.getPatientId());
 		manager.updateHealthCondition(currentlySelectedCond, updatedCondition);
 		handleUpdateGoBack();
 	}
 
-	public void handleCancelUpdate() {
-		handleUpdateGoBack();
-	}
+	
 
 	public void handleUpdateGoBack() {
 		currentlySelectedCond = null;
 		HealthView newView = new HealthView();
-		view.createHealthview(this.currentlySelectedPerson, this);
+		newView.createHealthview(this.currentlySelectedPerson, this);
 		view.getStage().setScene(newView.getCurrentScene());
 		view = newView;
 	}

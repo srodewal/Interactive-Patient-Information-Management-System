@@ -327,7 +327,7 @@ public class DatabaseManager {
 		{
 			try
 			{
-				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE HealthCondtion SET userId = ?, healthConcerns = ?, comments = ?, severity = ?, isCurrent = ? WHERE id = ?");
+				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE HealthCondition SET userId = ?, healthConcerns = ?, comments = ?, severity = ?, isCurrent = ? WHERE id = ?");
 				updateAppointment.setInt(1, updatedCond.getPatientId());
 				updateAppointment.setString(2, updatedCond.getHealthConcern());
 				updateAppointment.setString(3, updatedCond.getComments());

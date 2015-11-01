@@ -134,7 +134,7 @@ public class HealthView extends BaseView {
 
 			@Override
 			public void handle(ActionEvent e) {
-				parentController.handleCancelUpdate();
+				parentController.handleUpdateGoBack();
 
 			}
 		});
@@ -166,7 +166,7 @@ public class HealthView extends BaseView {
 
 			@Override
 			public void handle(ActionEvent e) {
-				parentController.handleCancelUpdate();
+				parentController.handleUpdateGoBack();
 
 			}
 		});
@@ -211,6 +211,7 @@ public class HealthView extends BaseView {
 		if (condition != null) {
 			conditionComboBox.setValue(condition.getHealthConcern());
 			commentsTextField.setText(condition.getComments());
+			HBox hbBtn = new HBox(10);
 			
 			Button updateBtn = new Button("Update");
 			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -222,31 +223,30 @@ public class HealthView extends BaseView {
 					if(!conditionComboBox.equals(null)) {
 
 						HealthCondition healthCondition = HealthConditionManager.healthHistoryAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
+						healthCondition.setComments(commentsTextField.getText());
 						parentController.handleUpdateHealthCondition(healthCondition);
 					}
 
 				}
 			});
 
-			baseVbox.getChildren().add(updateBtn);
+			hbBtn.getChildren().add(updateBtn);
 			
 			Button deleteBtn = new Button("Delete");
-			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
+			deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent e) {
 					// Pass the control of handling button clicks to the view controller
 					// pass conditions to database
-					if(!conditionComboBox.equals(null)) {
-
-						HealthCondition healthCondition = HealthConditionManager.healthHistoryAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
-						parentController.handleUpdateHealthCondition(healthCondition);
-					}
+					
+					parentController.handleDeleteHealthCondition();
+					
 
 				}
 			});
-
-			baseVbox.getChildren().add(deleteBtn);
+			hbBtn.getChildren().add(deleteBtn);
+			baseVbox.getChildren().add(hbBtn);
 			
 			
 		} else {
@@ -260,6 +260,7 @@ public class HealthView extends BaseView {
 					if(!conditionComboBox.equals(null)) {
 
 						HealthCondition healthCondition = HealthConditionManager.healthHistoryAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
+						healthCondition.setComments(commentsTextField.getText());
 						parentController.handleSubmitHc(healthCondition);
 					}
 
@@ -305,6 +306,44 @@ public class HealthView extends BaseView {
 		if (condition != null) {
 			conditionComboBox.setValue(condition.getHealthConcern());
 			commentsTextField.setText(condition.getComments());
+			
+			HBox hbBtn = new HBox(10);
+			
+			Button updateBtn = new Button("Update");
+			updateBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent e) {
+					// Pass the control of handling button clicks to the view controller
+					// pass conditions to database
+					if(!conditionComboBox.equals(null)) {
+
+						HealthCondition healthCondition = HealthConditionManager.healthConditionAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
+						healthCondition.setComments(commentsTextField.getText());
+						parentController.handleUpdateHealthCondition(healthCondition);
+					}
+
+				}
+			});
+
+			hbBtn.getChildren().add(updateBtn);
+			
+			Button deleteBtn = new Button("Delete");
+			deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent e) {
+					// Pass the control of handling button clicks to the view controller
+					// pass conditions to database
+					
+					parentController.handleDeleteHealthCondition();
+					
+
+				}
+			});
+			hbBtn.getChildren().add(deleteBtn);
+			baseVbox.getChildren().add(hbBtn);
+			
 		} else {
 			Button submitBtn = new Button("Submit");
 
@@ -317,6 +356,7 @@ public class HealthView extends BaseView {
 					// Pass the control of handling button clicks to the view controller 
 					if(!conditionComboBox.equals(null)) {
 						HealthCondition healthCondition = HealthConditionManager.healthConditionAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
+						healthCondition.setComments(commentsTextField.getText());
 						parentController.handleSubmitHc(healthCondition);
 					}
 
