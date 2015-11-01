@@ -1,10 +1,15 @@
 package com.ipims.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ipims.Helper;
+import com.ipims.database.DatabaseManager;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.LabRecord;
 import com.ipims.models.Patient;
+import com.ipims.models.Prescription;
 import com.ipims.models.User;
 import com.ipims.patientcase.PatientCaseViewController;
 
@@ -63,21 +68,22 @@ public class LabRecordView extends BaseView {
 	
 		// Show Patient Case if Doctor
 		//if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addLabRecord(null, labRecordViewController));
 		//}
 		
 		
 		
 		ListView<String> list = new ListView<String>();
 		
-		list.setItems(labRecordViewController.getLabRecordList());
+		/*list.setItems(labRecordViewController.getLabRecordList());
 		list.getSelectionModel().selectedItemProperty().addListener(
 		        (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
 		                System.out.println(newValue);
 		                int index = list.getSelectionModel().getSelectedIndex();
 		                labRecordViewController.didSelectItem(index);
 		    });
+		*/
 		
+		vbox.getChildren().add(addLabRecord(null, labRecordViewController, list));
 		
 		Text subTitle = new Text("View Lab Record");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -98,7 +104,7 @@ public class LabRecordView extends BaseView {
 	
 	
 
-	public VBox addLabRecord(LabRecord labrecord,  LabRecordViewController LabRecordViewController) {
+	public VBox addLabRecord(LabRecord labrecord,  LabRecordViewController LabRecordViewController, ListView<String> list) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -243,10 +249,25 @@ public class LabRecordView extends BaseView {
 				//labrecord.setPatient(tempPatient);
 				labrecord.setPatientId(tempPatient.getUserId());
 				*/
-				LabRecord tempRecord = new LabRecord();
+				
+				// clear list
+				ObservableList<String> items = LabRecordViewController.getLabRecordList();
+				items.clear();
+				
+				// show all lab records for patient
+				List<LabRecord> lrList = new ArrayList<LabRecord>();
+				lrList = DatabaseManager.getInstance().getAllLabRecords(tempPatient.getUserId());
+				//System.out.println("List " + tempPatient.getUserId() + "\n");
+				for(int i = 0; i < lrList.size(); i++) {
+					String lrInfo = "Calcium: " + Float.toString(lrList.get(i).getCalcium());
+					lrInfo += "Magnesium: " + Float.toString(lrList.get(i).getMagnesium());
+					lrInfo += "Glucose: " + Float.toString(lrList.get(i).getGlucose());
+					lrInfo += "Sodium: " + Float.toString(lrList.get(i).getSodium());
+					items.add(lrInfo);
+				}
 				
 				
-				
+	
 				
 				
 			/*	if(PatientTextField.getText().equals("")) {
@@ -299,7 +320,7 @@ public class LabRecordView extends BaseView {
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().addAll(hbox);
 		
-		vbox.getChildren().add(addLabRecord(labRecord, LabRecordViewController));
+		//vbox.getChildren().add(addLabRecord(labRecord, LabRecordViewController));
 		createScene(vbox);
 	}
 	

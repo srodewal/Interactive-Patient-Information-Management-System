@@ -728,14 +728,20 @@ public class DatabaseManager {
 		return conditions;
 	}
 
-	public List<LabRecord> getAllLabRecords()
+	public List<LabRecord> getAllLabRecords(int patientId)
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
 		try
 		{
-			Statement getRecords = dbConnection.createStatement();
-
-			ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord;");
+			/*PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM User WHERE type = ?");
+			getPatients.setInt(1, UserType.PATIENT.ordinal());
+			ResultSet rs = getPatients.executeQuery();*/
+			
+			PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord WHERE userId = ?");		
+			//ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord WHERE userId = ?");
+			getRecords.setInt(1, patientId);
+			ResultSet rs = getRecords.executeQuery();
+			
 			while(rs.next())
 			{
 				LabRecord record = new LabRecord();
