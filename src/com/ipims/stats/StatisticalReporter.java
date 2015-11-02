@@ -62,7 +62,7 @@ public class StatisticalReporter {
 		healthReport.add(sodium);
 		healthReport.add(magnesium);
 		healthReport.add(glucose);
-		
+
 		return healthReport;
 	}
 
@@ -78,9 +78,9 @@ public class StatisticalReporter {
 		//List<String> admissionRate = Arrays.asList(output_number);
 		ObservableList<String> admissionRate = FXCollections.observableArrayList (
 				);
-		
+
 		admissionRate.add(output_number);
-		
+
 		return admissionRate;
 
 	}
@@ -94,7 +94,7 @@ public class StatisticalReporter {
 		int skinCount = 0;
 
 		String allergy, chestPain, heartProb, diabetic, skinProb;
-		
+
 		ObservableList<String> typePatients = FXCollections.observableArrayList (
 				);
 		typePatients.add("Work in progress");
@@ -115,7 +115,7 @@ public class StatisticalReporter {
 		String caucasian, african, indian, pac, hisp, other, male, female;
 
 		List<Patient> patientList = new ArrayList<Patient>();
-		
+
 		patientList = DatabaseManager.getInstance().getAllPatients();
 
 		for(Patient patient: patientList)
@@ -161,7 +161,8 @@ public class StatisticalReporter {
 		hisp = "Number of Hispanic Patients: " + hispanicCount;
 		other = "Number of Patients that selected Other: " + otherCount;
 		male = "Number of Male Patients: " + maleCount;
-		female = "Number of Female Patients" + femaleCount;
+		female = "Number of Female Patients: " + femaleCount;
+		
 
 		//List<String> patientPopulations = Arrays.asList(caucasian, african, indian, pac, hisp, other, male, female);
 		ObservableList<String> patientPopulations = FXCollections.observableArrayList (
