@@ -13,6 +13,8 @@ import com.ipims.medication.PrescribeMedViewController;
 import com.ipims.models.Patient;
 import com.ipims.models.Prescription;
 import com.ipims.models.User;
+import com.ipims.models.User.UserType;
+import com.ipims.usersession.UserSession;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -230,7 +232,14 @@ public class PrescribeMedView extends BaseView {
 
 		HBox buttons = new HBox();
 		buttons.setSpacing(10);
-		buttons.getChildren().addAll(PrescribeMedBtn, showMedBtn);
+		
+		// only able to prescribe if doctor
+		if(UserSession.getInstance().getCurrentUser().getUsertype() == UserType.HSPSTAFF) {
+			buttons.getChildren().add(showMedBtn);
+		}
+		else {
+			buttons.getChildren().addAll(PrescribeMedBtn, showMedBtn);
+		}
 		
 		baseVbox.getChildren().add(buttons);
 
