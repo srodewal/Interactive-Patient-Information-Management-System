@@ -20,7 +20,7 @@ public class ReportsViewController {
 
 	//--------------- View Controller methods ---------------
 	//--------------------------------------------------------
-	
+
 	public ReportsViewController(Text reportTitle) {
 		ObservableList<String> items = null;
 		if (reportTitle.equals("Health Outcomes")) {
@@ -29,18 +29,22 @@ public class ReportsViewController {
 		} else if (reportTitle.equals("Admission Rates")) {
 			List<String> num = statRep.analyzeAdmissionRate();
 			items = FXCollections.observableArrayList (num);
+		} else if (reportTitle.equals("Patient Populations"))
+		{
+			List<String> pops = statRep.analyzePatientPopulation();
+			items = FXCollections.observableArrayList(pops);
 		}
 		view = new ReportsView();
 		view.createReportsView(this, reportTitle, items);
 	}
-	
+
 	public Scene getScene() {
 		return view.getCurrentScene();
 	}
-	
+
 	public void goBackStats() {
 		 StatsViewController stats = new StatsViewController();
          view.getStage().setScene(stats.getScene());
-         
+
 	}
 }
