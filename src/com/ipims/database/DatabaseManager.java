@@ -839,6 +839,29 @@ public class DatabaseManager {
 			logError(e.getMessage());
 		}
 	}
+	
+	
+	public void deleteLabRecord(LabRecord labrecord) {
+		try
+		{
+			System.out.println("Deleting Lab Record with id " + labrecord.getLabRecordId() + " ****");
+			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE id = ?");
+			stat.setInt(1, labrecord.getLabRecordId());
+			stat.executeUpdate();
+			stat.close();
+
+
+		}
+		catch(Exception e)
+		{
+			logError("Could not delete the Lab Record");
+			logError(e.getMessage());
+		}
+
+	}
+	
+	
+	
 	//=================== DB Helpers ==================
 
 	private User createUser(ResultSet rs) throws SQLException {

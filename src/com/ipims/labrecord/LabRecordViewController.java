@@ -50,7 +50,7 @@ public Scene getScene() {
 		List<LabRecord> list = getListOfLabRecords(patientid);
 
 		
-		if (user.getUsertype() == UserType.LABSTAFF) {
+		if (user.getUsertype() == UserType.LABSTAFF || user.getUsertype() == UserType.DOCTOR) {
 			
 		
 		LabRecordView updateView = new LabRecordView();
