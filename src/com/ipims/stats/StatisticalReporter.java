@@ -8,6 +8,10 @@ import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
 import com.ipims.models.LabRecord;
 import com.ipims.models.User;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import com.ipims.models.Patient;
 
 
@@ -15,7 +19,7 @@ public class StatisticalReporter {
 
 	//This function retrieves the lab record information from each patient that has a lab record,
 	//and determines which percent of patients fall into the healthy or abnormal categories
-	public List<String> analyzeHealth() {
+	public static ObservableList<String> analyzeHealth() {
 		int inRangeCA = 0, inRangeNA = 0, inRangeMG = 0, inRangeGL = 0, total = 0;
 		float caPercent = 0, naPercent = 0, mgPercent = 0, glPercent = 0;
 		String calcium, sodium, magnesium, glucose;
@@ -51,27 +55,37 @@ public class StatisticalReporter {
 		magnesium = "The percent of patients with normal magnesium is: " + Float.toString(mgPercent);
 		glucose = "The percent of patients with normal glucose is: " + Float.toString(glPercent);
 
-		List<String> healthReport = Arrays.asList(calcium, sodium, magnesium, glucose);
-
+		//List<String> healthReport = Arrays.asList(calcium, sodium, magnesium, glucose);
+		ObservableList<String> healthReport = FXCollections.observableArrayList (
+				);
+		healthReport.add(calcium);
+		healthReport.add(sodium);
+		healthReport.add(magnesium);
+		healthReport.add(glucose);
+		
 		return healthReport;
 	}
 
 	//This function analyzes the admission rate, which we defined only as the total number of registered patients.
 	//It goes into the database, gets the total number of patients, and reports it in the User Interface.
-	public List<String> analyzeAdmissionRate() {
+	public static ObservableList<String> analyzeAdmissionRate() {
 		int number_of_patients = 0;
 		String output_number = null;
 
 		number_of_patients = DatabaseManager.getInstance().getNumberOfRegisteredPatients();
 		output_number = "The admission rate is calculated as the total number of registered patients, which is: " + Integer.toString(number_of_patients);
 
-		List<String> admissionRate = Arrays.asList(output_number);
-
+		//List<String> admissionRate = Arrays.asList(output_number);
+		ObservableList<String> admissionRate = FXCollections.observableArrayList (
+				);
+		
+		admissionRate.add(output_number);
+		
 		return admissionRate;
 
 	}
 
-	public void analyzeTypeOfPatients() {
+	public static ObservableList<String> analyzeTypeOfPatients() {
 		int allergyCount = 0;
 		int chestCount = 0;
 		int heartCount = 0;
@@ -79,10 +93,15 @@ public class StatisticalReporter {
 		int skinCount = 0;
 
 		String allergy, chestPain, heartProb, diabetic, skinProb;
+		
+		ObservableList<String> typePatients = FXCollections.observableArrayList (
+				);
+		typePatients.add("Work in progress");
+		return typePatients;
 
 	}
 
-	public List<String> analyzePatientPopulation() {
+	public static ObservableList<String> analyzePatientPopulation() {
 		int caucasionCount= 0;
 		int africanAmericanCount = 0;
 		int indianCount = 0;
@@ -94,7 +113,8 @@ public class StatisticalReporter {
 
 		String caucasian, african, indian, pac, hisp, other, male, female;
 
-		List<Patient> patientList = null;
+		List<Patient> patientList = new ArrayList<Patient>();
+		
 		patientList = DatabaseManager.getInstance().getAllPatients();
 
 		for(Patient patient: patientList)
@@ -142,7 +162,17 @@ public class StatisticalReporter {
 		male = "Number of Male Patients: " + maleCount;
 		female = "Number of Female Patients" + femaleCount;
 
-		List<String> patientPopulations = Arrays.asList(caucasian, african, indian, pac, hisp, other, male, female);
+		//List<String> patientPopulations = Arrays.asList(caucasian, african, indian, pac, hisp, other, male, female);
+		ObservableList<String> patientPopulations = FXCollections.observableArrayList (
+				);
+		patientPopulations.add(caucasian);
+		patientPopulations.add(african);
+		patientPopulations.add(indian);
+		patientPopulations.add(pac);
+		patientPopulations.add(hisp);
+		patientPopulations.add(other);
+		patientPopulations.add(male);
+		patientPopulations.add(female);
 		return patientPopulations;
 	}
 }
