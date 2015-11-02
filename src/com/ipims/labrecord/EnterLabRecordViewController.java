@@ -101,7 +101,6 @@ public Scene getScene() {
 	}
 
 
-
 	
 	public void handleUpdateGoBack() {
 		EnterLabRecordView backToAppoinment = new EnterLabRecordView();
@@ -120,14 +119,17 @@ public Scene getScene() {
 		
 	}
 	
-	public void handleLabRecordDeletion() {
-		handleUpdateGoBack();
-	}
 
 	public void handleSubmitClick(LabRecord newLabRecord) {
 		labManager.newLabRecord(newLabRecord);
 	}
 
+	public void handleLabRecordDeletion() {
+		labManager.deleteLabRecord(currentlySelectedLab);
+		currentlySelectedLab = null;
+		handleUpdateGoBack();
+		view.showErrorMessage("Lab Record cancelled!!");
+	}
 
 	
 }

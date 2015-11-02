@@ -72,4 +72,12 @@ public class LabRecordManager {
 	}
 	
 	
+	public boolean deleteLabRecord(LabRecord labrecord) {
+		if (labrecord.getLabRecordId() != -1) {
+			DatabaseManager.getInstance().deleteLabRecord(labrecord);
+			return true;
+		}
+		return false;
+	}
+	
 }

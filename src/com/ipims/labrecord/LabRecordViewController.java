@@ -107,8 +107,12 @@ public Scene getScene() {
 	
 	
 	public void handleLabRecordDeletion() {
+		labManager.deleteLabRecord(currentlySelectedLab);
+		currentlySelectedLab = null;
 		handleUpdateGoBack();
+		view.showErrorMessage("Lab Record cancelled!!");
 	}
+
 
 	
 	

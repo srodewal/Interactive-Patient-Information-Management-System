@@ -1,6 +1,8 @@
 package com.ipims.views;
 
 
+import java.util.List;
+
 import com.ipims.Helper;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
@@ -21,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -164,13 +167,14 @@ public class EnterLabRecordView extends BaseView{
 		// Fill in values for update
 		if(labrecord != null) {
 			
+			
+			
 			//PULL LAB_RECORD FROM DATABASE Using index of labrecord chosen
 			//THEN DISPLAY SPECIFIC FIELDS FROM LABRECORD OBJECT PULLED
 			String Calcium = String.valueOf(labrecord.getGlucose());
 			String Glucose = String.valueOf(labrecord.getGlucose());
 			String Sodium = String.valueOf(labrecord.getSodium());
 			String Magnesium = String.valueOf(labrecord.getMagnesium());
-
 			
 			CalciumTextField.setText(Calcium);
 			GlucoseTextField.setText(Glucose);

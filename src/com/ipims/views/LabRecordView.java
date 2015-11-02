@@ -160,7 +160,6 @@ public class LabRecordView extends BaseView {
 			MagnesiumTextField.setMaxSize(120, 5);
 			
 				
-				
 			hbox2.getChildren().addAll(GlucoseLabel,GlucoseTextField);
 			hbox3.getChildren().addAll(SodiumLabel, SodiumTextField);
 			hbox4.getChildren().addAll(CalciumLabel, CalciumTextField);
@@ -170,16 +169,20 @@ public class LabRecordView extends BaseView {
 
 			// Add what should go into all fields when lab record is selected
 			
-			//title.setText("Update Appointment");
-			//PatientTextField.setText("Gregg");
-			//GlucoseTextField.setText("15mg");
-			//SodiumTextField.setText("12mg");
-			//CalciumTextField.setText("10mg");
-			//MagnesiumTextField.setText("25mg");
-			//
+			String Calcium = String.valueOf(labrecord.getGlucose());
+			String Glucose = String.valueOf(labrecord.getGlucose());
+			String Sodium = String.valueOf(labrecord.getSodium());
+			String Magnesium = String.valueOf(labrecord.getMagnesium());
 			
 			
-			
+			CalciumTextField.setText(Calcium);
+			GlucoseTextField.setText(Glucose);
+			SodiumTextField.setText(Sodium);
+			MagnesiumTextField.setText(Magnesium);
+
+			if (catPatientBox != null) {
+				catPatientBox.setValue(catPatientBox.getValue());
+			}
 			
 			
 			// Add update and cancel buttons
