@@ -7,6 +7,7 @@ import java.util.List;
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
 import com.ipims.models.LabRecord;
+ 
 
 public class StatisticalReporter {
 
