@@ -21,45 +21,32 @@ public class LabRecordManager {
 	
 	
 
-	public List<LabRecord> getLabRecordsofPatient(Patient patient) {
-		
-		List<LabRecord> labRecordList = new ArrayList<>(); 
+	public List<LabRecord> getLabRecordForPatient(Patient patient) {
 
-	// pulledLabRecord = DatabaseManager.getInstance().getLabRecord(patient);
+		List<LabRecord> LabRecordList = null;
+		int patientid;
 		
-		return labRecordList;
-
-	}
-	
-	public void EnterLabRecord(Patient patient) {
-		
-		
-		 //  DatabaseManager.getInstance().EnterLabRecord(patient);
+		if (patient == null) {
+			LabRecordList = DatabaseManager.getInstance().getAllLabRecord();
+		} else {
 			
-			
-	}
-	
-	public void UpdateLabRecord(Patient patient) {
-		
-     
-	 //  DatabaseManager.getInstance().UpdateLabRecord(patient);
-		
-		
-	}
-	
-	public static List<String> getAllPatients() {
-		List<User> patientList = DatabaseManager.getInstance().getPatientList();
-		List<String> list = new ArrayList<>(); 
-		for (User user : patientList){
-			list.add(user.getName());
+			patientid = patient.getUserId();
+			LabRecordList = DatabaseManager.getInstance().getLabRecordsForPatient(patientid);
 		}
-		return list;
+
+		return LabRecordList;
+		
+		
 	}
 	
-	public ObservableList<String> getPatientList() {
-		ObservableList<String> items = FXCollections.observableArrayList();
-		items.addAll(Helper.getAllPatients());
-		return items;
+	
+	
+	public boolean newLabRecord(LabRecord labrecord) {
+		if (labrecord.getLabRecordId() == -1) {
+			DatabaseManager.getInstance().newLabRecord(labrecord);
+			return true;
+		}
+		return false;
 	}
 	
 	

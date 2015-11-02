@@ -2,7 +2,7 @@ package com.ipims.views;
 
 import com.ipims.MenuViewController;
 import com.ipims.models.User;
-
+import com.ipims.models.User.UserType;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,13 +24,12 @@ public class MenuView extends BaseView {
 
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
-		vbox.setSpacing(8);
+		vbox.setSpacing(15);
 		vbox.setAlignment(Pos.CENTER);
 
-		
-		Text scenetitle = new Text("Menu");
-		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		vbox.getChildren().add(scenetitle);
+		Text appTitle = new Text("IPIMS");
+		appTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 50));
+		vbox.getChildren().add(appTitle);
 		
 		//If the passed in user is patient, create the menu for patient.
 
@@ -38,32 +37,45 @@ public class MenuView extends BaseView {
 		welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(welcomeTitle);
 		
-		vbox.getChildren().add(appoinmentButton(parentController));
-		vbox.getChildren().add(updateHealthButton(parentController));
-		vbox.getChildren().add(PrescribeMedButton(parentController));
-		vbox.getChildren().add(PatientCaseButton(parentController));
-		vbox.getChildren().add(ViewPatientInfoButton(parentController));
-		vbox.getChildren().add(LabRecordButton(parentController));
-		vbox.getChildren().add(EnterLabRecordButton(parentController));
-		vbox.getChildren().add(generateStatsButton(parentController));
-		
 
-//		if (user.getUsertype() == UserType.PATIENT) {
-//			
-//			Text welcomeTitle = new Text("Welcome User");
-//			welcomeTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
-//			vbox.getChildren().add(welcomeTitle);
-//			
-//			vbox.getChildren().add(appoinmentButton(parentController));
-//			vbox.getChildren().add(updateHealthButton(parentController));
-//			vbox.getChildren().add(labRecordButton(parentController));
-//			
-//			
-//			
-//
-//		} else if (user.getUsertype() == UserType.HSPSTAFF) {
-//			
-//		}
+		if (user.getUsertype() == UserType.PATIENT) {
+			
+			vbox.getChildren().add(appoinmentButton(parentController));
+			vbox.getChildren().add(updateHealthButton(parentController));
+			vbox.getChildren().add(ViewPatientInfoButton(parentController));
+			vbox.getChildren().add(LabRecordButton(parentController));
+			vbox.getChildren().add(EnterLabRecordButton(parentController));
+
+		} else if (user.getUsertype() == UserType.HSPSTAFF) {
+			vbox.getChildren().add(appoinmentButton(parentController));
+			vbox.getChildren().add(updateHealthButton(parentController));
+			vbox.getChildren().add(PatientCaseButton(parentController));
+			vbox.getChildren().add(ViewPatientInfoButton(parentController));
+			vbox.getChildren().add(LabRecordButton(parentController));
+			vbox.getChildren().add(generateStatsButton(parentController));
+			
+		} else if (user.getUsertype() == UserType.DOCTOR) {
+			
+			vbox.getChildren().add(appoinmentButton(parentController));
+			vbox.getChildren().add(updateHealthButton(parentController));
+			vbox.getChildren().add(PrescribeMedButton(parentController));
+			vbox.getChildren().add(PatientCaseButton(parentController));
+			vbox.getChildren().add(ViewPatientInfoButton(parentController));
+			
+		} else if (user.getUsertype() == UserType.NURSE) {
+			vbox.getChildren().add(appoinmentButton(parentController));
+			vbox.getChildren().add(updateHealthButton(parentController));
+			
+			vbox.getChildren().add(PatientCaseButton(parentController));
+			vbox.getChildren().add(ViewPatientInfoButton(parentController));
+			
+			
+		} else if (user.getUsertype() == UserType.LABSTAFF) {
+			
+			vbox.getChildren().add(LabRecordButton(parentController));
+			vbox.getChildren().add(EnterLabRecordButton(parentController));
+			
+		}
 
 		vbox.getChildren().add(logoutButton(parentController));
 		
@@ -71,10 +83,7 @@ public class MenuView extends BaseView {
 	}
 
 	private Button appoinmentButton(MenuViewController parentController) {
-		Button scheduleAppBtn = new Button("Appointments");
-                scheduleAppBtn.setPrefSize(190, 10);
-                
-		
+		Button scheduleAppBtn = createButton("Appointments");
 		scheduleAppBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -87,8 +96,7 @@ public class MenuView extends BaseView {
 	}
 
 	private Button updateHealthButton(MenuViewController parentController) {
-		Button updateHealthBtn = new Button("Health Condition(s)/Concern(s)");
-                updateHealthBtn.setPrefSize(190, 10);
+		Button updateHealthBtn = createButton("Health Condition(s)/Concern(s)");
 		updateHealthBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -103,8 +111,7 @@ public class MenuView extends BaseView {
 	
 	
 	private Button generateStatsButton(MenuViewController parentController) {
-		Button btn = new Button("Generate Statistical Reports");
-                btn.setPrefSize(190, 10);
+		Button btn = createButton("Generate Statistical Reports");
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -121,8 +128,7 @@ public class MenuView extends BaseView {
 	
 	private Button PrescribeMedButton(MenuViewController parentController) {
 		
-		Button PrescribeMedBtn = new Button("Prescribe Medication(s)");
-                PrescribeMedBtn.setPrefSize(190, 10);
+		Button PrescribeMedBtn = createButton("Prescribe Medication(s)");
 		PrescribeMedBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -137,8 +143,7 @@ public class MenuView extends BaseView {
 	
 	private Button PatientCaseButton(MenuViewController parentController) {
 		
-		Button PatientCaseBtn = new Button("Access Patient Case");
-                PatientCaseBtn.setPrefSize(190, 10);
+		Button PatientCaseBtn = createButton("Access Patient Case");
 		PatientCaseBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -154,8 +159,7 @@ public class MenuView extends BaseView {
 	
 	private Button LabRecordButton(MenuViewController parentController) {
 		
-		Button LabRecordBtn = new Button("View Lab Record");
-                LabRecordBtn.setPrefSize(190, 10);
+		Button LabRecordBtn = createButton("View Lab Record");
 		LabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -170,8 +174,7 @@ public class MenuView extends BaseView {
 	
 	private Button EnterLabRecordButton(MenuViewController parentController) {
 		
-		Button EnterLabRecordBtn = new Button("Enter Lab Record");
-                EnterLabRecordBtn.setPrefSize(190, 10);
+		Button EnterLabRecordBtn = createButton("Enter Lab Record");
 		EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -186,10 +189,10 @@ public class MenuView extends BaseView {
 
 
 	private Button logoutButton(MenuViewController parentController) {
-		Button logoutBtn = new Button("Logout");
-                logoutBtn.setPrefSize(190, 10);
+		Button logoutBtn = createButton("Logout");
+		logoutBtn.setStyle("-fx-base: #f28282;");
 		logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
-
+	
 			@Override
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
@@ -201,8 +204,7 @@ public class MenuView extends BaseView {
 	}
 	
 	private Button ViewPatientInfoButton(MenuViewController parentController) {
-		Button vpBtn = new Button("View Patient Info");
-                vpBtn.setPrefSize(190, 10);
+		Button vpBtn = createButton("View Patient Info");
 		vpBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -212,5 +214,11 @@ public class MenuView extends BaseView {
 			}
 		});
 		return vpBtn;
+	}
+	
+	private Button createButton(String buttonString) {
+		Button btn = new Button(buttonString);
+		btn.setPrefSize(250, 50);
+		return btn;
 	}
 }

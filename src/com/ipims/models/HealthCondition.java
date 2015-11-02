@@ -2,12 +2,12 @@ package com.ipims.models;
 
 public class HealthCondition {
 
-	private int healthConditionId;
+	private int healthConditionId = -1;
 	private String healthConcern;
 	private String comments;
-	private int severity;
+	private int severity = 0;
 	private boolean current;
-	private Patient currPatient;
+	private int patientId = -1;
 	
 	public int getHealthConditionId() {
 		return healthConditionId;
@@ -48,14 +48,14 @@ public class HealthCondition {
 	public void setCurrent(boolean pastOrCurrent) {
 		this.current = pastOrCurrent;
 	}
-	
-	// these may be unneeded
-	public void setPatient(Patient currPatient) {
-		this.currPatient = currPatient;
+
+	public int getPatientId() {
+		return patientId;
+	}
+
+	public void setPatientId(int patientId) {
+		this.patientId = patientId;
 	}
 	
-	public Patient getPatient() {
-		return currPatient;
-	}
 	
 }

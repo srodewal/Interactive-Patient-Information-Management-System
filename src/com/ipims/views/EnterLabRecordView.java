@@ -8,6 +8,7 @@ import com.ipims.labrecord.LabRecordManager;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.LabRecord;
+import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
@@ -33,8 +34,11 @@ import javafx.scene.text.Text;
 
 public class EnterLabRecordView extends BaseView{
 
+	private ListView<String> listView;
+
 	public void createEnterLabRecordView(User user, EnterLabRecordViewController enterLabRecordViewController) {
 
+		
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
 		vbox.setSpacing(8);
@@ -62,7 +66,8 @@ public class EnterLabRecordView extends BaseView{
 		
 		// Show Patient Case if Doctor
 				//if (user.getUsertype() == UserType.PATIENT ) {
-					vbox.getChildren().add(addEnterLabRecord(null, enterLabRecordViewController));
+				vbox.getChildren().add(addEnterLabRecord(null, enterLabRecordViewController));
+
 				//}
 		
 					
@@ -71,21 +76,16 @@ public class EnterLabRecordView extends BaseView{
 		vbox.getChildren().add(subTitle);			
 					
 					
-		ListView<String> list = new ListView<String>();
-		
-		list.setItems(enterLabRecordViewController.getLabRecordList());
-		list.getSelectionModel().selectedItemProperty().addListener(
-		        (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-		                System.out.println(newValue);
-		                int index = list.getSelectionModel().getSelectedIndex();
-		                enterLabRecordViewController.didSelectItem(index);
-		    });
-		vbox.getChildren().add(list);
-		
-		// for success/error message
-		//final Text actionTarget = new Text();
-		
-				
+		listView = new ListView<String>();
+		listView.setItems(enterLabRecordViewController.getLabRecordList());
+		listView.getSelectionModel().selectedItemProperty().addListener(
+				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+					
+					System.out.println(newValue);
+					int index = listView.getSelectionModel().getSelectedIndex();
+					enterLabRecordViewController.didSelectItem(index);
+				});
+		vbox.getChildren().add(listView);
 		createScene(vbox);
 		
 	}
@@ -167,23 +167,13 @@ public class EnterLabRecordView extends BaseView{
 		baseVbox.getChildren().addAll(hbox,hbox2,hbox3,hbox4,hbox5);
 				
 		
-				
 		// Fill in values for update
 		if(labrecord != null) {
 			
 			//PULL LAB_RECORD FROM DATABASE Using index of labrecord chosen
 			//THEN DISPLAY SPECIFIC FIELDS FROM LABRECORD OBJECT PULLED
 			
-			//String glucose = String.valueOf(labrecord.getGlucose());       ConvertToString
-			
-			//title.setText("Update Appointment");
-			//PatientTextField.setText("Gregg");
-			//GlucoseTextField.setText("13 mg);
-			//SodiumTextField.setText("12 mg");
-			//CalciumTextField.setText("14 mg");
-			//MagnesiumTextField.setText("25 mg");
-
-			
+	
 			// Add update and cancel buttons
 			//
 			HBox hbBtn = new HBox(10);
@@ -193,17 +183,11 @@ public class EnterLabRecordView extends BaseView{
 
 				@Override
 				public void handle(ActionEvent e) {
-					
-					
-					
 					// USE UPDATE FUNCTION FROM DATABASE TO UPDATE LABRECORD
 					
 					enterLabRecordViewController.handleUpdateClick(null);
 					
-					
-					
-					
-				
+
 				}
 			});
 			
@@ -228,37 +212,30 @@ public class EnterLabRecordView extends BaseView{
 			Button EnterLabRecordBtn = new Button("Submit");
 			EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-				@SuppressWarnings("null")
 				@Override
 				public void handle(ActionEvent e) {
 					
-					int Calcium = Integer.parseInt(CalciumTextField.getText());
-					int Glucose = Integer.parseInt(GlucoseTextField.getText());
-					int Sodium = Integer.parseInt(SodiumTextField.getText());
-					int Magnesium = Integer.parseInt(MagnesiumTextField.getText());
 				
+					LabRecord newLab = new LabRecord();
+					
+					float Calcium = Float.parseFloat(CalciumTextField.getText());
+					float Glucose = Float.parseFloat(GlucoseTextField.getText());
+					float Sodium = Float.parseFloat(SodiumTextField.getText());
+					float Magnesium = Float.parseFloat(MagnesiumTextField.getText());
+					Patient patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());					
+					int patientid = patient.getUserId();
+					
 					//Add user inputs to labRecord model class variables
 
-					labrecord.setPatient(catPatientBox.getValue());
-					labrecord.setGlucose(Glucose);
-					labrecord.setSodium(Sodium);
-					labrecord.setCalcium(Calcium);
-					labrecord.setMagnesium(Magnesium);
+					newLab.setPatientId(patientid);
+					newLab.setGlucose(Glucose);
+					newLab.setSodium(Sodium);
+					newLab.setCalcium(Calcium);
+					newLab.setMagnesium(Magnesium);
 
 					
-					// ADD LAB_RECORD TO DATABASE
+					enterLabRecordViewController.handleSubmitClick(newLab);
 					
-					
-					/*if(PatientTextField.getText().equals("")) {
-						actionTarget.setFill(Color.RED);
-						actionTarget.setText("Error: No patient name entered!");
-					}
-					
-					else {
-						items.add(enterLabRecordInfo);
-						actionTarget.setFill(Color.GREEN);
-						actionTarget.setText("Success");
-					}*/
 					
 				}
 			});
@@ -303,8 +280,10 @@ public class EnterLabRecordView extends BaseView{
 	}
 
 	
-	
-	
-	
+	public void refreshList(ObservableList<String>list) {
+		listView.getItems().clear();
+		listView.getItems().addAll(list);
+	}
+
 	
 }
