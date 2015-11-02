@@ -18,7 +18,7 @@ public class StatisticalReporter {
 		float caPercent = 0, naPercent = 0, mgPercent = 0, glPercent = 0;
 		String calcium, sodium, magnesium, glucose;
 		List<LabRecord> patientNumList = null;
-		patientNumList = DatabaseManager.getInstance().getAllLabRecords();
+		patientNumList = DatabaseManager.getInstance().getAllLabRecord();
 		
 		for(LabRecord record: patientNumList) {
 			total++;
