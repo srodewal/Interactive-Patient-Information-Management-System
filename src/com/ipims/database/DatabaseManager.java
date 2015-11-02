@@ -387,7 +387,7 @@ public class DatabaseManager {
 	{
 		try
 		{
-			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium) VALUES (?, ?, ?, ?, ?");
+			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium) VALUES (?, ?, ?, ?, ?)");
 			insertRecord.setInt(1, record.getPatientId());
 			insertRecord.setFloat(2, record.getGlucose());
 			insertRecord.setFloat(3, record.getCalcium());
@@ -771,7 +771,7 @@ public class DatabaseManager {
 			Statement getNumber = dbConnection.createStatement();
 			
 			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User;");
-			
+			NumberOfPatients = rs.getInt(1);
 		}
 		catch(Exception e) 
 		{
