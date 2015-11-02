@@ -6,12 +6,15 @@ import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.stats.ReportsViewController;
+import com.ipims.stats.StatisticalReporter;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -29,9 +32,30 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class ReportsView extends BaseView {
+	private VBox vbox;
+	
+	// print function to be called for a report
+	private void print(Node node) {
+	    System.out.println("Creating a printer job...");
+
+	    PrinterJob job = PrinterJob.createPrinterJob();
+	    if (job != null) {
+	      System.out.println(job.jobStatusProperty().asString());
+
+	      boolean printed = job.printPage(node);
+	      if (printed) {
+	        job.endJob();
+	      } else {
+	        System.out.println("Printing failed.");
+	      }
+	    } else {
+	      System.out.println("Could not create a printer job.");
+	    }
+	  }
+	
 	public void createReportsView(ReportsViewController parentController, Text reportTitle, ObservableList<String> items) {
 
-		VBox vbox = new VBox();
+		vbox = new VBox();
 		vbox.setPadding(new Insets(25));
 		vbox.setSpacing(8);
 
@@ -58,6 +82,20 @@ public class ReportsView extends BaseView {
 		ListView<String> list = new ListView<String>();
 		
 		final Text actionTarget = new Text();
+		
+		// create items observable list depending upon which report specified
+		if(reportTitle.getText().equals("Admission Rates")) {
+			items = StatisticalReporter.analyzeAdmissionRate();
+		}
+		else if(reportTitle.getText().equals("Health Outcomes")) {
+			items = StatisticalReporter.analyzeHealth();
+		}
+		else if(reportTitle.getText().equals("Patient Populations")) {
+			items = StatisticalReporter.analyzePatientPopulation();
+		}
+		else {
+			items = StatisticalReporter.analyzeTypeOfPatients();
+		}
 		
 		list.setItems(items); // moved
 
@@ -107,6 +145,9 @@ public class ReportsView extends BaseView {
 				// to-do
 				actionTarget.setFill(Color.GREEN);
 				actionTarget.setText("Print button pressed!");
+				// make information printable
+				// implementation of print
+				print(vbox);
 			}
 		});
 
