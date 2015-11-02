@@ -1,31 +1,27 @@
 package com.ipims.views;
 
-import java.text.SimpleDateFormat;
+//import java.awt.print.PrinterException;
+//import java.awt.print.PrinterJob;
+import javafx.print.PrinterJob;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.ipims.Helper;
-import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.medication.PrescribeMedViewController;
-import com.ipims.models.Doctor;
 import com.ipims.models.Patient;
 import com.ipims.models.Prescription;
 import com.ipims.models.User;
-import com.ipims.models.User.UserType;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -35,10 +31,27 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 
 public class PrescribeMedView extends BaseView {
 	private List<Patient> allPatients;
+	
+	private void print(Node node) {
+	    System.out.println("Creating a printer job...");
+
+	    PrinterJob job = PrinterJob.createPrinterJob();
+	    if (job != null) {
+	      System.out.println(job.jobStatusProperty().asString());
+
+	      boolean printed = job.printPage(node);
+	      if (printed) {
+	        job.endJob();
+	      } else {
+	        System.out.println("Printing failed.");
+	      }
+	    } else {
+	      System.out.println("Could not create a printer job.");
+	    }
+	  }
 	
 	public void createPrescribeMedView(User user, PrescribeMedViewController prescribeMedViewController) {
 
@@ -90,9 +103,11 @@ public class PrescribeMedView extends BaseView {
 
 			@Override
 			public void handle(ActionEvent e) {
-				//prescribeMedViewController.goBack();
+				// make information printable
 				actionTarget.setFill(Color.GREEN);
 				actionTarget.setText("Print requested");
+				// implementation of print
+				print(vbox);
 			}
 		});
 
