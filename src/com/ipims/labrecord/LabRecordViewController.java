@@ -26,9 +26,9 @@ public class LabRecordViewController {
 	//--------------------------------------------------------
 	
 public  LabRecordViewController() {
+	labManager = new LabRecordManager();
 	view = new LabRecordView();
 	view.createLabRecordView(UserSession.getInstance().getCurrentUser(), this);
-	labManager = new LabRecordManager();
 
 }
 
