@@ -77,20 +77,10 @@ public class LabRecordView extends BaseView {
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
 				
-		
 		listView = new ListView<String>();
-		listView.setItems(labRecordViewController.getLabRecordList());
-		listView.getSelectionModel().selectedItemProperty().addListener(
-		(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-			
-			System.out.println(newValue);
-			int index = listView.getSelectionModel().getSelectedIndex();
-			labRecordViewController.didSelectItem(index);
-		});
+
 		
 		vbox.getChildren().add(listView);
-		
-
 	
 		
 		createScene(vbox);
@@ -118,8 +108,12 @@ public class LabRecordView extends BaseView {
 			hbox.getChildren().add(patientLabel);
 			hbox.getChildren().add(catPatientBox);
 		//}
-
+			
 		
+			
+			
+			
+			
 		baseVbox.getChildren().add(hbox);
 
 
@@ -170,6 +164,8 @@ public class LabRecordView extends BaseView {
 			MagnesiumTextField.setPromptText("mg/dL");
 			MagnesiumTextField.setMaxSize(120, 5);
 			
+				
+				
 			hbox2.getChildren().addAll(GlucoseLabel,GlucoseTextField);
 			hbox3.getChildren().addAll(SodiumLabel, SodiumTextField);
 			hbox4.getChildren().addAll(CalciumLabel, CalciumTextField);
@@ -231,12 +227,22 @@ public class LabRecordView extends BaseView {
 				// Pass the control of handling button clicks to the view controller
 				
 				//GET LAB RECORD
-				
-				String labRecordInfo = "Lab Record Information:Blood Pressure\nGlucose\netc...";
-				
-				
-				
+	
+
+				Patient	patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
+				int patientid = patient.getUserId();
+			
+
+				listView.setItems(LabRecordViewController.getPatientLabRecordList(patientid));
+				listView.getSelectionModel().selectedItemProperty().addListener(
+				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+					
+					System.out.println(newValue);
+					int index = listView.getSelectionModel().getSelectedIndex();
+					LabRecordViewController.didSelectItem(index, patientid);
+				});
 		
+				
 			}
 		});
 
@@ -253,6 +259,7 @@ public class LabRecordView extends BaseView {
 		vbox.setPadding(new Insets(15));
 		vbox.setSpacing(8);
 
+
 		
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
@@ -268,6 +275,7 @@ public class LabRecordView extends BaseView {
 			@Override
 			public void handle(ActionEvent e) {
 				
+				
 				LabRecordViewController.handleUpdateGoBack();
 
 
@@ -276,13 +284,13 @@ public class LabRecordView extends BaseView {
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().addAll(hbox);
 		
-		//vbox.getChildren().add(addLabRecord(labRecord, LabRecordViewController));
+		vbox.getChildren().add(addLabRecord(labRecord, LabRecordViewController));
 		createScene(vbox);
 	}
 	
-	public void refreshList(ObservableList<String>list) {
+	/*public void refreshList(ObservableList<String>list) {
 		listView.getItems().clear();
 		listView.getItems().addAll(list);
-	}
+	}*/
 	
 }

@@ -40,6 +40,18 @@ public class LabRecordManager {
 	}
 	
 	
+	public List<LabRecord> getLabRecordsForPatient(int patientid) {
+
+		List<LabRecord> LabRecordList = null;
+		
+			LabRecordList = DatabaseManager.getInstance().getLabRecordsForPatient(patientid);
+		
+
+		return LabRecordList;
+		
+		
+	}
+	
 	
 	public boolean newLabRecord(LabRecord labrecord) {
 		if (labrecord.getLabRecordId() == -1) {
