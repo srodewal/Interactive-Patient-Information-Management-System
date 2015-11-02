@@ -80,7 +80,6 @@ public class StatisticalReporter {
 
 		String allergy, chestPain, heartProb, diabetic, skinProb;
 
-		
 	}
 
 	public List<String> analyzePatientPopulation() {
