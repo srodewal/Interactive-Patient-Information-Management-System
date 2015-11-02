@@ -87,10 +87,11 @@ public class PrescribeMedView extends BaseView {
 		
 		// for success/error message
 		final Text actionTarget = new Text();
+		final Text actionTargetForLab = new Text();
 		
 		// Show Prescribe Medication if Doctor
 		//if (user.getUsertype() == UserType.PATIENT ) {
-			vbox.getChildren().add(addPrescription(items, actionTarget));
+			vbox.getChildren().add(addPrescription(items, actionTarget, actionTargetForLab));
 		//}
 		
 		list.setItems(items); // moved
@@ -114,13 +115,13 @@ public class PrescribeMedView extends BaseView {
 		});
 
 		
-		vbox.getChildren().addAll(list, printBtn, actionTarget);
+		vbox.getChildren().addAll(list, printBtn, actionTarget, actionTargetForLab);
 		
 		createScene(vbox);
 		
 	}
 
-	public VBox addPrescription(ObservableList<String> items, Text actionTarget) {
+	public VBox addPrescription(ObservableList<String> items, Text actionTarget, Text actionTarget2) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -152,14 +153,28 @@ public class PrescribeMedView extends BaseView {
 		}
 		// end get all patients
 
+		// set label and text field for medication
 		Label MedicationLabel = new Label("Medication:");
 		MedicationLabel.setTextFill(Color.WHITE);
 		TextField MedicationTextField = new TextField();
 		MedicationTextField.setPromptText("Medication");
 		MedicationTextField.setMaxSize(110, 5);
+		
+		// set label and text field for lab test request
+		Label LabTestLabel = new Label("Lab Test:");
+		LabTestLabel.setTextFill(Color.WHITE);
+		TextField LabTestTextField = new TextField();
+		LabTestTextField.setPromptText("LabTest");
+		LabTestTextField.setMaxSize(110, 5);
 
 		hbox.getChildren().addAll(PatientLabel, patientComboBox, MedicationLabel, MedicationTextField);
 		baseVbox.getChildren().add(hbox);
+		
+		HBox labTest = new HBox();
+		labTest.setSpacing(10);
+		
+		labTest.getChildren().addAll(LabTestLabel, LabTestTextField);
+		baseVbox.getChildren().add(labTest);
 
 		HBox hbox2 = new HBox();
 		hbox2.setSpacing(10);
@@ -201,6 +216,37 @@ public class PrescribeMedView extends BaseView {
 					actionTarget.setFill(Color.RED);
 					actionTarget.setText("Error: Prescription already entered!");
 				}
+				
+				// lab test
+				temp = patientComboBox.getSelectionModel().getSelectedIndex();
+				patientName = allPatients.get(temp).getName();
+				currentDate = LocalDate.now(); // current date
+				String prescribeTest = patientName + " needs to have lab test for: " + LabTestTextField.getText() + " on: " + currentDate.toString();
+				if(LabTestTextField.getText().equals("")) {
+					actionTarget2.setFill(Color.RED);
+					actionTarget2.setText("Error: Unable to Prescribe Lab Test!");
+				}
+				else if(!items.contains(prescribeTest)) {
+					
+					// send to database
+					Prescription newTest = new Prescription();
+					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+					newTest.setUserId(tempPatient.getUserId());
+					newTest.setCurrent(false); // to indicate lab test
+					newTest.setDate(currentDate.toString()); // set date prescribed on
+					newTest.setPrescriptionText(LabTestTextField.getText());
+					DatabaseManager.getInstance().newPrescription(newTest);
+					
+					// add to visible list
+					items.add(prescribeTest);
+					
+					actionTarget2.setFill(Color.GREEN);
+					actionTarget2.setText("Lab Test Prescribed!");
+				}
+				else {
+					actionTarget2.setFill(Color.RED);
+					actionTarget2.setText("Error: Test already entered!");
+				}
 			}
 		});
 		
@@ -220,12 +266,19 @@ public class PrescribeMedView extends BaseView {
 				allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
 				System.out.println("List " + tempPatient.getUserId() + "\n");
 				for(int i = 0; i < allMeds.size(); i++) {
-					String currMedication = allMeds.get(i).getPrescriptionText() + " prescribed on: " + allMeds.get(i).getDate();
-					items.add(currMedication);
+					if(allMeds.get(i).isCurrent()) {
+						String currMedication = allMeds.get(i).getPrescriptionText() + " prescribed on: " + allMeds.get(i).getDate();
+						items.add(currMedication);
+					}
+					else {
+						String currTest = allMeds.get(i).getPrescriptionText() + " ordered for lab test on: " + allMeds.get(i).getDate();
+						items.add(currTest);
+					}
 				}
 				
 				actionTarget.setFill(Color.GREEN);
 				actionTarget.setText("Viewing!");
+				actionTarget2.setText("");
 				
 			}
 		});
