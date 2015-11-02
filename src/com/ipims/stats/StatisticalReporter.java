@@ -161,6 +161,7 @@ public class StatisticalReporter {
 		other = "Number of Patients that selected Other: " + otherCount;
 		male = "Number of Male Patients: " + maleCount;
 		female = "Number of Female Patients: " + femaleCount;
+		
 
 		//List<String> patientPopulations = Arrays.asList(caucasian, african, indian, pac, hisp, other, male, female);
 		ObservableList<String> patientPopulations = FXCollections.observableArrayList (
