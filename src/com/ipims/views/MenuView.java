@@ -53,6 +53,7 @@ public class MenuView extends BaseView {
 			vbox.getChildren().add(ViewPatientInfoButton(parentController));
 			vbox.getChildren().add(LabRecordButton(parentController));
 			vbox.getChildren().add(generateStatsButton(parentController));
+			vbox.getChildren().add(PrescribeMedButton(parentController)); // added
 			
 		} else if (user.getUsertype() == UserType.DOCTOR) {
 			
