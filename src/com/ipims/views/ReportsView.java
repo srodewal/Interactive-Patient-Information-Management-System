@@ -29,7 +29,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class ReportsView extends BaseView {
-	public void createReportsView(ReportsViewController parentController, Text reportTitle) {
+	public void createReportsView(ReportsViewController parentController, Text reportTitle, ObservableList<String> items) {
 
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(25));
@@ -56,10 +56,6 @@ public class ReportsView extends BaseView {
 		vbox.getChildren().add(hbox);
 		
 		ListView<String> list = new ListView<String>();
-		ObservableList<String> items = FXCollections.observableArrayList (
-				"Report goes here!",
-				"Some information.."
-			);
 		
 		final Text actionTarget = new Text();
 		

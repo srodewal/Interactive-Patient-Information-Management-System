@@ -699,6 +699,24 @@ public class DatabaseManager {
 
 		return records;
 	}
+	
+	public int getNumberOfRegisteredPatients() 
+	{
+		int NumberOfPatients = 0; 
+		try {
+			Statement getNumber = dbConnection.createStatement();
+			
+			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User;");
+			
+		}
+		catch(Exception e) 
+		{
+			logError("Could not retrieve patient count. Please check that the database has been properly set up.");
+			logError(e.getMessage());
+		}
+		
+		return NumberOfPatients;
+	}
 
 	//=================== DB Helpers ==================
 

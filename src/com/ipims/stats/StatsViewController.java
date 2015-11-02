@@ -1,10 +1,16 @@
 package com.ipims.stats;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ipims.MenuViewController;
+import com.ipims.models.Appointment;
 import com.ipims.usersession.UserSession;
 import com.ipims.views.Appointmentsview;
 import com.ipims.views.StatsView;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 
@@ -58,6 +64,8 @@ public class StatsViewController {
 		ReportsViewController tp = new ReportsViewController(reportTitle);
         view.getStage().setScene(tp.getScene());
 	}
+
+	
 
 	
 	
