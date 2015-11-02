@@ -50,15 +50,14 @@ public Scene getScene() {
 	}
 	
 
-	public void didSelectItem(int index) {
+	public void didSelectItem(int index, int patientid) {
 		
 		User user = UserSession.getInstance().getCurrentUser();
 
-		List<LabRecord> list = getListOfLabRecords();
+		List<LabRecord> list = getListOfLabRecords(patientid);
 
 		
-		if (user.getUsertype() == UserType.PATIENT || 
-				user.getUsertype() == UserType.HSPSTAFF) {
+		if (user.getUsertype() == UserType.LABSTAFF) {
 			
 		
 		EnterLabRecordView updateView = new EnterLabRecordView();
@@ -72,9 +71,9 @@ public Scene getScene() {
 
 	
 
-	public ObservableList<String> getLabRecordList () {
+	public ObservableList<String> getPatientLabRecordList (int patientid) {
 
-		List<LabRecord> LabRecordList = getListOfLabRecords();
+		List<LabRecord> LabRecordList = getListOfLabRecords(patientid);
 		List<String> stringLabList = new ArrayList<>();
 		for (int i = 0; i < LabRecordList.size(); i++) {
 			LabRecord lab = LabRecordList.get(i);
@@ -87,20 +86,20 @@ public Scene getScene() {
 		ObservableList<String> items = FXCollections.observableArrayList (stringLabList);
 		return items;
 	}
+	
 
-	private List<LabRecord>getListOfLabRecords() {
+	private List<LabRecord>getListOfLabRecords(int patientid) {
 
-		// If patient logs in, get the list of appointments for that patient
-		// If HSP, Nurse or Doctor logs in, get the list all appointments
-		//
+		// Pass patientid in order to get all lab records for that patient 
+
 		List<LabRecord> LabRecordList = null;
 		
-	   
-			LabRecordList = labManager.getLabRecordForPatient(null);
+			LabRecordList = labManager.getLabRecordsForPatient(patientid);
 		
 		return LabRecordList;
 		
 	}
+
 
 
 	
@@ -113,6 +112,7 @@ public Scene getScene() {
 	
 
 	public void handleUpdateClick(LabRecord updatedLabRecord) {
+		
 		labManager.updateLabRecord(currentlySelectedLab, updatedLabRecord);
 		currentlySelectedLab = null;
 		handleUpdateGoBack();
@@ -126,7 +126,6 @@ public Scene getScene() {
 
 	public void handleSubmitClick(LabRecord newLabRecord) {
 		labManager.newLabRecord(newLabRecord);
-		view.refreshList(getLabRecordList());
 	}
 
 

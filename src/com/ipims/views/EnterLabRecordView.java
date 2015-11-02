@@ -65,28 +65,21 @@ public class EnterLabRecordView extends BaseView{
 		hbox.getChildren().add(mainMenuBtn);
 		vbox.getChildren().add(hbox);
 		
-		// Show Patient Case if Doctor
-				//if (user.getUsertype() == UserType.PATIENT ) {
-				vbox.getChildren().add(addEnterLabRecord(null, enterLabRecordViewController));
+		// This is what shows the view
+			vbox.getChildren().add(addEnterLabRecord(null, enterLabRecordViewController));
 
-				//}
-		
-					
+				
+			
 		Text subTitle = new Text("View Lab Record");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);			
 					
 					
 		listView = new ListView<String>();
-		listView.setItems(enterLabRecordViewController.getLabRecordList());
-		listView.getSelectionModel().selectedItemProperty().addListener(
-				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-					
-					System.out.println(newValue);
-					int index = listView.getSelectionModel().getSelectedIndex();
-					enterLabRecordViewController.didSelectItem(index);
-				});
+	
+		
 		vbox.getChildren().add(listView);
+		
 		createScene(vbox);
 		
 	}
@@ -126,14 +119,14 @@ public class EnterLabRecordView extends BaseView{
 
 		
 		ComboBox<String> catPatientBox = new ComboBox<String>();
-		//if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.LABSTAFF) {
+
 			Label patientLabel = new Label("Patient:");
 			patientLabel.setTextFill(Color.WHITE);
 			catPatientBox.getItems().addAll(Helper.getPatientList());
 			
 			hbox.getChildren().add(patientLabel);
 			hbox.getChildren().add(catPatientBox);
-		//}
+		
 		
 		Label GlucoseLabel = new Label("Glucose:");
 		GlucoseLabel.setTextFill(Color.WHITE);
@@ -268,6 +261,16 @@ public class EnterLabRecordView extends BaseView{
 					enterLabRecordViewController.handleSubmitClick(newLab);
 					
 					
+					listView.setItems(enterLabRecordViewController.getPatientLabRecordList(patientid));
+					listView.getSelectionModel().selectedItemProperty().addListener(
+							(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+								
+								System.out.println(newValue);
+								int index = listView.getSelectionModel().getSelectedIndex();
+								enterLabRecordViewController.didSelectItem(index, patientid);
+							});
+					
+					
 				}
 			});
 
@@ -310,11 +313,6 @@ public class EnterLabRecordView extends BaseView{
 		createScene(vbox);
 	}
 
-	
-	public void refreshList(ObservableList<String>list) {
-		listView.getItems().clear();
-		listView.getItems().addAll(list);
-	}
 
 	
 }

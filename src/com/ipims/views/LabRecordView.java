@@ -66,12 +66,10 @@ public class LabRecordView extends BaseView {
 		vbox.getChildren().add(hbox);
 		
 	
-		// Show Patient Case if Doctor
-		//if (user.getUsertype() == UserType.PATIENT ) {
-		
+		// This is what shows the view
 		vbox.getChildren().add(addLabRecord(null, labRecordViewController));
 
-		//}
+		
 		
 		Text subTitle = new Text("View Lab Record");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
@@ -110,9 +108,6 @@ public class LabRecordView extends BaseView {
 		//}
 			
 		
-			
-			
-			
 			
 		baseVbox.getChildren().add(hbox);
 
@@ -287,10 +282,6 @@ public class LabRecordView extends BaseView {
 		vbox.getChildren().add(addLabRecord(labRecord, LabRecordViewController));
 		createScene(vbox);
 	}
-	
-	/*public void refreshList(ObservableList<String>list) {
-		listView.getItems().clear();
-		listView.getItems().addAll(list);
-	}*/
+
 	
 }

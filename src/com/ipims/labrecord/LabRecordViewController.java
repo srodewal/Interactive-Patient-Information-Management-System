@@ -82,12 +82,9 @@ public Scene getScene() {
 	
 	private List<LabRecord>getListOfLabRecords(int patientid) {
 
-		// If patient logs in, get the list of appointments for that patient
-		// If HSP, Nurse or Doctor logs in, get the list all appointments
-		//
-		List<LabRecord> LabRecordList = null;
+		// Pass patientid in order to get all lab records for that patient 
 		
-			
+		List<LabRecord> LabRecordList = null;
 		
 			LabRecordList = labManager.getLabRecordsForPatient(patientid);
 		
