@@ -811,6 +811,34 @@ public class DatabaseManager {
 
 		return records;
 	}
+	
+	public void updateLabRecord(LabRecord record)
+	{
+		try
+		{
+			if(record.getLabRecordId() != -1)
+			{
+				PreparedStatement updateRecord = dbConnection.prepareStatement("Update LabRecord SET userId = ?, glucose = ?, sodium = ?, calcium = ?, magnesium = ? WHERE recordId = ?");
+				updateRecord.setInt(1, record.getPatientId());
+				updateRecord.setFloat(2, record.getGlucose());
+				updateRecord.setFloat(3, record.getSodium());
+				updateRecord.setFloat(4, record.getCalcium());
+				updateRecord.setFloat(5, record.getMagnesium());
+				updateRecord.setInt(6, record.getLabRecordId());
+				
+				updateRecord.executeUpdate();
+			}
+			else
+			{
+				logError("Cannot update a lab record without an id.");
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not update given lab record. Please check that the database has been properly set up.");
+			logError(e.getMessage());
+		}
+	}
 	//=================== DB Helpers ==================
 
 	private User createUser(ResultSet rs) throws SQLException {
