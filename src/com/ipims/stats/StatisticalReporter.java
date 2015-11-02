@@ -80,16 +80,7 @@ public class StatisticalReporter {
 
 		String allergy, chestPain, heartProb, diabetic, skinProb;
 
-		//List<Patient> typeList = null;
-		//typeList = DatabaseManager.getInstance().getAllPatients();
-
-		//for(Patient patient: typeList)
-		//{
-
-		//}
-
-		//List<String> typeOfPatients = Arrays.alist();
-		//return typeOfPatients;
+		
 	}
 
 	public List<String> analyzePatientPopulation() {
