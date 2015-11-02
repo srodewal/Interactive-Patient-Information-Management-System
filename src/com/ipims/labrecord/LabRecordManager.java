@@ -50,4 +50,14 @@ public class LabRecordManager {
 	}
 	
 	
+	public boolean updateLabRecord(LabRecord oldLab, LabRecord newLab) {
+		if (oldLab.getLabRecordId() > 0) {
+			DatabaseManager.getInstance().updateLabRecord(newLab);
+			return true;
+		}
+
+		return false;
+	}
+	
+	
 }

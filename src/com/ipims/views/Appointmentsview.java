@@ -175,6 +175,7 @@ public class Appointmentsview extends BaseView {
 
 		// Fill in values for update
 		if(appointment != null) {
+			
 			title.setText("Update Appointment");
 			datePicker.setValue(appointment.getDate());
 			timeTextField.setText(appointment.getTime());

@@ -3,6 +3,7 @@ package com.ipims.views;
 
 import com.ipims.Helper;
 import com.ipims.appointment.AppointmentViewController;
+import com.ipims.database.DatabaseManager;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordManager;
 import com.ipims.labrecord.LabRecordViewController;
@@ -172,7 +173,20 @@ public class EnterLabRecordView extends BaseView{
 			
 			//PULL LAB_RECORD FROM DATABASE Using index of labrecord chosen
 			//THEN DISPLAY SPECIFIC FIELDS FROM LABRECORD OBJECT PULLED
+			String Calcium = String.valueOf(labrecord.getGlucose());
+			String Glucose = String.valueOf(labrecord.getGlucose());
+			String Sodium = String.valueOf(labrecord.getSodium());
+			String Magnesium = String.valueOf(labrecord.getMagnesium());
+
 			
+			CalciumTextField.setText(Calcium);
+			GlucoseTextField.setText(Glucose);
+			SodiumTextField.setText(Sodium);
+			MagnesiumTextField.setText(Magnesium);
+
+			//if (catPatientBox != null) {
+				catPatientBox.setValue(labrecord.getPatient());
+			//}
 	
 			// Add update and cancel buttons
 			//
@@ -185,7 +199,24 @@ public class EnterLabRecordView extends BaseView{
 				public void handle(ActionEvent e) {
 					// USE UPDATE FUNCTION FROM DATABASE TO UPDATE LABRECORD
 					
-					enterLabRecordViewController.handleUpdateClick(null);
+					
+					LabRecord newLab = new LabRecord();
+
+					
+					float Calcium = Float.parseFloat(CalciumTextField.getText());
+					float Glucose = Float.parseFloat(GlucoseTextField.getText());
+					float Sodium = Float.parseFloat(SodiumTextField.getText());
+					float Magnesium = Float.parseFloat(MagnesiumTextField.getText());
+					Patient patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());					
+					int patientid = patient.getUserId();
+					
+					newLab.setPatientId(patientid);
+					newLab.setGlucose(Glucose);
+					newLab.setSodium(Sodium);
+					newLab.setCalcium(Calcium);
+					newLab.setMagnesium(Magnesium);
+
+					enterLabRecordViewController.handleUpdateClick(newLab);
 					
 
 				}

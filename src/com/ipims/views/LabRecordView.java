@@ -36,7 +36,7 @@ import javafx.scene.text.Text;
 
 public class LabRecordView extends BaseView {
 
-	
+	private ListView<String> listView;
 	
 	public void createLabRecordView(User user, LabRecordViewController labRecordViewController) {
 
@@ -68,32 +68,27 @@ public class LabRecordView extends BaseView {
 	
 		// Show Patient Case if Doctor
 		//if (user.getUsertype() == UserType.PATIENT ) {
+		
+		vbox.getChildren().add(addLabRecord(null, labRecordViewController));
+
 		//}
-		
-		
-		
-		ListView<String> list = new ListView<String>();
-		
-		/*list.setItems(labRecordViewController.getLabRecordList());
-		list.getSelectionModel().selectedItemProperty().addListener(
-		        (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-		                System.out.println(newValue);
-		                int index = list.getSelectionModel().getSelectedIndex();
-		                labRecordViewController.didSelectItem(index);
-		    });
-		*/
-		
-		vbox.getChildren().add(addLabRecord(null, labRecordViewController, list));
 		
 		Text subTitle = new Text("View Lab Record");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		vbox.getChildren().add(subTitle);
+				
 		
-		vbox.getChildren().add(list);
+		listView = new ListView<String>();
+		listView.setItems(labRecordViewController.getLabRecordList());
+		listView.getSelectionModel().selectedItemProperty().addListener(
+		(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+			
+			System.out.println(newValue);
+			int index = listView.getSelectionModel().getSelectedIndex();
+			labRecordViewController.didSelectItem(index);
+		});
 		
-		
-		// for success/error message
-		//final Text actionTarget = new Text();
+		vbox.getChildren().add(listView);
 		
 
 	
@@ -104,7 +99,7 @@ public class LabRecordView extends BaseView {
 	
 	
 
-	public VBox addLabRecord(LabRecord labrecord,  LabRecordViewController LabRecordViewController, ListView<String> list) {
+	public VBox addLabRecord(LabRecord labrecord,  LabRecordViewController LabRecordViewController) {
 
 		VBox baseVbox = new VBox();
 		baseVbox.setPadding(new Insets(15));
@@ -239,48 +234,9 @@ public class LabRecordView extends BaseView {
 				
 				String labRecordInfo = "Lab Record Information:Blood Pressure\nGlucose\netc...";
 				
-				// setting lab record in database
-				Patient tempPatient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
-				
-				/*labrecord.setCalcium(Integer.valueOf(CalciumTextField.getText()));
-				labrecord.setGlucose(Integer.valueOf(GlucoseTextField.getText()));
-				labrecord.setMagnesium(Integer.valueOf(MagnesiumTextField.getText()));
-				labrecord.setSodium(Integer.valueOf(SodiumTextField.getText()));
-				//labrecord.setPatient(tempPatient);
-				labrecord.setPatientId(tempPatient.getUserId());
-				*/
-				
-				// clear list
-				ObservableList<String> items = LabRecordViewController.getLabRecordList();
-				items.clear();
-				
-				// show all lab records for patient
-				List<LabRecord> lrList = new ArrayList<LabRecord>();
-				lrList = DatabaseManager.getInstance().getLabRecordsForPatient(tempPatient.getUserId());
-				//System.out.println("List " + tempPatient.getUserId() + "\n");
-				for(int i = 0; i < lrList.size(); i++) {
-					String lrInfo = "Calcium: " + Float.toString(lrList.get(i).getCalcium());
-					lrInfo += "Magnesium: " + Float.toString(lrList.get(i).getMagnesium());
-					lrInfo += "Glucose: " + Float.toString(lrList.get(i).getGlucose());
-					lrInfo += "Sodium: " + Float.toString(lrList.get(i).getSodium());
-					items.add(lrInfo);
-				}
 				
 				
-	
-				
-				
-			/*	if(PatientTextField.getText().equals("")) {
-					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Error: No patient name entered!");
-				}
-				
-				else {
-					items.add(labRecordInfo);
-					actionTarget.setFill(Color.GREEN);
-					actionTarget.setText("Success");
-				}
-			*/	
+		
 			}
 		});
 
@@ -324,6 +280,9 @@ public class LabRecordView extends BaseView {
 		createScene(vbox);
 	}
 	
-
+	public void refreshList(ObservableList<String>list) {
+		listView.getItems().clear();
+		listView.getItems().addAll(list);
+	}
 	
 }

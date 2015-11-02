@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ipims.MenuViewController;
 import com.ipims.appointment.AppointmentManager;
+import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
 import com.ipims.models.LabRecord;
 import com.ipims.models.Patient;
@@ -79,8 +80,8 @@ public Scene getScene() {
 			LabRecord lab = LabRecordList.get(i);
 			int index = i+1;
 			
-			String str = "" + index +".";
-			str+= " (Calcium: "+ lab.getCalcium()+" Glucose: "+ lab.getGlucose()+" Magnesium:  "+ lab.getMagnesium()+"Sodium:  "+ lab.getSodium();
+			String str = "" + index +". ";
+			str+= "Name: "+ DatabaseManager.getInstance().getUser(lab.getPatientId()).getName()+ "\nCalcium: "+ lab.getCalcium()+"\nGlucose: "+ lab.getGlucose()+"\nMagnesium:  "+ lab.getMagnesium()+"\nSodium:  "+ lab.getSodium();
 			stringLabList.add(str);
 		}
 		ObservableList<String> items = FXCollections.observableArrayList (stringLabList);
@@ -94,10 +95,11 @@ public Scene getScene() {
 		//
 		List<LabRecord> LabRecordList = null;
 		
-	    LabRecordList = labManager.getLabRecordForPatient(null);
+	   
+			LabRecordList = labManager.getLabRecordForPatient(null);
 		
-
 		return LabRecordList;
+		
 	}
 
 
@@ -109,10 +111,14 @@ public Scene getScene() {
 		view = backToAppoinment;
 	}
 	
+
 	public void handleUpdateClick(LabRecord updatedLabRecord) {
+		labManager.updateLabRecord(currentlySelectedLab, updatedLabRecord);
+		currentlySelectedLab = null;
 		handleUpdateGoBack();
+		view.showErrorMessage("LabRecord updated.");
+		
 	}
-	
 	
 	public void handleLabRecordDeletion() {
 		handleUpdateGoBack();
