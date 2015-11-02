@@ -85,6 +85,7 @@ public class StatisticalReporter {
 
 	}
 
+	// to do
 	public static ObservableList<String> analyzeTypeOfPatients() {
 		int allergyCount = 0;
 		int chestCount = 0;
