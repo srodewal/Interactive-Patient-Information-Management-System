@@ -181,7 +181,7 @@ public class LabRecordView extends BaseView {
 			MagnesiumTextField.setText(Magnesium);
 
 			if (catPatientBox != null) {
-				catPatientBox.setValue(catPatientBox.getValue());
+				catPatientBox.setValue(DatabaseManager.getInstance().getUser(labrecord.getPatientId()).getName());
 			}
 			
 			
@@ -196,7 +196,25 @@ public class LabRecordView extends BaseView {
 				@Override
 				public void handle(ActionEvent e) {
 					
-					LabRecordViewController.handleUpdateClick(null);
+					
+					LabRecord newLab = new LabRecord();
+
+					
+					float Calcium = Float.parseFloat(CalciumTextField.getText());
+					float Glucose = Float.parseFloat(GlucoseTextField.getText());
+					float Sodium = Float.parseFloat(SodiumTextField.getText());
+					float Magnesium = Float.parseFloat(MagnesiumTextField.getText());
+					Patient patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());					
+					int patientid = patient.getUserId();
+					
+					newLab.setPatientId(patientid);
+					newLab.setGlucose(Glucose);
+					newLab.setSodium(Sodium);
+					newLab.setCalcium(Calcium);
+					newLab.setMagnesium(Magnesium);
+
+					
+					LabRecordViewController.handleUpdateClick(newLab);
 				
 				}
 			});

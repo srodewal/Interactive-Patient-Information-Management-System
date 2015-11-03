@@ -64,6 +64,7 @@ public class LabRecordManager {
 	
 	public boolean updateLabRecord(LabRecord oldLab, LabRecord newLab) {
 		if (oldLab.getLabRecordId() > 0) {
+			newLab.setLabRecordId(oldLab.getLabRecordId());
 			DatabaseManager.getInstance().updateLabRecord(newLab);
 			return true;
 		}
