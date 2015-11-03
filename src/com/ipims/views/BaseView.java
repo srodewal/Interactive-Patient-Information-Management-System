@@ -44,13 +44,24 @@ public class BaseView {
 	 * @param message Message to be displayed.
 	 */
 	public void showErrorMessage(String message) {
-		Alert alert = new Alert(AlertType.INFORMATION);
+		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error");
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 
 		alert.showAndWait();
 	}
+	
+	public void showInfo(String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
+	
+	
 	
 	protected void createScene(Parent root) {
 		currentScene = new Scene(root, WIDTH, HEIGHT);

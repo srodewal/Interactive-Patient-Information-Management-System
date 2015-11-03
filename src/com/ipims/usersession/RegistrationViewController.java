@@ -20,7 +20,7 @@ public class RegistrationViewController {
 
     public void handleRegister(User user, String password) {
     	UserSession.getInstance().register(user, password);
-    	view.showErrorMessage("User registered. Please login again.");
+    	view.showInfo("User registered. Please login again.");
     	handleBackButton();
     }
     

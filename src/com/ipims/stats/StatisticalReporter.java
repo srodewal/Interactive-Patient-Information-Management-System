@@ -120,48 +120,49 @@ public class StatisticalReporter {
 
 		for(Patient patient: patientList)
 		{
-			if(patient.getRace() == "Caucasian")
+			if(patient.getRace().equals("Caucasian"))
 			{
 				caucasionCount++;
 			}
-			if(patient.getRace() == "African American")
+			else if(patient.getRace().equals("African American"))
 			{
 				africanAmericanCount++;
 			}
-			if(patient.getRace() == "American Indian")
+			else if(patient.getRace().equals("American Indian"))
 			{
 				indianCount++;
 			}
-			if(patient.getRace() == "Pacific Islander")
+			else if(patient.getRace().equals("Pacific Islander"))
 			{
 				pacificCount++;
 			}
-			if(patient.getRace() == "Hispanic")
+			else if(patient.getRace().equals("Hispanic"))
 			{
 				hispanicCount++;
 			}
-			if(patient.getRace() == "Other")
+			else //if(patient.getRace().equals("Other"))
 			{
 				otherCount++;
 			}
-			if(patient.getSex() == "Male")
+			
+			if(patient.getSex().equals("Male"))
 			{
 				maleCount++;
 			}
-			if(patient.getSex() == "Female")
+			else //if(patient.getSex().equals("Female"))
 			{
 				femaleCount++;
 			}
 		}
 
-		caucasian = "Number of Caucasian Patients: " + caucasionCount;
-		african = "Number of African American Patients: " + africanAmericanCount;
-		indian = "Number of American Indian Patients: " + indianCount;
-		pac = "Number of Pacific Islander Patients: " + pacificCount;
-		hisp = "Number of Hispanic Patients: " + hispanicCount;
-		other = "Number of Patients that selected Other: " + otherCount;
-		male = "Number of Male Patients: " + maleCount;
-		female = "Number of Female Patients: " + femaleCount;
+		caucasian = "Number of Caucasian Patients: " + Integer.toString(caucasionCount);
+		african = "Number of African American Patients: " + Integer.toString(africanAmericanCount);
+		indian = "Number of American Indian Patients: " + Integer.toString(indianCount);
+		pac = "Number of Pacific Islander Patients: " + Integer.toString(pacificCount);
+		hisp = "Number of Hispanic Patients: " + Integer.toString(hispanicCount);
+		other = "Number of Patients that selected Other: " + Integer.toString(otherCount);
+		male = "Number of Male Patients: " + Integer.toString(maleCount);
+		female = "Number of Female Patients: " + Integer.toString(femaleCount);
 		
 
 		//List<String> patientPopulations = Arrays.asList(caucasian, african, indian, pac, hisp, other, male, female);

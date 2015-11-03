@@ -111,7 +111,7 @@ public class AppointmentViewController {
 		appManager.updateAppointment(currentlySelectedApp, updatedAppointment);
 		currentlySelectedApp = null;
 		handleUpdateGoBack();
-		view.showErrorMessage("Appoinment updated.");
+		view.showInfo("Appoinment updated.");
 	}
 
 	public void handleSubmitClick(Appointment newAppoinment) {
@@ -123,7 +123,7 @@ public class AppointmentViewController {
 		appManager.deleteAppoinment(currentlySelectedApp);
 		currentlySelectedApp = null;
 		handleUpdateGoBack();
-		view.showErrorMessage("Appoinment cancelled!!");
+		view.showInfo("Appoinment cancelled!!");
 	}
 
 

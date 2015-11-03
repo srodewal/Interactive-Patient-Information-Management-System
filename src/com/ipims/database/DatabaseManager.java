@@ -183,7 +183,8 @@ public class DatabaseManager {
 							+ "userId INTEGER NOT NULL,"
 							+ "date TEXT NOT NULL,"
 							+ "medicine TEXT NOT NULL,"
-							+ "pastOrCurrent INTEGER NOT NULL"
+							+ "pastOrCurrent INTEGER NOT NULL,"
+							+ "testOrMedicine INTEGER NOT NULL"
 							+ ")");
 					createPrescription.close();
 				}
@@ -227,14 +228,14 @@ public class DatabaseManager {
 
 	}
 
-	public  void newUser(User user, String password)
+	public  User newUser(User user, String password)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
 				System.out.println("Trying to create user " + user.getName() + " " + user.getUsertype().ordinal());
-				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance, sex, race) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement insertPatient = dbConnection.prepareStatement("INSERT INTO User (name, userName, passwordHash, ssn, type, dob, address, email, phoneNumber, insurance, sex, race) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 				insertPatient.setString(1, user.getName());
 				insertPatient.setString(2, user.getUserName());
 				insertPatient.setString(3, password);
@@ -247,7 +248,16 @@ public class DatabaseManager {
 				insertPatient.setString(10, user.getInsurance());
 				insertPatient.setString(11, user.getSex());
 				insertPatient.setString(12, user.getRace());
-				insertPatient.executeUpdate();
+				
+				int affectedRows = insertPatient.executeUpdate();
+				if(affectedRows != 0)
+				{
+					ResultSet rs = insertPatient.getGeneratedKeys();
+					if(rs.next())
+					{
+						user.setUserId(rs.getInt(1));
+					}
+				}
 				insertPatient.close();
 			}
 			catch(Exception e)
@@ -260,27 +270,40 @@ public class DatabaseManager {
 		{
 			logError("Cannot insert new patient as there is no current database connection.");
 		}
+		return user;
 	}
 
-	public  void newAppointment(Appointment appoinment)
+	public  Appointment newAppointment(Appointment appointment)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
-				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointments (patientId, doctorId, category, time, date) VALUES (?,?,?,?,?)");
-				insertAppointment.setInt(1, appoinment.getPatient().getUserId());
-				if (appoinment.getDoctor() != null) {
-					insertAppointment.setInt(2, appoinment.getDoctor().getUserId());
+				PreparedStatement insertAppointment = dbConnection.prepareStatement("INSERT INTO Appointments (patientId, doctorId, category, time, date) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+				insertAppointment.setInt(1, appointment.getPatient().getUserId());
+				if (appointment.getDoctor() != null) {
+					insertAppointment.setInt(2, appointment.getDoctor().getUserId());
 				} else {
 					insertAppointment.setNull(2, java.sql.Types.INTEGER);
 				}
 				
-				insertAppointment.setString(3, appoinment.getCategory());
-				insertAppointment.setString(4, appoinment.getTime());
-				insertAppointment.setString(5, appoinment.getDate().toString());
-				insertAppointment.executeUpdate();
+				insertAppointment.setString(3, appointment.getCategory());
+				insertAppointment.setString(4, appointment.getTime());
+				insertAppointment.setString(5, appointment.getDate().toString());
+				
+				int affectedRows = insertAppointment.executeUpdate();
+				
+				if(affectedRows != 0)
+				{
+					ResultSet rs = insertAppointment.getGeneratedKeys();
+					if(rs.next())
+					{
+						appointment.setAppointmentId(rs.getInt(1));
+					}
+				}
+				
 				insertAppointment.close();
+				
 			}
 			catch(Exception e)
 			{
@@ -292,6 +315,7 @@ public class DatabaseManager {
 		{
 			logError("Cannot insert new appointment as there is no current database connection.");
 		}
+		return appointment;
 	}
 
 	public void updateAppoinemt(Appointment oldAppoinment, Appointment updatedAppoinment) {
@@ -349,13 +373,13 @@ public class DatabaseManager {
 		}
 	}
 
-	public void newHealthCondition(HealthCondition condition)
+	public HealthCondition newHealthCondition(HealthCondition condition)
 	{
 		if(dbConnection != null)
 		{
 			try
 			{
-				PreparedStatement insertHealthCondition = dbConnection.prepareStatement("INSERT INTO HealthCondition (userId,healthConcerns,comments,severity,isCurrent) VALUES(?, ?, ?, ?, ?)");
+				PreparedStatement insertHealthCondition = dbConnection.prepareStatement("INSERT INTO HealthCondition (userId,healthConcerns,comments,severity,isCurrent) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 				insertHealthCondition.setInt(1, condition.getPatientId());
 				insertHealthCondition.setString(2, condition.getHealthConcern());
 				insertHealthCondition.setString(3, condition.getComments());
@@ -368,7 +392,18 @@ public class DatabaseManager {
 				{
 					insertHealthCondition.setInt(5, 0);
 				}
-				insertHealthCondition.executeUpdate();
+				
+				int affectedRows = insertHealthCondition.executeUpdate();
+				
+				if(affectedRows != 0)
+				{
+					ResultSet rs = insertHealthCondition.getGeneratedKeys();
+					if(rs.next())
+					{
+						condition.setHealthConditionId(rs.getInt(1));
+					}
+				}
+				
 				insertHealthCondition.close();
 			}
 			catch(Exception e)
@@ -381,35 +416,49 @@ public class DatabaseManager {
 		{
 			logError("Cannot insert new health condition as there is no current database connection.");
 		}
+		
+		return condition;
 	}
 
-	public void newLabRecord(LabRecord record)
+	public LabRecord newLabRecord(LabRecord record)
 	{
 		try
 		{
-			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium) VALUES (?, ?, ?, ?, ?)");
+			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			insertRecord.setInt(1, record.getPatientId());
 			insertRecord.setFloat(2, record.getGlucose());
 			insertRecord.setFloat(3, record.getCalcium());
 			insertRecord.setFloat(4, record.getMagnesium());
 			insertRecord.setFloat(5, record.getSodium());
 
-			insertRecord.executeUpdate();
+			int affectedRows = insertRecord.executeUpdate();
+			
+			if(affectedRows != 0)
+			{
+				ResultSet rs = insertRecord.getGeneratedKeys();
+				if(rs.next())
+				{
+					record.setLabRecordId(rs.getInt(1));
+				}
+			}
+			
+			insertRecord.close();
 		}
 		catch(Exception e)
 		{
 			logError("Could not add lab record to the database. Please check that the database has been set up properly.");
 			logError(e.getMessage());
 		}
+		return record;
 	}
 
-	public void newPrescription(Prescription prescription)
+	public Prescription newPrescription(Prescription prescription)
 	{
 		try
 		{
 			System.out.println("p1");
 			// this statement ->
-			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent) VALUES (?, ?, ?, ?)");
+			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent, testOrMedicine) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			System.out.println("p2");
 			System.out.println("Setup " + prescription.getUserId() + "\n");
 			insertPrescription.setInt(1, prescription.getUserId());
@@ -423,14 +472,35 @@ public class DatabaseManager {
 			{
 				insertPrescription.setInt(4, 0);
 			}
+			
+			if(prescription.isMedicine())
+			{
+				insertPrescription.setInt(5, 1);
+			}
+			else
+			{
+				insertPrescription.setInt(5, 0);
+			}
 
-			insertPrescription.executeUpdate();
+			int affectedRows = insertPrescription.executeUpdate();
+			
+			if(affectedRows != 0)
+			{
+				ResultSet rs = insertPrescription.getGeneratedKeys();
+				if(rs.next())
+				{
+					prescription.setPrescriptionId(rs.getInt(1));
+				}
+			}
+			
+			insertPrescription.close();
 		}
 		catch(Exception e)
 		{
 			logError("Could not add prescription the the database. Please check that the database has been set up properly.");
 			logError(e.getMessage());
 		}
+		return prescription;
 	}
 
 	public User getUser(String userName, String password) { //for login
@@ -632,6 +702,15 @@ public class DatabaseManager {
 				{
 					prescription.setCurrent(true);
 				}
+				
+				if(rs.getInt("testOrMedicine") == 0)
+				{
+					prescription.setMedicine(false);
+				}
+				else
+				{
+					prescription.setMedicine(true);
+				}
 
 				prescriptions.add(prescription);
 			}
@@ -770,7 +849,7 @@ public class DatabaseManager {
 		try {
 			Statement getNumber = dbConnection.createStatement();
 			
-			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User;");
+			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT.ordinal() + ";");
 			NumberOfPatients = rs.getInt(1);
 		}
 		catch(Exception e) 
