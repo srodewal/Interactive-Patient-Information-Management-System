@@ -183,7 +183,8 @@ public class DatabaseManager {
 							+ "userId INTEGER NOT NULL,"
 							+ "date TEXT NOT NULL,"
 							+ "medicine TEXT NOT NULL,"
-							+ "pastOrCurrent INTEGER NOT NULL"
+							+ "pastOrCurrent INTEGER NOT NULL,"
+							+ "testOrMedicine INTEGER NOT NULL"
 							+ ")");
 					createPrescription.close();
 				}
@@ -457,7 +458,7 @@ public class DatabaseManager {
 		{
 			System.out.println("p1");
 			// this statement ->
-			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent, testOrMedicine) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			System.out.println("p2");
 			System.out.println("Setup " + prescription.getUserId() + "\n");
 			insertPrescription.setInt(1, prescription.getUserId());
@@ -470,6 +471,15 @@ public class DatabaseManager {
 			else
 			{
 				insertPrescription.setInt(4, 0);
+			}
+			
+			if(prescription.isMedicine())
+			{
+				insertPrescription.setInt(5, 1);
+			}
+			else
+			{
+				insertPrescription.setInt(5, 0);
 			}
 
 			int affectedRows = insertPrescription.executeUpdate();
@@ -691,6 +701,15 @@ public class DatabaseManager {
 				else
 				{
 					prescription.setCurrent(true);
+				}
+				
+				if(rs.getInt("testOrMedicine") == 0)
+				{
+					prescription.setMedicine(false);
+				}
+				else
+				{
+					prescription.setMedicine(true);
 				}
 
 				prescriptions.add(prescription);
