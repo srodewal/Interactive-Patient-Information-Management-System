@@ -25,9 +25,11 @@ public class StatisticalReporter {
 		String calcium, sodium, magnesium, glucose;
 		List<LabRecord> patientNumList = null;
 		patientNumList = DatabaseManager.getInstance().getAllLabRecord();
+		total = DatabaseManager.getInstance().getNumberOfRegisteredPatients();
+		System.out.println("Total is: " + total);
 
 		for(LabRecord record: patientNumList) {
-			total++;
+			System.out.println("A lab record is being processed"); // test
 			if (8.5 < record.getCalcium() && record.getCalcium() < 10.2) {
 				inRangeCA++;
 			}
@@ -45,10 +47,10 @@ public class StatisticalReporter {
 			}
 		}
 
-		caPercent = (float) inRangeCA / total;
-		naPercent = (float) inRangeNA / total;
-		mgPercent = (float) inRangeMG / total;
-		glPercent = (float) inRangeGL / total;
+		caPercent = (float) inRangeCA / total * 100;
+		naPercent = (float) inRangeNA / total * 100;
+		mgPercent = (float) inRangeMG / total * 100;
+		glPercent = (float) inRangeGL / total * 100;
 
 		calcium = "The percent of patients with normal calcium is: " + Float.toString(caPercent);
 		sodium = "The percent of patients with normal sodium is: " + Float.toString(naPercent);
@@ -72,7 +74,13 @@ public class StatisticalReporter {
 		int number_of_patients = 0;
 		String output_number = null;
 
-		number_of_patients = DatabaseManager.getInstance().getNumberOfRegisteredPatients();
+		//number_of_patients = DatabaseManager.getInstance().getNumberOfRegisteredPatients();
+		// 
+		List<Patient> patientList = new ArrayList<Patient>();
+		patientList = DatabaseManager.getInstance().getAllPatients();
+		for(int i = 0; i < patientList.size(); i++) {
+			number_of_patients++;
+		}
 		output_number = "The admission rate is calculated as the total number of registered patients, which is: " + Integer.toString(number_of_patients);
 
 		//List<String> admissionRate = Arrays.asList(output_number);
@@ -94,6 +102,12 @@ public class StatisticalReporter {
 		int skinCount = 0;
 
 		String allergy, chestPain, heartProb, diabetic, skinProb;
+		
+		List<Patient> patientList = new ArrayList<Patient>();
+		patientList = DatabaseManager.getInstance().getAllPatients();
+		for(int i = 0; i < patientList.size(); i++) {
+			//patientList.get(i).getConditions
+		}
 
 		ObservableList<String> typePatients = FXCollections.observableArrayList (
 				);
