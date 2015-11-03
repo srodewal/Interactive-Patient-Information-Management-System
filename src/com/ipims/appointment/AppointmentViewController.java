@@ -1,11 +1,10 @@
 package com.ipims.appointment;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ipims.MenuViewController;
-import com.ipims.database.DatabaseManager;
+
 import com.ipims.models.Appointment;
 import com.ipims.models.Patient;
 import com.ipims.models.User;
