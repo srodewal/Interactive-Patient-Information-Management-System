@@ -235,8 +235,8 @@ public class LabRecordView extends BaseView {
 		
 		else{
 		
-		Button LabRecordBtn = new Button("Submit");
-		LabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
+		//Button LabRecordBtn = new Button("Submit");
+		 catPatientBox.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
@@ -258,11 +258,16 @@ public class LabRecordView extends BaseView {
 					LabRecordViewController.didSelectItem(index, patientid);
 				});
 		
+				if(listView.getItems().isEmpty() == true){
+					
+					showInfo("Patient has no lab records");
+
+				}
 				
 			}
 		});
 
-		baseVbox.getChildren().add(LabRecordBtn);
+		//baseVbox.getChildren().add(LabRecordBtn);
 		}
 		
 		return baseVbox;
