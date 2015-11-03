@@ -1,5 +1,6 @@
 package com.ipims.usersession;
 
+import com.ipims.database.DatabaseManager;
 import com.ipims.models.User;
 import com.ipims.views.Registrationview;
 
@@ -19,9 +20,17 @@ public class RegistrationViewController {
     }
 
     public void handleRegister(User user, String password) {
-    	UserSession.getInstance().register(user, password);
-    	view.showInfo("User registered. Please login again.");
-    	handleBackButton();
+    	
+    	User alreadyExistingUser = DatabaseManager.getInstance().getUser(user.getUserName());
+    	if (alreadyExistingUser == null) {
+    		
+    		UserSession.getInstance().register(user, password);
+        	view.showInfo("User registered. Please login again.");
+        	handleBackButton();
+    	} else {
+    		view.showInfo("User name already exists. Please use a different username.");
+    	}
+    	
     }
     
     public void handleBackButton() {
