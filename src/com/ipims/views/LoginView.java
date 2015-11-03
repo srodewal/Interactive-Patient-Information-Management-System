@@ -14,6 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -24,16 +25,25 @@ public class LoginView extends BaseView {
 
 	public void createLoginView(LoginViewController parentController) {
 
+		VBox vbox = new VBox();
+	
+	
+		vbox.setAlignment(Pos.CENTER);
+		
+		Text appTitle = new Text("IPIMS");
+		appTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 50));
+		vbox.getChildren().add(appTitle);
+
+		Text scenetitle = new Text("Interactive Patient Information Management System");		
+		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		vbox.getChildren().add(scenetitle);
+
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-		grid.setPadding(new Insets(25, 25, 25, 25));
-
-		Text scenetitle = new Text("Login");
-		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		grid.add(scenetitle, 0, 0, 2, 1);
-
+		grid.setPadding(new Insets(50, 25, 25, 25));
+		
 		Label userName = new Label("User Name:");
 		grid.add(userName, 0, 1);
 
@@ -45,35 +55,29 @@ public class LoginView extends BaseView {
 
 		PasswordField pwBox = new PasswordField();
 		grid.add(pwBox, 1, 2);
-
-		// Create Login Button
-
-		Button loginBtn = new Button("Login");
+		
+		vbox.getChildren().add(grid);
+		
 		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtn.setAlignment(Pos.CENTER);
+		
+		// Create Login Button
+		Button loginBtn = new Button("Login");
+		loginBtn.setPrefSize(100, 10);
 		hbBtn.getChildren().add(loginBtn);
-		grid.add(hbBtn, 1, 4);
+		
 
 		// Create New User Button
-
 		Button btn2 = new Button("New User");
-		HBox hbBtn2 = new HBox(10);
-		hbBtn2.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn2.getChildren().add(btn2);
-		grid.add(hbBtn2, 1, 5);
-
-		final Text actiontarget = new Text();
-		grid.add(actiontarget, 1, 6);
+		btn2.setPrefSize(100, 10);
+		hbBtn.getChildren().add(btn2);
+		vbox.getChildren().add(hbBtn);
 
 		//If login button is pressed
-
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-
-				//parentController.handleLoginButtonClick("Asd","asd");
-
 
 				System.out.println(userTextField.getText()); // for testing
 				System.out.println(pwBox.getText()); // for testing
@@ -93,7 +97,7 @@ public class LoginView extends BaseView {
 			}
 		});
 
-		createScene(grid);
+		createScene(vbox);
 		
 
 
