@@ -62,7 +62,7 @@ public Scene getScene() {
 		
 		EnterLabRecordView updateView = new EnterLabRecordView();
 		currentlySelectedLab = list.get(index);
-		updateView.createUpdateEnterLabRecordView(new LabRecord(), this);
+		updateView.createUpdateEnterLabRecordView(currentlySelectedLab, this);
 		view.getStage().setScene(updateView.getCurrentScene());
 		view = updateView;
 		

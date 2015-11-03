@@ -924,7 +924,7 @@ public class DatabaseManager {
 		try
 		{
 			System.out.println("Deleting Lab Record with id " + labrecord.getLabRecordId() + " ****");
-			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE id = ?");
+			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE recordId = ?");
 			stat.setInt(1, labrecord.getLabRecordId());
 			stat.executeUpdate();
 			stat.close();

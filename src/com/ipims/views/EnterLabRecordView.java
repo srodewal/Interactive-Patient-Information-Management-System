@@ -181,9 +181,9 @@ public class EnterLabRecordView extends BaseView{
 			SodiumTextField.setText(Sodium);
 			MagnesiumTextField.setText(Magnesium);
 
-			//if (catPatientBox != null) {
-				catPatientBox.setValue(labrecord.getPatient());
-			//}
+			if (catPatientBox != null) {
+				catPatientBox.setValue(DatabaseManager.getInstance().getUser(labrecord.getPatientId()).getName());
+			}
 	
 			// Add update and cancel buttons
 			//
