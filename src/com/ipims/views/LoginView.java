@@ -26,25 +26,23 @@ public class LoginView extends BaseView {
 	public void createLoginView(LoginViewController parentController) {
 
 		VBox vbox = new VBox();
-		vbox.setPadding(new Insets(20));
-		
-		vbox.setPadding(new Insets(5, 15, 15, 15));
+	
+	
 		vbox.setAlignment(Pos.CENTER);
 		
 		Text appTitle = new Text("IPIMS");
 		appTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 50));
 		vbox.getChildren().add(appTitle);
-		
-		
-//		Text scenetitle = new Text("Login");
-//		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-//		vbox.getChildren().add(scenetitle);
+
+		Text scenetitle = new Text("Interactive Patient Information Management System");		
+		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		vbox.getChildren().add(scenetitle);
 
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-		grid.setPadding(new Insets(25, 25, 25, 25));
+		grid.setPadding(new Insets(50, 25, 25, 25));
 		
 		Label userName = new Label("User Name:");
 		grid.add(userName, 0, 1);
