@@ -849,7 +849,7 @@ public class DatabaseManager {
 		try {
 			Statement getNumber = dbConnection.createStatement();
 			
-			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT + ";");
+			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT.ordinal() + ";");
 			NumberOfPatients = rs.getInt(1);
 		}
 		catch(Exception e) 
@@ -924,7 +924,7 @@ public class DatabaseManager {
 		try
 		{
 			System.out.println("Deleting Lab Record with id " + labrecord.getLabRecordId() + " ****");
-			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE id = ?");
+			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE recordId = ?");
 			stat.setInt(1, labrecord.getLabRecordId());
 			stat.executeUpdate();
 			stat.close();

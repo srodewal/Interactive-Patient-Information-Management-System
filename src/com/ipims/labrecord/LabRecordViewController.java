@@ -55,7 +55,7 @@ public Scene getScene() {
 		
 		LabRecordView updateView = new LabRecordView();
 		currentlySelectedLab = list.get(index);
-		updateView.createUpdateLabRecordView(new LabRecord(), this);
+		updateView.createUpdateLabRecordView(currentlySelectedLab, this);
 		view.getStage().setScene(updateView.getCurrentScene());
 		view = updateView;
 		
@@ -102,7 +102,14 @@ public Scene getScene() {
 	}
 	
 	public void handleUpdateClick(LabRecord updatedLabRecord) {
+		
+
+		labManager.updateLabRecord(currentlySelectedLab, updatedLabRecord);
+		currentlySelectedLab = null;
 		handleUpdateGoBack();
+		view.showErrorMessage("LabRecord updated.");
+		
+		
 	}
 	
 	
