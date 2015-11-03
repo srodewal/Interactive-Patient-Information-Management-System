@@ -849,7 +849,7 @@ public class DatabaseManager {
 		try {
 			Statement getNumber = dbConnection.createStatement();
 			
-			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT + ";");
+			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT.ordinal() + ";");
 			NumberOfPatients = rs.getInt(1);
 		}
 		catch(Exception e) 
