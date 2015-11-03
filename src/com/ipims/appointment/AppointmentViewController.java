@@ -51,6 +51,12 @@ public class AppointmentViewController {
 			str+= " (Category: "+ app.getCategory()+") on "+ app.getDate()+" at "+ app.getTime();
 			stringAppList.add(str);
 		}
+		
+		// Show no appointments if the list is empty.
+		if(stringAppList.isEmpty()) {
+			stringAppList.add("No appoinments made");
+		}
+		
 		ObservableList<String> items = FXCollections.observableArrayList (stringAppList);
 		return items;
 	}
@@ -86,10 +92,14 @@ public class AppointmentViewController {
 		User user = UserSession.getInstance().getCurrentUser();
 		List<Appointment> list = getListOfAppointment();
 
+		if(list.isEmpty()) {
+			return;
+		}
+		
 		// Only Patient or HSP staff can update
 		//
-		if (user.getUsertype() == UserType.PATIENT || 
-				user.getUsertype() == UserType.HSPSTAFF) {
+		if (index > -1 && (user.getUsertype() == UserType.PATIENT || 
+				user.getUsertype() == UserType.HSPSTAFF)) {
 
 			Appointmentsview updateView = new Appointmentsview();
 			currentlySelectedApp = list.get(index);

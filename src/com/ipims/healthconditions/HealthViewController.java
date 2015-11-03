@@ -96,7 +96,7 @@ public class HealthViewController {
 	public void handleSubmitHc(HealthCondition newHc) {
 		newHc.setPatientId(currentlySelectedPerson.getUserId());
 		manager.saveHealthCondition(newHc);
-		this.view.showErrorMessage("Condition saved.");
+		this.view.showInfo("Condition saved.");
 		this.view.refreshList(getWholeHealthConditionObsList());
 	}
 
