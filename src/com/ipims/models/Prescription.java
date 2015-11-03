@@ -8,6 +8,7 @@ public class Prescription {
 	private String date;
 	private String prescriptionText;
 	private boolean current;
+	private boolean medicine;
 	
 	public int getUserId() {
 		return userId;
@@ -39,5 +40,11 @@ public class Prescription {
 	}
 	public void setCurrent(boolean current) {
 		this.current = current;
+	}
+	public boolean isMedicine() {
+		return medicine;
+	}
+	public void setMedicine(boolean medicine) {
+		this.medicine = medicine;
 	}
 }

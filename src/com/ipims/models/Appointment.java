@@ -52,4 +52,9 @@ public class Appointment {
 	public int getAppointmentId() {
 		return appointmentId;
 	}
+	
+	public void setAppointmentId(int id)
+	{
+		this.appointmentId = id;
+	}
 }
