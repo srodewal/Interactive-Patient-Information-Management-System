@@ -24,15 +24,15 @@ public class ReportsViewController {
 	public ReportsViewController(Text reportTitle) {
 		ObservableList<String> items = null;
 		if (reportTitle.equals("Health Outcomes")) {
-			List<String> percents = statRep.analyzeHealth();
-			items = FXCollections.observableArrayList (percents);
+			//List<String> percents = statRep.analyzeHealth();
+			//items = FXCollections.observableArrayList (percents);
 		} else if (reportTitle.equals("Admission Rates")) {
-			List<String> num = statRep.analyzeAdmissionRate();
-			items = FXCollections.observableArrayList (num);
+			//List<String> num = statRep.analyzeAdmissionRate();
+			//items = FXCollections.observableArrayList (num);
 		} else if (reportTitle.equals("Patient Populations"))
 		{
-			List<String> pops = statRep.analyzePatientPopulation();
-			items = FXCollections.observableArrayList(pops);
+			//List<String> pops = statRep.analyzePatientPopulation();
+			//items = FXCollections.observableArrayList(pops);
 		}
 		view = new ReportsView();
 		view.createReportsView(this, reportTitle, items);
