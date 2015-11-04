@@ -10,15 +10,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.ipims.models.*;
 import com.ipims.models.User.UserType;
-
+/**
+ * 
+ * @author Matthew Hanna
+ *	
+ *	Singleton class that will manage all database queries.
+ */
 public class DatabaseManager {
-	private static final DatabaseManager INSTANCE = new DatabaseManager();
+	private static final DatabaseManager INSTANCE = new DatabaseManager(); //greedily instantiate an instance of this singleton as we always need a database connection
 
 	private Connection dbConnection = null;
 
-	private static final int NUM_TABLES = 6;
+	private static final int NUM_TABLES = 6; //used for sizing of the set containing tables that should exist
 
-
+	//initiates connection to the database and then calls method to check that necessary tables exist
 	private DatabaseManager()
 	{
 
@@ -34,12 +39,13 @@ public class DatabaseManager {
 			logError(e.getMessage());
 		}
 	}
-
+	
+	//gets existing table names and then calls method to add any missing tables if any are not present
 	private  void checkTables()
 	{
 		if(dbConnection != null)
 		{
-			HashSet<String> existingTables = new HashSet<>(NUM_TABLES);
+			HashSet<String> existingTables = new HashSet<>(NUM_TABLES); // use a set to store the existing tables as this makes it easy to check for any missing tables
 			try
 			{
 				DatabaseMetaData dbMeta = dbConnection.getMetaData();
@@ -61,7 +67,10 @@ public class DatabaseManager {
 			}
 		}
 	}
-
+	/**
+	 * Adds any missing tables to the database
+	 * @param existingTables Set of tables that already exist in the database
+	 */
 	private  void fixTables(HashSet<String> existingTables)
 	{
 		if(dbConnection != null)
@@ -70,6 +79,9 @@ public class DatabaseManager {
 			{
 				try
 				{
+					/* This table contains anything related to a generic user, any information specific to a type of patient
+					 * should be stored in another table indexed by user id
+					 */
 					Statement createUser = dbConnection.createStatement();
 					createUser.executeUpdate("CREATE TABLE User("
 							+ "userId INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -98,6 +110,9 @@ public class DatabaseManager {
 			{
 				try
 				{
+					/*
+					 * This table contains the category of doctors
+					 */
 					Statement createDoctorCategory = dbConnection.createStatement();
 					createDoctorCategory.executeUpdate("CREATE TABLE DoctorCategory( userId INTEGER PRIMARY KEY NOT NULL,"
 							+ " category TEXT NOT NULL )");
@@ -113,6 +128,9 @@ public class DatabaseManager {
 			{
 				try
 				{
+					/*
+					 * This table contains appointments for patients to see a certain doctor. Only id's are stored for users.
+					 */
 					Statement createAppointment = dbConnection.createStatement();
 					createAppointment.executeUpdate("CREATE TABLE Appointments( "
 							+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -134,6 +152,10 @@ public class DatabaseManager {
 			{
 				try
 				{
+					/*
+					 * This table contains any health conditions that a patient might have. The only patient information that is
+					 * stored is their id.
+					 */
 					Statement createHealthCondition = dbConnection.createStatement();
 					createHealthCondition.executeUpdate("CREATE TABLE HealthCondition("
 							+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -156,9 +178,12 @@ public class DatabaseManager {
 			{
 				try
 				{
+					/*
+					 * This contains lab records associated with a patient. The only patient information stored is their id.
+					 */
 					Statement createLabRecord = dbConnection.createStatement();
 					createLabRecord.executeUpdate("CREATE TABLE LabRecord("
-							+ "recordId INTEGER PRIMARY KEY NOT NULL,"
+							+ "recordId INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "userId INTEGER NOT NULL,"
 							+ "glucose REAL NOT NULL,"
 							+ "sodium REAL NOT NULL,"
@@ -177,9 +202,13 @@ public class DatabaseManager {
 			{
 				try
 				{
+					/*
+					 * This table contains prescriptions associates with a patient. The only patient information stored is their
+					 * id.
+					 */
 					Statement createPrescription = dbConnection.createStatement();
 					createPrescription.executeUpdate("CREATE TABLE Prescription("
-							+ "prescriptionId INTEGER PRIMARY KEY NOT NULL,"
+							+ "prescriptionId INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "userId INTEGER NOT NULL,"
 							+ "date TEXT NOT NULL,"
 							+ "medicine TEXT NOT NULL,"
@@ -200,18 +229,21 @@ public class DatabaseManager {
 			logError("Could not write missing tables to database. Please check that the database exists and is valid.");
 		}
 	}
-
+	
+	//wrapper for global log
 	private void logError(String errMessage)
 	{
 
 		Logger.getGlobal().log(Level.WARNING, errMessage);
 	}
 
+	//get current instance of this singleton
 	public static DatabaseManager getInstance()
 	{
 		return INSTANCE;
 	}
 
+	//close the database connection once we don't need it anymore (will likely be used only on exit)
 	public void close()
 	{
 		if(dbConnection != null)
@@ -228,6 +260,13 @@ public class DatabaseManager {
 
 	}
 
+	/**
+	 * Add a user to the database. This only works for a generic user, any additional information will require a different method
+	 * or a wrapper around this one.
+	 * @param user The user that should be added to the database
+	 * @param password The user's password
+	 * @return Returns the given user with their id set to the id generated by the database
+	 */
 	public  User newUser(User user, String password)
 	{
 		if(dbConnection != null)
@@ -273,6 +312,11 @@ public class DatabaseManager {
 		return user;
 	}
 
+	/**
+	 * Adds an appointment to the database
+	 * @param appointment The appointment that should be added to the database
+	 * @return Returns the given appointment with its id set to the id generated by the database.
+	 */
 	public  Appointment newAppointment(Appointment appointment)
 	{
 		if(dbConnection != null)
@@ -304,7 +348,7 @@ public class DatabaseManager {
 				
 				insertAppointment.close();
 				
-			}
+			}// get all lab records for every patient
 			catch(Exception e)
 			{
 				logError("Cannot insert new appointment. Check that inputs are correct and the datbase has been set up properly.");
@@ -318,61 +362,12 @@ public class DatabaseManager {
 		return appointment;
 	}
 
-	public void updateAppoinemt(Appointment oldAppoinment, Appointment updatedAppoinment) {
-		if(dbConnection != null)
-		{
-			try
-			{
-				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE Appointments SET patientId = ?, doctorId = ?, category = ?, time = ?, date = ? WHERE id = ?");
-				updateAppointment.setInt(1, updatedAppoinment.getPatient().getUserId());
-				updateAppointment.setInt(2, updatedAppoinment.getDoctor().getUserId());
-				updateAppointment.setString(3, updatedAppoinment.getCategory());
-				updateAppointment.setString(4, updatedAppoinment.getTime());
-				updateAppointment.setString(5, updatedAppoinment.getDate().toString());
-				updateAppointment.setInt(6, oldAppoinment.getAppointmentId());
-				updateAppointment.executeUpdate();
-				updateAppointment.close();
-			}
-			catch(Exception e)
-			{
-				logError("Cannot update the appointment. Check that inputs are correct and the datbase has been set up properly.");
-				logError(e.getMessage());
-			}
-		}
-		else
-		{
-			logError("Cannot update appoinment as there is no current database connection.");
-		}
-	}
-	
-	
-	public void updateHealthCondition(HealthCondition oldCond, HealthCondition updatedCond) {
-		if(dbConnection != null)
-		{
-			try
-			{
-				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE HealthCondition SET userId = ?, healthConcerns = ?, comments = ?, severity = ?, isCurrent = ? WHERE id = ?");
-				updateAppointment.setInt(1, updatedCond.getPatientId());
-				updateAppointment.setString(2, updatedCond.getHealthConcern());
-				updateAppointment.setString(3, updatedCond.getComments());
-				updateAppointment.setInt(4, updatedCond.getSeverity());
-				updateAppointment.setInt(5, updatedCond.isCurrent()?1:0);
-				updateAppointment.setInt(6, oldCond.getHealthConditionId());
-				updateAppointment.executeUpdate();
-				updateAppointment.close();
-			}
-			catch(Exception e)
-			{
-				logError("Cannot update the Health Condition. Check that inputs are correct and the datbase has been set up properly.");
-				logError(e.getMessage());
-			}
-		}
-		else
-		{
-			logError("Cannot update health condition as there is no current database connection.");
-		}
-	}
-
+	/**
+	 * Adds a patient's health condition to the database. This can be either a current condition or part of the patient's medical
+	 * history.
+	 * @param condition Condition that should be added to the database
+	 * @return Returns the condition given with its id set to the id generated by the database
+	 */
 	public HealthCondition newHealthCondition(HealthCondition condition)
 	{
 		if(dbConnection != null)
@@ -384,14 +379,7 @@ public class DatabaseManager {
 				insertHealthCondition.setString(2, condition.getHealthConcern());
 				insertHealthCondition.setString(3, condition.getComments());
 				insertHealthCondition.setInt(4, condition.getSeverity());
-				if(condition.isCurrent())
-				{
-					insertHealthCondition.setInt(5, 1);
-				}
-				else
-				{
-					insertHealthCondition.setInt(5, 0);
-				}
+				insertHealthCondition.setInt(5, condition.isCurrent() ? 1 : 0);
 				
 				int affectedRows = insertHealthCondition.executeUpdate();
 				
@@ -420,6 +408,11 @@ public class DatabaseManager {
 		return condition;
 	}
 
+	/**
+	 * Adds a patient's lab record to the database.
+	 * @param record Record that should be added to the database.
+	 * @return Returns the given record with its id set to the id generated by the database.
+	 */
 	public LabRecord newLabRecord(LabRecord record)
 	{
 		try
@@ -452,35 +445,25 @@ public class DatabaseManager {
 		return record;
 	}
 
+	/**
+	 * Adds a patient's prescription to the database. This can either be a prescription for a medicine or a test. It can also
+	 * be a current prescription or part of the patient's medical history.
+	 * @param prescription The prescription that should be added to the database.
+	 * @return Returns the given prescription with 
+	 */
 	public Prescription newPrescription(Prescription prescription)
 	{
 		try
 		{
 			System.out.println("p1");
-			// this statement ->
 			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent, testOrMedicine) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			System.out.println("p2");
 			System.out.println("Setup " + prescription.getUserId() + "\n");
 			insertPrescription.setInt(1, prescription.getUserId());
 			insertPrescription.setString(2, prescription.getDate());
 			insertPrescription.setString(3, prescription.getPrescriptionText());
-			if(prescription.isCurrent())
-			{
-				insertPrescription.setInt(4, 1);
-			}
-			else
-			{
-				insertPrescription.setInt(4, 0);
-			}
-			
-			if(prescription.isMedicine())
-			{
-				insertPrescription.setInt(5, 1);
-			}
-			else
-			{
-				insertPrescription.setInt(5, 0);
-			}
+			insertPrescription.setInt(4, prescription.isCurrent() ? 1 : 0);
+			insertPrescription.setInt(5, prescription.isMedicine() ? 1 : 0);
 
 			int affectedRows = insertPrescription.executeUpdate();
 			
@@ -503,7 +486,13 @@ public class DatabaseManager {
 		return prescription;
 	}
 
-	public User getUser(String userName, String password) { //for login
+	/**
+	 * Logs in a user and returns their information.
+	 * @param userName username of the desired user
+	 * @param password password of the desired user
+	 * @return Returns the user's information
+	 */
+	public User getUser(String userName, String password) {
 		User user = null;
 		try {
 			PreparedStatement stat = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ? AND passwordHash = ?");
@@ -521,7 +510,12 @@ public class DatabaseManager {
 		return user;
 	}
 
-	public User getUser(int userId) //for normal use
+	/**
+	 * Gets information about a user based on their id. This is the general use version of the above.
+	 * @param userId id of the desired user
+	 * @return Returns the user's information
+	 */
+	public User getUser(int userId)
 	{
 		User user = null;
 
@@ -545,7 +539,12 @@ public class DatabaseManager {
 		return user;
 	}
 
-	public User getUser(String userName) //for normal use
+	/**
+	 * Gets information about a user based on their username. This is an alternative to retrieving by id.
+	 * @param userName username of the desired user
+	 * @return Returns the user's information
+	 */
+	public User getUser(String userName)
 	{
 		User user = null;
 
@@ -569,6 +568,10 @@ public class DatabaseManager {
 		return user;
 	}
 
+	/**
+	 * Gets a list of all users with the patient type.
+	 * @return List of all patients
+	 */
 	public List<User> getPatientList() {
 
 		List<User> userList = new ArrayList<>();
@@ -588,6 +591,11 @@ public class DatabaseManager {
 		return userList;
 	}
 
+	/**
+	 * Gets a list of all appointments associated with a certain patient.
+	 * @param patient The patient associated with the appointments
+	 * @return Returns a list of appointments associated with the patient's id
+	 */
 	public List<Appointment> getAppointmentForPatient(Patient patient)
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
@@ -614,6 +622,10 @@ public class DatabaseManager {
 		return appointmentList;
 	}
 
+	/**
+	 * Get every appointment in the database. This is useful for checking availability.
+	 * @return Returns a list of all appointments
+	 */
 	public List<Appointment> getAllAppointments()
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
@@ -638,44 +650,11 @@ public class DatabaseManager {
 		return appointmentList;
 	}
 
-	public void deleteAppoinment(Appointment appoinment) {
-		try
-		{
-			System.out.println("Deleting appoinment with id " + appoinment.getAppointmentId() + " ****");
-			PreparedStatement delApp = dbConnection.prepareStatement("DELETE FROM Appointments WHERE id = ?");
-			delApp.setInt(1, appoinment.getAppointmentId());
-			delApp.executeUpdate();
-			delApp.close();
-
-
-		}
-		catch(Exception e)
-		{
-			logError("Could not delete the appoinment");
-			logError(e.getMessage());
-		}
-
-	}
-	
-	public void deleteHealthCondition(HealthCondition condition) {
-		try
-		{
-			System.out.println("Deleting Condition with id " + condition.getHealthConditionId() + " ****");
-			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM HealthCondition WHERE id = ?");
-			stat.setInt(1, condition.getHealthConditionId());
-			stat.executeUpdate();
-			stat.close();
-
-
-		}
-		catch(Exception e)
-		{
-			logError("Could not delete the condition");
-			logError(e.getMessage());
-		}
-
-	}
-
+	/**
+	 * Gets all prescriptions associated with a certain patient.
+	 * @param patientId id of the patient associated with the prescriptions.
+	 * @return Returns a list of all prescriptions associated with given id
+	 */
 	public List<Prescription> getPrescriptionsForPatient(int patientId)
 	{
 		List<Prescription> prescriptions = new ArrayList<>();
@@ -724,6 +703,10 @@ public class DatabaseManager {
 		return prescriptions;
 	}
 
+	/**
+	 * Gets a list of all users with the doctor type
+	 * @return Returns a list of all doctors
+	 */
 	public List<Doctor> getAllDoctors()
 	{
 		List<Doctor> doctors = new ArrayList<>();
@@ -750,6 +733,10 @@ public class DatabaseManager {
 		return doctors;
 	}
 
+	/**
+	 * Get a list of all patients. Different from getPatientList in that it coerces the type of each user to Patient.
+	 * @return Returns a list of all patients
+	 */
 	public List<Patient> getAllPatients()
 	{
 		List<Patient> patients = new ArrayList<>();
@@ -763,7 +750,6 @@ public class DatabaseManager {
 			while(rs.next())
 			{
 				Patient patient = (Patient) createUser(rs);
-				//patient.setCategory(rs.getString("username"));
 
 				patients.add(patient);
 			}
@@ -777,6 +763,11 @@ public class DatabaseManager {
 		return patients;
 	}
 
+	/**
+	 * Lists all conditions associated with a certain patient.
+	 * @param patient Patient associated with the conditions
+	 * @return Returns a list of all conditions associated with the given patient
+	 */
 	public List<HealthCondition> getPatientConditions(Patient patient)
 	{
 		List<HealthCondition> conditions = new ArrayList<>();
@@ -807,18 +798,17 @@ public class DatabaseManager {
 		return conditions;
 	}
 
-	// get all lab records for specified patient
+	/**
+	 * Gets all lab records associated with a certain patient.
+	 * @param patientId id of the patient associated with the records
+	 * @return Returns a list of lab records associated with the given id
+	 */
 	public List<LabRecord> getLabRecordsForPatient(int patientId)
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
 		try
-		{
-			/*PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM User WHERE type = ?");
-			getPatients.setInt(1, UserType.PATIENT.ordinal());
-			ResultSet rs = getPatients.executeQuery();*/
-			
+		{	
 			PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord WHERE userId = ?");		
-			//ResultSet rs = getRecords.executeQuery("SELECT * FROM LabRecord WHERE userId = ?");
 			getRecords.setInt(1, patientId);
 			ResultSet rs = getRecords.executeQuery();
 			
@@ -843,6 +833,10 @@ public class DatabaseManager {
 		return records;
 	}
 	
+	/**
+	 * Counts the number of users with the patient type in the database. This is used for statistical reports.
+	 * @return Returns the number of patients in the database
+	 */
 	public int getNumberOfRegisteredPatients() 
 	{
 		int NumberOfPatients = 0; 
@@ -861,7 +855,10 @@ public class DatabaseManager {
 		return NumberOfPatients;
 	}
 
-	// get all lab records for every patient
+	/**
+	 * Gets all lab records in the database. This is used for statistical reports.
+	 * @return
+	 */
 	public List<LabRecord> getAllLabRecord()
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
@@ -891,6 +888,72 @@ public class DatabaseManager {
 		return records;
 	}
 	
+	/**
+	 * Updates an appointment that already exists in the database.
+	 * @param appoinment Appointment that needs updating
+	 */
+	public void updateAppoinemt(Appointment appoinment) {
+		if(dbConnection != null)
+		{
+			try
+			{
+				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE Appointments SET patientId = ?, doctorId = ?, category = ?, time = ?, date = ? WHERE id = ?");
+				updateAppointment.setInt(1, appoinment.getPatient().getUserId());
+				updateAppointment.setInt(2, appoinment.getDoctor().getUserId());
+				updateAppointment.setString(3, appoinment.getCategory());
+				updateAppointment.setString(4, appoinment.getTime());
+				updateAppointment.setString(5, appoinment.getDate().toString());
+				updateAppointment.setInt(6, appoinment.getAppointmentId());
+				updateAppointment.executeUpdate();
+				updateAppointment.close();
+			}
+			catch(Exception e)
+			{
+				logError("Cannot update the appointment. Check that inputs are correct and the datbase has been set up properly.");
+				logError(e.getMessage());
+			}
+		}
+		else
+		{
+			logError("Cannot update appoinment as there is no current database connection.");
+		}
+	}
+	
+	/**
+	 * Updates a condition that already exists in the database
+	 * @param condition condition to be updated
+	 */
+	public void updateHealthCondition(HealthCondition condition) {
+		if(dbConnection != null)
+		{
+			try
+			{
+				PreparedStatement updateAppointment = dbConnection.prepareStatement("UPDATE HealthCondition SET userId = ?, healthConcerns = ?, comments = ?, severity = ?, isCurrent = ? WHERE id = ?");
+				updateAppointment.setInt(1, condition.getPatientId());
+				updateAppointment.setString(2, condition.getHealthConcern());
+				updateAppointment.setString(3, condition.getComments());
+				updateAppointment.setInt(4, condition.getSeverity());
+				updateAppointment.setInt(5, condition.isCurrent() ? 1 : 0);
+				updateAppointment.setInt(6, condition.getHealthConditionId());
+				updateAppointment.executeUpdate();
+				updateAppointment.close();
+			}
+			catch(Exception e)
+			{
+				logError("Cannot update the Health Condition. Check that inputs are correct and the datbase has been set up properly.");
+				logError(e.getMessage());
+			}
+		}
+		else
+		{
+			logError("Cannot update health condition as there is no current database connection.");
+		}
+	}
+	
+	/**
+	 * Updates a lab record that already exists in the database.
+	 * @param record lab record that should be updated
+	 */
 	public void updateLabRecord(LabRecord record)
 	{
 		try
@@ -919,7 +982,56 @@ public class DatabaseManager {
 		}
 	}
 	
+	/**
+	 * Deletes an appointment from the database. This is useful to get rid of old or cancelled appointments.
+	 * @param appoinment the appointment that should be deleted
+	 */
+	public void deleteAppoinment(Appointment appoinment) {
+		try
+		{
+			System.out.println("Deleting appoinment with id " + appoinment.getAppointmentId() + " ****");
+			PreparedStatement delApp = dbConnection.prepareStatement("DELETE FROM Appointments WHERE id = ?");
+			delApp.setInt(1, appoinment.getAppointmentId());
+			delApp.executeUpdate();
+			delApp.close();
+
+
+		}
+		catch(Exception e)
+		{
+			logError("Could not delete the appoinment");
+			logError(e.getMessage());
+		}
+
+	}
 	
+	/**
+	 * Deletes a patient's condition from the database.
+	 * @param condition condition that should be deleted from the database.
+	 */
+	public void deleteHealthCondition(HealthCondition condition) {
+		try
+		{
+			System.out.println("Deleting Condition with id " + condition.getHealthConditionId() + " ****");
+			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM HealthCondition WHERE id = ?");
+			stat.setInt(1, condition.getHealthConditionId());
+			stat.executeUpdate();
+			stat.close();
+
+
+		}
+		catch(Exception e)
+		{
+			logError("Could not delete the condition");
+			logError(e.getMessage());
+		}
+
+	}
+	
+	/**
+	 * Deletes a lab record from the database.
+	 * @param labrecord record that should be deleted.
+	 */
 	public void deleteLabRecord(LabRecord labrecord) {
 		try
 		{
@@ -943,6 +1055,12 @@ public class DatabaseManager {
 	
 	//=================== DB Helpers ==================
 
+	/**
+	 * Creates a user from a ResultSet. This is useful when many users need to be created, i.e. when getting a list of users.
+	 * @param rs ResultSet containing the information about a user or users
+	 * @return Returns a user's information
+	 * @throws SQLException
+	 */
 	private User createUser(ResultSet rs) throws SQLException {
 		System.out.println("Found user " + rs.getString("name") + " " + rs.getInt("type"));
 		User user = User.createUser(UserType.fromInteger( rs.getInt("type")));
@@ -961,6 +1079,12 @@ public class DatabaseManager {
 		return user;
 	}
 
+	/**
+	 * Creates an appointment from a ResultSet. This is useful when many appointments need to be created, i.e. listing appointments for a user.
+	 * @param rs ResultSet containing the information about an appointment or appointments.
+	 * @return Returns the appointment's infromation
+	 * @throws SQLException
+	 */
 	private Appointment createAppoinment(ResultSet rs) throws SQLException {
 		System.out.println("Found Appoinment");
 		int appoinmentId = rs.getInt("id");
