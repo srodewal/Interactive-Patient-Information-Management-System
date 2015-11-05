@@ -232,15 +232,14 @@ public class DatabaseManager {
 				try
 				{
 					/*
-					 * This table contains any alerts that a doctor should see. It is associated with a certain doctor and a
-					 * certain health condition.
+					 * This table contains any alerts that a doctor should see. It is associated with a certain
+					 * patient and a certain health condition.
 					 */
 					Statement createAlert = dbConnection.createStatement();
 					createAlert.executeUpdate("CREATE TABLE Alert("
 							+ "alertId INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "conditionId INTEGER NOT NULL,"
-							+ "doctorId INTEGER NOT NULL"
-							+ "message TEXT NOT NULL,"
+							+ "patientId INTEGER NOT NULL,"
 							+ "read INTEGER NOT NULL"
 							+ ")");
 					createAlert.close();
@@ -527,11 +526,10 @@ public class DatabaseManager {
 	{
 		try
 		{
-			PreparedStatement insertAlert = dbConnection.prepareStatement("INSERT INTO Alert (conditionId, doctorId, message, read) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement insertAlert = dbConnection.prepareStatement("INSERT INTO Alert (conditionId, patientId, read) VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			insertAlert.setInt(1, alert.getConditionId());
-			insertAlert.setInt(2, alert.getDoctorId());
-			insertAlert.setString(3, alert.getMessage());
-			insertAlert.setInt(4, alert.isRead() ? 1 : 0);
+			insertAlert.setInt(2, alert.getPatientId());
+			insertAlert.setInt(3, alert.isRead() ? 1 : 0);
 			
 			int affectedRows = insertAlert.executeUpdate();
 			
@@ -678,7 +676,7 @@ public class DatabaseManager {
 
 			while(rs.next())
 			{
-				Appointment appointment = createAppoinment(rs);
+				Appointment appointment = createAppointment(rs);
 				appointmentList.add(appointment);
 			}
 		}
@@ -688,6 +686,30 @@ public class DatabaseManager {
 			logError(e.getMessage());
 		}
 
+		return appointmentList;
+	}
+	
+	public List<Appointment> getAppointmentsForDoctor(int doctorId)
+	{
+		List<Appointment> appointmentList = new ArrayList<>();
+		
+		try
+		{
+			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE doctorId = ?");
+			getAppointments.setInt(1, doctorId);;
+			
+			ResultSet rs = getAppointments.executeQuery();
+			while(rs.next())
+			{
+				appointmentList.add(createAppointment(rs));
+			}
+		}
+		catch(Exception e)
+		{
+			logError("Could not get appointments. Please check that the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+		
 		return appointmentList;
 	}
 
@@ -706,7 +728,7 @@ public class DatabaseManager {
 
 			while(rs.next())
 			{
-				Appointment appointment = createAppoinment(rs);
+				Appointment appointment = createAppointment(rs);
 				appointmentList.add(appointment);
 			}
 		}
@@ -773,30 +795,28 @@ public class DatabaseManager {
 	}
 	
 	/**
-	 * Gets all alerts associated with a certain doctor.
-	 * @param doctorId id of the doctor associated with the alerts
-	 * @return Returns all alerts associated with the given id
+	 * Gets all alerts.
+	 * @return Returns all alerts in the database
 	 */
-	public List<Alert> getAlertsForDoctor(int doctorId)
+	public List<Alert> getAllAlerts()
 	{
 		List<Alert> alerts = new ArrayList<>();
 		
 		try
 		{
-			PreparedStatement getAlerts = dbConnection.prepareStatement("SELECT * FROM Alert WHERE doctorId = ?");
-			getAlerts.setInt(1, doctorId);
+			Statement getAlerts = dbConnection.createStatement();
 			
-			ResultSet rs = getAlerts.executeQuery();
+			ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert;");
 			while(rs.next())
 			{
 				Alert alert = null;
 				if(rs.getInt("read") == 0)
 				{
-					alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), doctorId, rs.getString("message"), false);
+					alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), false);
 				}
 				else
 				{
-					alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), doctorId, rs.getString("message"), true);
+					alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), true);
 				}
 				
 				alerts.add(alert);
@@ -1214,7 +1234,7 @@ public class DatabaseManager {
 	 * @return Returns the appointment's information
 	 * @throws SQLException
 	 */
-	private Appointment createAppoinment(ResultSet rs) throws SQLException {
+	private Appointment createAppointment(ResultSet rs) throws SQLException {
 		System.out.println("Found Appoinment");
 		int appoinmentId = rs.getInt("id");
 		int patientId = rs.getInt("patientId");
