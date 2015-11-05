@@ -11,7 +11,7 @@ public class LabRecord {
 	private float Magnesium;
 	private int LabRecordId = -1;
 	private String Patient;
-	
+	private LocalDate date;
 	
 	
 	
@@ -88,6 +88,14 @@ public class LabRecord {
 
 	public void setMagnesium(float magnesium) {
 		Magnesium = magnesium;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 	
 	

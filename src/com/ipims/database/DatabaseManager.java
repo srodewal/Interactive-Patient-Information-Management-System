@@ -192,7 +192,8 @@ public class DatabaseManager {
 							+ "glucose REAL NOT NULL,"
 							+ "sodium REAL NOT NULL,"
 							+ "magnesium REAL NOT NULL,"
-							+ "calcium REAL NOT NULL"
+							+ "calcium REAL NOT NULL,"
+							+ "date TEXT NOT NULL"
 							+ ")");
 					createLabRecord.close();
 				}
@@ -446,12 +447,13 @@ public class DatabaseManager {
 	{
 		try
 		{
-			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium, date) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			insertRecord.setInt(1, record.getPatientId());
 			insertRecord.setFloat(2, record.getGlucose());
 			insertRecord.setFloat(3, record.getCalcium());
 			insertRecord.setFloat(4, record.getMagnesium());
 			insertRecord.setFloat(5, record.getSodium());
+			insertRecord.setString(6, record.getDate().toString());
 
 			int affectedRows = insertRecord.executeUpdate();
 			
@@ -951,6 +953,7 @@ public class DatabaseManager {
 				record.setSodium(rs.getFloat("sodium"));
 				record.setCalcium(rs.getFloat("calcium"));
 				record.setMagnesium(rs.getFloat("magnesium"));
+				record.setDate(LocalDate.parse(rs.getString("date"), DateTimeFormatter.ISO_LOCAL_DATE));
 				records.add(record);
 			}
 		}
@@ -1006,6 +1009,7 @@ public class DatabaseManager {
 				record.setSodium(rs.getFloat("sodium"));
 				record.setCalcium(rs.getFloat("calcium"));
 				record.setMagnesium(rs.getFloat("magnesium"));
+				record.setDate(LocalDate.parse(rs.getString("date"), DateTimeFormatter.ISO_LOCAL_DATE));
 				records.add(record);
 			}
 		}
@@ -1090,13 +1094,14 @@ public class DatabaseManager {
 		{
 			if(record.getLabRecordId() != -1)
 			{
-				PreparedStatement updateRecord = dbConnection.prepareStatement("Update LabRecord SET userId = ?, glucose = ?, sodium = ?, calcium = ?, magnesium = ? WHERE recordId = ?");
+				PreparedStatement updateRecord = dbConnection.prepareStatement("Update LabRecord SET userId = ?, glucose = ?, sodium = ?, calcium = ?, magnesium = ?, date = ? WHERE recordId = ?");
 				updateRecord.setInt(1, record.getPatientId());
 				updateRecord.setFloat(2, record.getGlucose());
 				updateRecord.setFloat(3, record.getSodium());
 				updateRecord.setFloat(4, record.getCalcium());
 				updateRecord.setFloat(5, record.getMagnesium());
-				updateRecord.setInt(6, record.getLabRecordId());
+				updateRecord.setString(6, record.getDate().toString());
+				updateRecord.setInt(7, record.getLabRecordId());
 				
 				updateRecord.executeUpdate();
 			}
