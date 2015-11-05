@@ -127,7 +127,8 @@ public class ViewPatientInfoView extends BaseView {
 			vbox.getChildren().add(patientHbox);
 			vbox.getChildren().add(list);
 			
-			Button viewAnotherBtn = new Button("View Another Patient");
+			// removed this button due to redundancy
+			/*Button viewAnotherBtn = new Button("View Another Patient");
 			viewAnotherBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -138,10 +139,10 @@ public class ViewPatientInfoView extends BaseView {
 					actionTarget.setFill(Color.GREEN);
 					actionTarget.setText("Button pressed! List cleared.");
 				}
-			});
+			});*/
 			
 			// to display success or error message
-			vbox.getChildren().addAll(viewAnotherBtn, actionTarget);
+			vbox.getChildren().add(actionTarget);
 			
 			
 			createScene(vbox);

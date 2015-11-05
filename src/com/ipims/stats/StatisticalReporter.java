@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
+import com.ipims.models.HealthCondition;
 import com.ipims.models.LabRecord;
 import com.ipims.models.User;
 
@@ -101,17 +102,40 @@ public class StatisticalReporter {
 		int diabeticCount = 0;
 		int skinCount = 0;
 
-		String allergy, chestPain, heartProb, diabetic, skinProb;
+		//String allergy, chestPain, heartProb, diabetic, skinProb;
 		
 		List<Patient> patientList = new ArrayList<Patient>();
 		patientList = DatabaseManager.getInstance().getAllPatients();
 		for(int i = 0; i < patientList.size(); i++) {
-			//patientList.get(i).getConditions
+			// return all health conditions for each patient and update counts
+			List<HealthCondition> hcList = DatabaseManager.getInstance().getPatientConditions(patientList.get(i));
+			for(int j = 0; j < hcList.size(); j++) {
+				if(hcList.get(i).getHealthConcern().equals("Allergies")) {
+					allergyCount++;
+				}
+				if(hcList.get(i).getHealthConcern().equals("Chest Pain")) {
+					chestCount++;
+				}
+				if(hcList.get(i).getHealthConcern().equals("Heart Problems")) {
+					heartCount++;
+				}
+				if(hcList.get(i).getHealthConcern().equals("Diabetes")) {
+					diabeticCount++;
+				}
+				if(hcList.get(i).getHealthConcern().equals("Skin Problems")) {
+					skinCount++;
+				}
+			}
+			
 		}
 
 		ObservableList<String> typePatients = FXCollections.observableArrayList (
 				);
-		typePatients.add("Work in progress");
+		typePatients.add("Allergy Count: " + Integer.toString(allergyCount));
+		typePatients.add("Chest Pain Count: " + Integer.toString(chestCount));
+		typePatients.add("Heart Problems Count: " + Integer.toString(heartCount));
+		typePatients.add("Diabetes Count: " + Integer.toString(diabeticCount));
+		typePatients.add("Skin Problems Count: " + Integer.toString(skinCount));
 		return typePatients;
 
 	}
