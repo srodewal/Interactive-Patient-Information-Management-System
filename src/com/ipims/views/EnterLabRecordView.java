@@ -238,7 +238,7 @@ public class EnterLabRecordView extends BaseView{
 			
 		} else {
 			Button EnterLabRecordBtn = new Button("Submit");
-			catPatientBox.setOnAction(new EventHandler<ActionEvent>() {
+			EnterLabRecordBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent e) {
