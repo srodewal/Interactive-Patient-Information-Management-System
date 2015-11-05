@@ -102,7 +102,7 @@ public class StatisticalReporter {
 		int diabeticCount = 0;
 		int skinCount = 0;
 
-		String allergy, chestPain, heartProb, diabetic, skinProb;
+		//String allergy, chestPain, heartProb, diabetic, skinProb;
 		
 		List<Patient> patientList = new ArrayList<Patient>();
 		patientList = DatabaseManager.getInstance().getAllPatients();
