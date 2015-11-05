@@ -64,7 +64,7 @@ public class PrescribeMedView extends BaseView {
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
 		
-		Text title = new Text("Prescribe Medications");
+		Text title = new Text("E-Prescribe");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		hbox.getChildren().add(title);
 
@@ -164,16 +164,16 @@ public class PrescribeMedView extends BaseView {
 		Label LabTestLabel = new Label("Lab Test:");
 		LabTestLabel.setTextFill(Color.WHITE);
 		TextField LabTestTextField = new TextField();
-		LabTestTextField.setPromptText("LabTest");
+		LabTestTextField.setPromptText("Lab Test");
 		LabTestTextField.setMaxSize(110, 5);
 
-		hbox.getChildren().addAll(PatientLabel, patientComboBox, MedicationLabel, MedicationTextField);
+		hbox.getChildren().addAll(PatientLabel, patientComboBox);
 		baseVbox.getChildren().add(hbox);
 		
 		HBox labTest = new HBox();
 		labTest.setSpacing(10);
 		
-		labTest.getChildren().addAll(LabTestLabel, LabTestTextField);
+		labTest.getChildren().addAll(MedicationLabel, MedicationTextField, LabTestLabel, LabTestTextField);
 		baseVbox.getChildren().add(labTest);
 
 		HBox hbox2 = new HBox();

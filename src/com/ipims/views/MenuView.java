@@ -127,7 +127,7 @@ public class MenuView extends BaseView {
 	
 	private Button PrescribeMedButton(MenuViewController parentController) {
 		
-		Button PrescribeMedBtn = createButton("Prescribe Medication(s)/Lab Test(s)");
+		Button PrescribeMedBtn = createButton("E-Prescribe");
 		PrescribeMedBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
