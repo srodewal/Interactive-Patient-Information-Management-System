@@ -76,9 +76,10 @@ public class HealthView extends BaseView {
 
 				@Override
 				public void handle(ActionEvent event) {
-					parentController.patientAtIndexSelected(patientComboBox.getSelectionModel().getSelectedIndex());
-
-
+					if(patientComboBox.getSelectionModel().getSelectedIndex() != -1) {
+						parentController.patientAtIndexSelected(patientComboBox.getSelectionModel().getSelectedIndex());
+					}
+					// else // should display error message
 				}
 
 			});
@@ -105,7 +106,9 @@ public class HealthView extends BaseView {
 					
 					System.out.println(newValue);
 					int index = listView.getSelectionModel().getSelectedIndex();
-					parentController.handleHealthConditionAtIndexSelected(index);
+					if(index != -1) { // not sure if check needed
+						parentController.handleHealthConditionAtIndexSelected(index);
+					}
 				});
 		
 		vbox.getChildren().add(listView);
@@ -220,7 +223,7 @@ public class HealthView extends BaseView {
 				public void handle(ActionEvent e) {
 					// Pass the control of handling button clicks to the view controller
 					// pass conditions to database
-					if(!conditionComboBox.equals(null)) {
+					if(conditionComboBox.getSelectionModel().getSelectedIndex() != -1) {
 
 						HealthCondition healthCondition = HealthConditionManager.healthHistoryAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
 						healthCondition.setComments(commentsTextField.getText());
@@ -257,13 +260,12 @@ public class HealthView extends BaseView {
 				public void handle(ActionEvent e) {
 					// Pass the control of handling button clicks to the view controller
 					// pass conditions to database
-					if(!conditionComboBox.equals(null)) {
+					if(conditionComboBox.getSelectionModel().getSelectedIndex() != -1) {
 
 						HealthCondition healthCondition = HealthConditionManager.healthHistoryAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
 						healthCondition.setComments(commentsTextField.getText());
 						parentController.handleSubmitHc(healthCondition);
 					}
-
 				}
 			});
 
@@ -316,7 +318,7 @@ public class HealthView extends BaseView {
 				public void handle(ActionEvent e) {
 					// Pass the control of handling button clicks to the view controller
 					// pass conditions to database
-					if(!conditionComboBox.equals(null)) {
+					if(conditionComboBox.getSelectionModel().getSelectedIndex() != -1) {
 
 						HealthCondition healthCondition = HealthConditionManager.healthConditionAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
 						healthCondition.setComments(commentsTextField.getText());
@@ -354,7 +356,7 @@ public class HealthView extends BaseView {
 				@Override
 				public void handle(ActionEvent e) {
 					// Pass the control of handling button clicks to the view controller 
-					if(!conditionComboBox.equals(null)) {
+					if(conditionComboBox.getSelectionModel().getSelectedIndex() != -1) {
 						HealthCondition healthCondition = HealthConditionManager.healthConditionAtIndex(conditionComboBox.getSelectionModel().getSelectedIndex());
 						healthCondition.setComments(commentsTextField.getText());
 						parentController.handleSubmitHc(healthCondition);
