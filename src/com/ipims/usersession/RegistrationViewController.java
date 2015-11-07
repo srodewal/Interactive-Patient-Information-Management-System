@@ -21,7 +21,9 @@ public class RegistrationViewController {
 
     public void handleRegister(User user, String password) {
     	
-    	User alreadyExistingUser = DatabaseManager.getInstance().getUser(user.getUserName());
+    	if(user.getUserName().length() <= 20 && password.length() <= 20){
+    	
+    		User alreadyExistingUser = DatabaseManager.getInstance().getUser(user.getUserName());
     	if (alreadyExistingUser == null) {
     		
     		UserSession.getInstance().register(user, password);
@@ -31,6 +33,9 @@ public class RegistrationViewController {
     		view.showInfo("User name already exists. Please use a different username.");
     	}
     	
+    	}
+    	
+    	else view.showErrorMessage("Username and Password are allowed up to 20 characters.");
     }
     
     public void handleBackButton() {
