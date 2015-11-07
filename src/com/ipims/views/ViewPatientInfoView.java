@@ -9,6 +9,8 @@ import com.ipims.healthconditions.HealthViewController; // should be taken out
 import com.ipims.hsp.ViewPatientInfoViewController;
 import com.ipims.models.Patient;
 import com.ipims.models.User;
+import com.ipims.models.User.UserType;
+import com.ipims.usersession.UserSession;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,7 +79,7 @@ public class ViewPatientInfoView extends BaseView {
 			
 			ListView<String> list = new ListView<String>();
 			ObservableList<String> items = FXCollections.observableArrayList (
-					"Patient Information goes here!"
+					"Please select a patient to display their information!"
 				);
 		
 			
@@ -128,9 +130,33 @@ public class ViewPatientInfoView extends BaseView {
 				} // end handle
 			}); // end setOnAction
 			
-			patientHbox.getChildren().addAll(PatientLabel, patientComboBox, submitBtn);
-			
-			vbox.getChildren().add(patientHbox);
+			if(UserSession.getInstance().getCurrentUser().getUsertype() != UserType.PATIENT) {
+				patientHbox.getChildren().addAll(PatientLabel, patientComboBox, submitBtn);
+				vbox.getChildren().add(patientHbox);
+			}
+			else {
+				items.clear();
+				User tempUser = DatabaseManager.getInstance().getUser(UserSession.getInstance().getCurrentUser().getUserId());
+				String name = "Name: " + tempUser.getName();
+				items.add(name);
+				String dob = "DOB: " + tempUser.getDateOfBirth();
+				items.add(dob);
+				String address = "Address: " + tempUser.getAddress();
+				items.add(address);
+				String ssn = "SSN: " + tempUser.getSsn();
+				items.add(ssn);
+				String phoneNum = "Phone Number: " + tempUser.getPhoneNumber();
+				items.add(phoneNum);
+				String email = "Email: " + tempUser.getEmail();
+				items.add(email);
+				String healthInsurance = "Health Insurance Provider: " + tempUser.getInsurance();
+				items.add(healthInsurance);
+				String sex = "Sex: " + tempUser.getSex();
+				items.add(sex);
+				String race = "Race: " + tempUser.getRace();
+				items.add(race);
+			}
+	
 			vbox.getChildren().add(list);
 			
 			// removed this button due to redundancy
