@@ -1,6 +1,7 @@
 package com.ipims.views;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.ipims.Helper;
@@ -26,6 +27,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -35,6 +38,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 public class EnterLabRecordView extends BaseView{
 
@@ -103,6 +107,11 @@ public class EnterLabRecordView extends BaseView{
 		HBox hbox = new HBox();
 		hbox.setSpacing(10);
 		hbox.setAlignment(Pos.CENTER_LEFT);
+		
+		HBox hbox1 = new HBox();
+		hbox1.setSpacing(10);
+		hbox1.setAlignment(Pos.CENTER_LEFT);
+
 
 		HBox hbox2 = new HBox();
 		hbox2.setSpacing(10);
@@ -129,7 +138,39 @@ public class EnterLabRecordView extends BaseView{
 			
 			hbox.getChildren().add(patientLabel);
 			hbox.getChildren().add(catPatientBox);
+			
+			Label dateLabel = new Label("Date:");
+			dateLabel.setTextFill(Color.WHITE);
+
+			DatePicker datePicker = new DatePicker();
+			datePicker.setPromptText("mm/dd/yyyy");
+			datePicker.setMaxSize(120, 5);
+
+			// following code makes it impossible to schedule appointment in the past
+			LocalDate currentDate = LocalDate.now(); // current date
+			/*if(datePicker.isBefore(currentDate)) {
+			}*/
+			final Callback<DatePicker, DateCell> dayCellFactory = 
+					new Callback<DatePicker, DateCell>() {
+				@Override
+				public DateCell call(final DatePicker datePicker) {
+					return new DateCell() {
+						@Override
+						public void updateItem(LocalDate item, boolean empty) {
+							super.updateItem(item, empty);
+
+							if (item.isBefore(currentDate)) {
+								setDisable(true);
+								setStyle("-fx-background-color: #ffc0cb;");
+							}   
+						}
+					};
+				}
+			};
+			datePicker.setDayCellFactory(dayCellFactory);
 		
+			hbox1.getChildren().add(dateLabel);
+			hbox1.getChildren().add(datePicker);
 		
 		Label GlucoseLabel = new Label("Glucose:");
 		GlucoseLabel.setTextFill(Color.WHITE);
@@ -161,7 +202,7 @@ public class EnterLabRecordView extends BaseView{
 		hbox5.getChildren().addAll(MagnesiumLabel, MagnesiumTextField);
 
 
-		baseVbox.getChildren().addAll(hbox,hbox2,hbox3,hbox4,hbox5);
+		baseVbox.getChildren().addAll(hbox,hbox1,hbox2,hbox3,hbox4,hbox5);
 				
 		
 		// Fill in values for update
@@ -175,7 +216,8 @@ public class EnterLabRecordView extends BaseView{
 			String Glucose = String.valueOf(labrecord.getGlucose());
 			String Sodium = String.valueOf(labrecord.getSodium());
 			String Magnesium = String.valueOf(labrecord.getMagnesium());
-			
+			datePicker.setValue(labrecord.getDate());
+
 			CalciumTextField.setText(Calcium);
 			GlucoseTextField.setText(Glucose);
 			SodiumTextField.setText(Sodium);
@@ -208,6 +250,7 @@ public class EnterLabRecordView extends BaseView{
 					int patientid = patient.getUserId();
 					
 					newLab.setPatientId(patientid);
+					newLab.setDate(datePicker.getValue());
 					newLab.setGlucose(Glucose);
 					newLab.setSodium(Sodium);
 					newLab.setCalcium(Calcium);
@@ -256,11 +299,12 @@ public class EnterLabRecordView extends BaseView{
 					//Add user inputs to labRecord model class variables
 
 					newLab.setPatientId(patientid);
+					newLab.setDate(datePicker.getValue());
 					newLab.setGlucose(Glucose);
 					newLab.setSodium(Sodium);
 					newLab.setCalcium(Calcium);
 					newLab.setMagnesium(Magnesium);
-
+					
 					
 					enterLabRecordViewController.handleSubmitClick(newLab);
 					
