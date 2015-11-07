@@ -44,7 +44,7 @@ public class AppointmentManager {
 
 	public boolean updateAppointment(Appointment oldApp, Appointment newApp) {
 		if (oldApp.getAppointmentId() > 0) {
-			DatabaseManager.getInstance().updateAppoinemt(oldApp, newApp);
+			DatabaseManager.getInstance().updateAppointment(newApp);
 			return true;
 		}
 

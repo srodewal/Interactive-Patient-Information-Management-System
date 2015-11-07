@@ -46,7 +46,7 @@ public class HealthConditionManager {
 	
 	public void updateHealthCondition(HealthCondition oldCondition, HealthCondition updatedCondition) {
 		if (oldCondition != null && oldCondition.getHealthConditionId() > -1) {
-			DatabaseManager.getInstance().updateHealthCondition(oldCondition, updatedCondition);
+			DatabaseManager.getInstance().updateHealthCondition(updatedCondition);
 		}
 	}
 
