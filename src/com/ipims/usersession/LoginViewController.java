@@ -23,6 +23,8 @@ public class LoginViewController  {
 
 	public void handleLoginButtonClick(String username, String password) {
 		
+		
+		if(username.length() <= 20 && password.length() <= 20){
 		UserSession.getInstance().login(username, password);
 		if (UserSession.getInstance().getCurrentUser() == null) {
 			view.showErrorMessage("Could not login please check the username / password");
@@ -30,7 +32,10 @@ public class LoginViewController  {
 			MenuViewController vc = new MenuViewController();
 			view.getStage().setScene(vc.getScene());
 		}
-
+		}
+		
+		else 
+			view.showErrorMessage("Username and Password is allowed up to 20 characters");
 	}
 	
 	public void handleNewUserButtonClick() {
