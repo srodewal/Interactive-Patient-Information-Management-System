@@ -186,69 +186,77 @@ public class PrescribeMedView extends BaseView {
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
 				
-				int temp = patientComboBox.getSelectionModel().getSelectedIndex();
-				String patientName = allPatients.get(temp).getName();
-				LocalDate currentDate = LocalDate.now(); // current date
-				String prescribeMed = patientName + " prescribed " + MedicationTextField.getText() + " on: " + currentDate.toString();
+				int temp = patientComboBox.getSelectionModel().getSelectedIndex(); // is -1 if no patient selected
+				//System.out.println("Index selected is: " + temp); // test
 				
-				if(MedicationTextField.getText().equals("")) {
+				if(temp == -1) {
 					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Error: Unable to Prescribe Medication!");
-				}
-				else if(!items.contains(prescribeMed)) {
-					
-					// send to database
-					Prescription newMed = new Prescription();
-					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
-					newMed.setUserId(tempPatient.getUserId());
-					newMed.setCurrent(true);
-					newMed.setDate(currentDate.toString()); // set date prescribed on
-					newMed.setPrescriptionText(MedicationTextField.getText());
-					DatabaseManager.getInstance().newPrescription(newMed);
-					
-					// add to visible list
-					items.add(prescribeMed);
-					
-					actionTarget.setFill(Color.GREEN);
-					actionTarget.setText("Medication Prescribed!");
+					actionTarget.setText("Please select a patient from the dropdown menu!");
 				}
 				else {
-					actionTarget.setFill(Color.RED);
-					actionTarget.setText("Error: Prescription already entered!");
-				}
-				
-				// lab test
-				temp = patientComboBox.getSelectionModel().getSelectedIndex();
-				patientName = allPatients.get(temp).getName();
-				currentDate = LocalDate.now(); // current date
-				String prescribeTest = patientName + " needs to have lab test for: " + LabTestTextField.getText() + " on: " + currentDate.toString();
-				if(LabTestTextField.getText().equals("")) {
-					actionTarget2.setFill(Color.RED);
-					actionTarget2.setText("Error: Unable to Prescribe Lab Test!");
-				}
-				else if(!items.contains(prescribeTest)) {
+					String patientName = allPatients.get(temp).getName();
+					LocalDate currentDate = LocalDate.now(); // current date
+					String prescribeMed = patientName + " prescribed " + MedicationTextField.getText() + " on: " + currentDate.toString();
 					
-					// send to database
-					Prescription newTest = new Prescription();
-					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
-					newTest.setUserId(tempPatient.getUserId());
-					newTest.setCurrent(false); // to indicate lab test
-					newTest.setDate(currentDate.toString()); // set date prescribed on
-					newTest.setPrescriptionText(LabTestTextField.getText());
-					DatabaseManager.getInstance().newPrescription(newTest);
+					if(MedicationTextField.getText().equals("")) {
+						actionTarget.setFill(Color.RED);
+						actionTarget.setText("Error: Unable to Prescribe Medication!");
+					}
+					else if(!items.contains(prescribeMed)) {
+						
+						// send to database
+						Prescription newMed = new Prescription();
+						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+						newMed.setUserId(tempPatient.getUserId());
+						newMed.setCurrent(true);
+						newMed.setDate(currentDate.toString()); // set date prescribed on
+						newMed.setPrescriptionText(MedicationTextField.getText());
+						DatabaseManager.getInstance().newPrescription(newMed);
+						
+						// add to visible list
+						items.add(prescribeMed);
+						
+						actionTarget.setFill(Color.GREEN);
+						actionTarget.setText("Medication Prescribed!");
+					}
+					else {
+						actionTarget.setFill(Color.RED);
+						actionTarget.setText("Error: Prescription already entered!");
+					}
 					
-					// add to visible list
-					items.add(prescribeTest);
-					
-					actionTarget2.setFill(Color.GREEN);
-					actionTarget2.setText("Lab Test Prescribed!");
-				}
-				else {
-					actionTarget2.setFill(Color.RED);
-					actionTarget2.setText("Error: Test already entered!");
-				}
-			}
-		});
+					// lab test
+					temp = patientComboBox.getSelectionModel().getSelectedIndex();
+					patientName = allPatients.get(temp).getName();
+					currentDate = LocalDate.now(); // current date
+					String prescribeTest = patientName + " needs to have lab test for: " + LabTestTextField.getText() + " on: " + currentDate.toString();
+					if(LabTestTextField.getText().equals("")) {
+						actionTarget2.setFill(Color.RED);
+						actionTarget2.setText("Error: Unable to Prescribe Lab Test!");
+					}
+					else if(!items.contains(prescribeTest)) {
+						
+						// send to database
+						Prescription newTest = new Prescription();
+						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+						newTest.setUserId(tempPatient.getUserId());
+						newTest.setCurrent(false); // to indicate lab test
+						newTest.setDate(currentDate.toString()); // set date prescribed on
+						newTest.setPrescriptionText(LabTestTextField.getText());
+						DatabaseManager.getInstance().newPrescription(newTest);
+						
+						// add to visible list
+						items.add(prescribeTest);
+						
+						actionTarget2.setFill(Color.GREEN);
+						actionTarget2.setText("Lab Test Prescribed!");
+					}
+					else {
+						actionTarget2.setFill(Color.RED);
+						actionTarget2.setText("Error: Test already entered!");
+					} // end else	
+				} // end else for (temp == ?)
+			} // end handle method
+		}); // end setOnAction method
 		
 		Button showMedBtn = new Button("View");
 		showMedBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -257,31 +265,39 @@ public class PrescribeMedView extends BaseView {
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
 				
-				// clear list
-				items.clear();
-				
-				// show all prescriptions for patient
-				List<Prescription> allMeds = new ArrayList<Prescription>();
-				Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
-				allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
-				System.out.println("List " + tempPatient.getUserId() + "\n");
-				for(int i = 0; i < allMeds.size(); i++) {
-					if(allMeds.get(i).isCurrent()) {
-						String currMedication = allMeds.get(i).getPrescriptionText() + " prescribed on: " + allMeds.get(i).getDate();
-						items.add(currMedication);
+				if(patientComboBox.getSelectionModel().getSelectedIndex() != -1) {
+					// clear list
+					items.clear();
+					
+					// show all prescriptions for patient
+					List<Prescription> allMeds = new ArrayList<Prescription>();
+					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+					allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
+					System.out.println("List " + tempPatient.getUserId() + "\n");
+					for(int i = 0; i < allMeds.size(); i++) {
+						if(allMeds.get(i).isCurrent()) {
+							String currMedication = allMeds.get(i).getPrescriptionText() + " prescribed on: " + allMeds.get(i).getDate();
+							items.add(currMedication);
+						}
+						else {
+							String currTest = allMeds.get(i).getPrescriptionText() + " ordered for lab test on: " + allMeds.get(i).getDate();
+							items.add(currTest);
+						}
 					}
-					else {
-						String currTest = allMeds.get(i).getPrescriptionText() + " ordered for lab test on: " + allMeds.get(i).getDate();
-						items.add(currTest);
-					}
+					
+					actionTarget.setFill(Color.GREEN);
+					actionTarget.setText("Viewing!");
+					actionTarget2.setText("");
+				} // end if
+				else {
+					actionTarget.setFill(Color.RED);
+					actionTarget.setText("Please select a patient from the dropdown menu!");
+					actionTarget2.setText("");
 				}
 				
-				actionTarget.setFill(Color.GREEN);
-				actionTarget.setText("Viewing!");
-				actionTarget2.setText("");
 				
-			}
-		});
+			} // end handle method
+		}); // end setOnAction method
 
 		HBox buttons = new HBox();
 		buttons.setSpacing(10);

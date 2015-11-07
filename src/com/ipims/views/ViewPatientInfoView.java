@@ -91,36 +91,42 @@ public class ViewPatientInfoView extends BaseView {
 
 				@Override
 				public void handle(ActionEvent e) {
-					actionTarget.setFill(Color.GREEN);
-					actionTarget.setText("Submit Button Pressed!");
-					
-					// clear list
-					items.clear();
-					
-					// get user from database
-					Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
-					User tempUser = DatabaseManager.getInstance().getUser(tempPatient.getUserId());
-					
-					String name = "Name: " + tempUser.getName();
-					items.add(name);
-					String dob = "DOB: " + tempUser.getDateOfBirth();
-					items.add(dob);
-					String address = "Address: " + tempUser.getAddress();
-					items.add(address);
-					String ssn = "SSN: " + tempUser.getSsn();
-					items.add(ssn);
-					String phoneNum = "Phone Number: " + tempUser.getPhoneNumber();
-					items.add(phoneNum);
-					String email = "Email: " + tempUser.getEmail();
-					items.add(email);
-					String healthInsurance = "Health Insurance Provider: " + tempUser.getInsurance();
-					items.add(healthInsurance);
-					String sex = "Sex: " + tempUser.getSex();
-					items.add(sex);
-					String race = "Race: " + tempUser.getRace();
-					items.add(race);
-				}
-			});
+					if(patientComboBox.getSelectionModel().getSelectedIndex() == -1) {
+						actionTarget.setFill(Color.RED);
+						actionTarget.setText("Please select a patient from the dropdown menu!");
+					} // end if
+					else {
+						actionTarget.setFill(Color.GREEN);
+						actionTarget.setText("Submit Button Pressed!");
+						
+						// clear list
+						items.clear();
+						
+						// get user from database
+						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+						User tempUser = DatabaseManager.getInstance().getUser(tempPatient.getUserId());
+						
+						String name = "Name: " + tempUser.getName();
+						items.add(name);
+						String dob = "DOB: " + tempUser.getDateOfBirth();
+						items.add(dob);
+						String address = "Address: " + tempUser.getAddress();
+						items.add(address);
+						String ssn = "SSN: " + tempUser.getSsn();
+						items.add(ssn);
+						String phoneNum = "Phone Number: " + tempUser.getPhoneNumber();
+						items.add(phoneNum);
+						String email = "Email: " + tempUser.getEmail();
+						items.add(email);
+						String healthInsurance = "Health Insurance Provider: " + tempUser.getInsurance();
+						items.add(healthInsurance);
+						String sex = "Sex: " + tempUser.getSex();
+						items.add(sex);
+						String race = "Race: " + tempUser.getRace();
+						items.add(race);
+					} // end else
+				} // end handle
+			}); // end setOnAction
 			
 			patientHbox.getChildren().addAll(PatientLabel, patientComboBox, submitBtn);
 			
