@@ -71,8 +71,8 @@ public Scene getScene() {
 			LabRecord lab = LabRecordList.get(i);
 			int index = i+1;
 			
-			String str = "" + index +". ";
-			str+= "Name: "+ DatabaseManager.getInstance().getUser(lab.getPatientId()).getName()+ "\nCalcium: "+ lab.getCalcium()+"\nGlucose: "+ lab.getGlucose()+"\nMagnesium:  "+ lab.getMagnesium()+"\nSodium:  "+ lab.getSodium();
+			
+			String str = "Name: "+ DatabaseManager.getInstance().getUser(lab.getPatientId()).getName()+"\nDate: " +lab.getDate() +"\nCalcium: "+ lab.getCalcium()+"\nGlucose: "+ lab.getGlucose()+"\nMagnesium:  "+ lab.getMagnesium()+"\nSodium:  "+ lab.getSodium();
 			stringLabList.add(str);
 		}
 		ObservableList<String> items = FXCollections.observableArrayList (stringLabList);

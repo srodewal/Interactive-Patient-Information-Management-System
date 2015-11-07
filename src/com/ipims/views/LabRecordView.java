@@ -1,5 +1,6 @@
 package com.ipims.views;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -31,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 
 
@@ -118,6 +122,10 @@ public class LabRecordView extends BaseView {
 			
 			//Add Glucose, Magnesium, sodium, and calcium fields
 			
+			HBox hbox1 = new HBox();
+			hbox1.setSpacing(10);
+			hbox1.setAlignment(Pos.CENTER_LEFT);
+			
 			HBox hbox2 = new HBox();
 			hbox2.setSpacing(10);
 			hbox2.setAlignment(Pos.CENTER_RIGHT);
@@ -134,6 +142,34 @@ public class LabRecordView extends BaseView {
 			hbox5.setSpacing(10);
 			hbox5.setAlignment(Pos.CENTER_RIGHT);
 
+			Label dateLabel = new Label("Date:");
+			dateLabel.setTextFill(Color.WHITE);
+
+			DatePicker datePicker = new DatePicker();
+			datePicker.setPromptText("mm/dd/yyyy");
+			datePicker.setMaxSize(120, 5);
+			
+			LocalDate currentDate = LocalDate.now(); // current date
+			/*if(datePicker.isBefore(currentDate)) {
+			}*/
+			final Callback<DatePicker, DateCell> dayCellFactory = 
+					new Callback<DatePicker, DateCell>() {
+				@Override
+				public DateCell call(final DatePicker datePicker) {
+					return new DateCell() {
+						@Override
+						public void updateItem(LocalDate item, boolean empty) {
+							super.updateItem(item, empty);
+
+							if (item.isBefore(currentDate)) {
+								setDisable(true);
+								setStyle("-fx-background-color: #ffc0cb;");
+							}   
+						}
+					};
+				}
+			};
+			datePicker.setDayCellFactory(dayCellFactory);
 			
 			Label GlucoseLabel = new Label("Glucose:");
 			GlucoseLabel.setTextFill(Color.WHITE);
@@ -159,13 +195,14 @@ public class LabRecordView extends BaseView {
 			MagnesiumTextField.setPromptText("mg/dL");
 			MagnesiumTextField.setMaxSize(120, 5);
 			
-				
+			hbox1.getChildren().add(dateLabel);
+			hbox1.getChildren().add(datePicker);	
 			hbox2.getChildren().addAll(GlucoseLabel,GlucoseTextField);
 			hbox3.getChildren().addAll(SodiumLabel, SodiumTextField);
 			hbox4.getChildren().addAll(CalciumLabel, CalciumTextField);
 			hbox5.getChildren().addAll(MagnesiumLabel, MagnesiumTextField);
 
-			baseVbox.getChildren().addAll(hbox2, hbox3, hbox4, hbox5);
+			baseVbox.getChildren().addAll(hbox1,hbox2, hbox3, hbox4, hbox5);
 
 			// Add what should go into all fields when lab record is selected
 			
@@ -174,7 +211,8 @@ public class LabRecordView extends BaseView {
 			String Sodium = String.valueOf(labrecord.getSodium());
 			String Magnesium = String.valueOf(labrecord.getMagnesium());
 			
-			
+			datePicker.setValue(labrecord.getDate());
+
 			CalciumTextField.setText(Calcium);
 			GlucoseTextField.setText(Glucose);
 			SodiumTextField.setText(Sodium);
@@ -208,6 +246,7 @@ public class LabRecordView extends BaseView {
 					int patientid = patient.getUserId();
 					
 					newLab.setPatientId(patientid);
+					newLab.setDate(datePicker.getValue());
 					newLab.setGlucose(Glucose);
 					newLab.setSodium(Sodium);
 					newLab.setCalcium(Calcium);
