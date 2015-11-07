@@ -107,7 +107,7 @@ public Scene getScene() {
 		labManager.updateLabRecord(currentlySelectedLab, updatedLabRecord);
 		currentlySelectedLab = null;
 		handleUpdateGoBack();
-		view.showErrorMessage("LabRecord updated.");
+		view.showInfo("LabRecord updated.");
 		
 		
 	}
@@ -117,7 +117,7 @@ public Scene getScene() {
 		labManager.deleteLabRecord(currentlySelectedLab);
 		currentlySelectedLab = null;
 		handleUpdateGoBack();
-		view.showErrorMessage("Lab Record cancelled!!");
+		view.showInfo("Lab Record cancelled!");
 	}
 
 

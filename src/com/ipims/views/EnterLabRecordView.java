@@ -289,12 +289,17 @@ public class EnterLabRecordView extends BaseView{
 				
 					LabRecord newLab = new LabRecord();
 					
+					
+					
+						
 					float Calcium = Float.parseFloat(CalciumTextField.getText());
 					float Glucose = Float.parseFloat(GlucoseTextField.getText());
 					float Sodium = Float.parseFloat(SodiumTextField.getText());
 					float Magnesium = Float.parseFloat(MagnesiumTextField.getText());
 					Patient patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());					
 					int patientid = patient.getUserId();
+					
+					
 					
 					//Add user inputs to labRecord model class variables
 
@@ -305,9 +310,11 @@ public class EnterLabRecordView extends BaseView{
 					newLab.setCalcium(Calcium);
 					newLab.setMagnesium(Magnesium);
 					
-					
+					if(CalciumTextField.getText() != null && GlucoseTextField.getText() != null &&
+					SodiumTextField.getText() != null && MagnesiumTextField.getText() != null &&
+					catPatientBox.getSelectionModel() != null && datePicker.getValue() != null){
+						
 					enterLabRecordViewController.handleSubmitClick(newLab);
-					
 					
 					listView.setItems(enterLabRecordViewController.getPatientLabRecordList(patientid));
 					listView.getSelectionModel().selectedItemProperty().addListener(
@@ -317,6 +324,12 @@ public class EnterLabRecordView extends BaseView{
 								int index = listView.getSelectionModel().getSelectedIndex();
 								enterLabRecordViewController.didSelectItem(index, patientid);
 							});
+					
+					
+					}
+					
+					else showErrorMessage("Please fill in all fields");
+					
 					
 					
 				}
