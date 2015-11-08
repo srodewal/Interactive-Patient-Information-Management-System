@@ -95,11 +95,11 @@ public class IPIMSApplication extends Application {
 			user.setUserName("will");
 			user.setCategory(Helper.getAllCategories().get(3));
 			DatabaseManager.getInstance().newUser(user, "test");
-		}
+		}		
 
-		if (DatabaseManager.getInstance().getUser("smith", "test") == null) {
+		if (DatabaseManager.getInstance().getUser("emg") == null) {
 			user.setName("Smith");
-			user.setUserName("smith");
+			user.setUserName("emg");
 			user.setCategory(Helper.getAllCategories().get(2));
 			DatabaseManager.getInstance().newUser(user, "test");
 		}

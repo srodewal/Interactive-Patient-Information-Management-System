@@ -3,9 +3,11 @@ package com.ipims.appointment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ipims.Helper;
 import com.ipims.MenuViewController;
-
+import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
+
 import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
@@ -43,20 +45,20 @@ public class AppointmentViewController {
 		for (int i = 0; i < appointmentList.size(); i++) {
 			Appointment app = appointmentList.get(i);
 			int index = i+1;
-			
+
 			String str = "" + index +".";
 			if (app.getDoctor() != null) {
-				str += ". Dr. "+app.getDoctor().getName();
+				str += " Dr. "+app.getDoctor().getName();
 			} 
 			str+= " (Category: "+ app.getCategory()+") on "+ app.getDate()+" at "+ app.getTime();
 			stringAppList.add(str);
 		}
-		
+
 		// Show no appointments if the list is empty.
 		if(stringAppList.isEmpty()) {
-			stringAppList.add("No appoinments made");
+			stringAppList.add("No appoinments.");
 		}
-		
+
 		ObservableList<String> items = FXCollections.observableArrayList (stringAppList);
 		return items;
 	}
@@ -79,9 +81,6 @@ public class AppointmentViewController {
 		return appointmentList;
 	}
 
-
-
-
 	public void goBack() {
 		MenuViewController menu = new MenuViewController();
 		view.getStage().setScene(menu.getScene());   
@@ -95,7 +94,7 @@ public class AppointmentViewController {
 		if(list.isEmpty()) {
 			return;
 		}
-		
+
 		// Only Patient or HSP staff can update
 		//
 		if (index > -1 && (user.getUsertype() == UserType.PATIENT || 
@@ -117,24 +116,87 @@ public class AppointmentViewController {
 	}
 
 	public void handleUpdateClick(Appointment updatedAppointment) {
-		appManager.updateAppointment(currentlySelectedApp, updatedAppointment);
-		currentlySelectedApp = null;
-		handleUpdateGoBack();
-		view.showInfo("Appoinment updated.");
+
+		if (validateInputAppoinment(updatedAppointment) == true) {
+
+			// If the dates or times are different, check if that conflicts any other appointment.
+			//
+			if ( (currentlySelectedApp.getDate().equals(updatedAppointment.getDate()) == false ||
+					currentlySelectedApp.getTime().equals(updatedAppointment.getTime()) == false)
+					&& checkForConflict(updatedAppointment) == false) {
+				return;
+			} 
+				
+			appManager.updateAppointment(currentlySelectedApp, updatedAppointment);
+			currentlySelectedApp = null;
+			handleUpdateGoBack();
+			view.showInfo("Appoinment updated.");
+		}
+
 	}
 
 	public void handleSubmitClick(Appointment newAppoinment) {
-		appManager.newAppointment(newAppoinment);
-		view.refreshList(getAppoinmentList());
+
+		if (validateInputAppoinment(newAppoinment) == true &&
+				checkForConflict( newAppoinment) == true) {
+
+			if (newAppoinment.getCategory() == null) {
+				System.out.println(newAppoinment.getDoctor().getCategory());
+				newAppoinment.setCategory(newAppoinment.getDoctor().getCategory());
+			}
+			appManager.newAppointment(newAppoinment);
+			view.refreshList(getAppoinmentList());
+		}
 	}
 
 	public void handleAppointmentCancellation() {
+		
 		appManager.deleteAppoinment(currentlySelectedApp);
 		currentlySelectedApp = null;
 		handleUpdateGoBack();
 		view.showInfo("Appoinment cancelled!!");
 	}
 
+	private boolean validateInputAppoinment(Appointment newAppoinment) {
 
+		// Check if all the fields are entered.
+		if (newAppoinment.getDate() == null || newAppoinment.getTime() == null || newAppoinment.getDoctor() == null) {
+			view.showErrorMessage("Cannot submit the appoinment. Please enter all the required fields.");
+			return false;
+		}
+
+		// Check if the time is valid.
+		String []parts = newAppoinment.getTime().split(":");
+		if (parts.length != 2 || Helper.isNumeric(parts[0]) == false || Helper.isNumeric(parts[1]) == false  ) {
+
+			view.showErrorMessage("Please enter a valid time.");
+			return false;
+		} else {
+			int hours = Integer.parseInt(parts[0]);
+			int minutes = Integer.parseInt(parts[1]);
+			if (hours < 0 || hours > 24 || minutes < 0 || minutes > 59) {
+
+				view.showErrorMessage("Please enter a valid time.");
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean checkForConflict(Appointment newAppoinment) {
+		
+		String datetext = newAppoinment.getDate().toString();
+		boolean result = true;
+		List<Appointment> listOfAppoinments = DatabaseManager.getInstance().getAppointmentsForDoctor(newAppoinment.getDoctor().getUserId(), datetext);
+		for (Appointment app : listOfAppoinments) {
+			if (app.getTime().equals(newAppoinment.getTime())) {
+				view.showErrorMessage("An appointment already exists for the same time frame. Please enter a different time.");
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
 
 }

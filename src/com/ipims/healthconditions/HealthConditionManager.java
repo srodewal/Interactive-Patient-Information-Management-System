@@ -29,9 +29,14 @@ public class HealthConditionManager {
 	 * @param condition
 	 */
 	private void checkForSeverityAndSendAlert(HealthCondition condition) {
-		if (condition.isCurrent() && condition.getSeverity() > 4) {
-
+		if (condition.isCurrent()) {
+			if(condition.getSeverity() > 4) {
+				
+			} else if (condition.getHealthConcern().equals("Emergency")) {
+				
+			}
 		}
+		
 	}
 	
 	/**
@@ -42,11 +47,17 @@ public class HealthConditionManager {
 		if (condition != null && condition.getHealthConditionId() >= 0) {
 			DatabaseManager.getInstance().deleteHealthCondition(condition);
 		}
+		
 	}
 	
 	public void updateHealthCondition(HealthCondition oldCondition, HealthCondition updatedCondition) {
 		if (oldCondition != null && oldCondition.getHealthConditionId() > -1) {
+			updatedCondition.setHealthConditionId(oldCondition.getHealthConditionId());
 			DatabaseManager.getInstance().updateHealthCondition(updatedCondition);
+			
+			if (oldCondition.getHealthConcern().equals(updatedCondition.getHealthConcern()) == false) {
+				checkForSeverityAndSendAlert(updatedCondition);
+			}
 		}
 	}
 
@@ -57,9 +68,8 @@ public class HealthConditionManager {
 	 */
 	public void saveHealthCondition(HealthCondition condition) {
 
-		DatabaseManager.getInstance().newHealthCondition(condition);
-		System.out.println("Sent to database!");
-		checkForSeverityAndSendAlert(condition);
+		HealthCondition hc = DatabaseManager.getInstance().newHealthCondition(condition);
+		checkForSeverityAndSendAlert(hc);
 	}
 
 	/**
@@ -131,6 +141,11 @@ public class HealthConditionManager {
 		healthCondition.setHealthConcern("Diabetes");
 		list.add(healthCondition);
 
+		healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+		healthCondition.setSeverity(5);
+		healthCondition.setHealthConcern("Emergency");
+		list.add(healthCondition);
 
 		return list;
 	}

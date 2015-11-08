@@ -3,7 +3,6 @@ package com.ipims.views;
 import java.time.LocalDate;
 
 import com.ipims.Helper;
-import com.ipims.appointment.AppointmentManager;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.Appointment;
 import com.ipims.models.Doctor;
@@ -36,6 +35,11 @@ import javafx.util.Callback;
 public class Appointmentsview extends BaseView {
 
 	private ListView<String> listView;
+	private DatePicker datePicker;
+	private TextField timeTextField;
+	private ComboBox<String> catComboBox;
+	private ComboBox<String> docComboBox;
+	
 	public void createAppointmentsView(User user, AppointmentViewController parentController) {
 
 		VBox vbox = new VBox();
@@ -79,7 +83,7 @@ public class Appointmentsview extends BaseView {
 		listView.setItems(parentController.getAppoinmentList());
 		listView.getSelectionModel().selectedItemProperty().addListener(
 				(ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-					
+
 					System.out.println(newValue);
 					int index = listView.getSelectionModel().getSelectedIndex();
 					parentController.didSelectItem(index);
@@ -109,7 +113,7 @@ public class Appointmentsview extends BaseView {
 		Label dateLabel = new Label("Date:");
 		dateLabel.setTextFill(Color.WHITE);
 
-		DatePicker datePicker = new DatePicker();
+		datePicker = new DatePicker();
 		datePicker.setPromptText("mm/dd/yyyy");
 		datePicker.setMaxSize(120, 5);
 
@@ -139,7 +143,7 @@ public class Appointmentsview extends BaseView {
 
 		Label timeLabel = new Label("Time:");
 		timeLabel.setTextFill(Color.WHITE);
-		TextField timeTextField = new TextField();
+		timeTextField = new TextField();
 		timeTextField.setPromptText("HH:MM");
 		timeTextField.setMaxSize(110, 5);
 
@@ -152,12 +156,12 @@ public class Appointmentsview extends BaseView {
 		Label docLabel = new Label("Doctor:");
 		docLabel.setTextFill(Color.WHITE);
 
-		ComboBox<String> docComboBox = new ComboBox<String>();
+		 docComboBox = new ComboBox<String>();
 		docComboBox.getItems().addAll(Helper.getDoctorList());
 
 		Label categoryLabel = new Label("Category:");
 		categoryLabel.setTextFill(Color.WHITE);
-		ComboBox<String> catComboBox = new ComboBox<String>();
+		catComboBox = new ComboBox<String>();
 		catComboBox.getItems().addAll(Helper.getCategoryList());
 
 		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
@@ -175,7 +179,7 @@ public class Appointmentsview extends BaseView {
 
 		// Fill in values for update
 		if(appointment != null) {
-			
+
 			title.setText("Update Appointment");
 			datePicker.setValue(appointment.getDate());
 			timeTextField.setText(appointment.getTime());
@@ -279,6 +283,11 @@ public class Appointmentsview extends BaseView {
 	}
 
 	public void refreshList(ObservableList<String>list) {
+		docComboBox.setValue(null);
+		catComboBox.setValue(null);
+		datePicker.setValue(null);
+		timeTextField.setText(null);
+		
 		listView.getItems().clear();
 		listView.getItems().addAll(list);
 	}
