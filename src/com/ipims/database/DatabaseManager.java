@@ -241,7 +241,8 @@ public class DatabaseManager {
 							+ "alertId INTEGER PRIMARY KEY AUTOINCREMENT,"
 							+ "conditionId INTEGER NOT NULL,"
 							+ "patientId INTEGER NOT NULL,"
-							+ "read INTEGER NOT NULL"
+							+ "read INTEGER NOT NULL,"
+							+ "severeOrEmergency INTEGER NOT NULL"
 							+ ")");
 					createAlert.close();
 				}
@@ -557,10 +558,11 @@ public class DatabaseManager {
 	{
 		try
 		{
-			PreparedStatement insertAlert = dbConnection.prepareStatement("INSERT INTO Alert (conditionId, patientId, read) VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement insertAlert = dbConnection.prepareStatement("INSERT INTO Alert (conditionId, patientId, read, severeOrEmergency) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			insertAlert.setInt(1, alert.getConditionId());
 			insertAlert.setInt(2, alert.getPatientId());
 			insertAlert.setInt(3, alert.isRead() ? 1 : 0);
+			insertAlert.setInt(4, alert.isEmergency() ? 1 : 0);
 			
 			int affectedRows = insertAlert.executeUpdate();
 			
@@ -875,10 +877,10 @@ public class DatabaseManager {
 	}
 	
 	/**
-	 * Gets all alerts.
-	 * @return Returns all alerts in the database
+	 * Gets all severe alerts.
+	 * @return Returns all severe alerts in the database
 	 */
-	public List<Alert> getAllAlerts()
+	public List<Alert> getAllSevereAlerts()
 	{
 		List<Alert> alerts = new ArrayList<>();
 		
@@ -886,18 +888,41 @@ public class DatabaseManager {
 		{
 			Statement getAlerts = dbConnection.createStatement();
 			
-			ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert;");
+			ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert WHERE severeOrEmergency = 0;");
 			while(rs.next())
 			{
-				Alert alert = null;
-				if(rs.getInt("read") == 0)
-				{
-					alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), false);
-				}
-				else
-				{
-					alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), true);
-				}
+				Alert alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), rs.getInt("read") == 0 ? false: true, false);
+				
+				alerts.add(alert);
+			}
+			
+			getAlerts.close();
+		}
+		catch(Exception e)
+		{
+			logError("Could not get alerts. Please check that the database has been set up correctly.");
+			logError(e.getMessage());
+		}
+		
+		return alerts;
+	}
+	
+	/**
+	 * Gets all emergency alerts.
+	 * @return Returns emergency alerts in the database
+	 */
+	public List<Alert> getAllEmergencyAlerts()
+	{
+		List<Alert> alerts = new ArrayList<>();
+		
+		try
+		{
+			Statement getAlerts = dbConnection.createStatement();
+			
+			ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert WHERE severeOrEmergency = 1;");
+			while(rs.next())
+			{
+				Alert alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), rs.getInt("read") == 0 ? false: true, true);
 				
 				alerts.add(alert);
 			}

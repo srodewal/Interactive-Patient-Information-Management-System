@@ -5,20 +5,23 @@ public class Alert {
 	private int conditionId;
 	private int patientId;
 	private boolean read;
+	private boolean emergency;
 	
-	public Alert(int alertId, int conditionId, int patientId, boolean read)
+	public Alert(int alertId, int conditionId, int patientId, boolean read, boolean emergency)
 	{
 		this.alertId = alertId;
 		this.conditionId = conditionId;
 		this.patientId = patientId;
 		this.read = read;
+		this.emergency = emergency;
 	}
 	
-	public Alert(int conditionId, int patientId, boolean read)
+	public Alert(int conditionId, int patientId, boolean read, boolean emergency)
 	{
 		this.conditionId = conditionId;
 		this.patientId = patientId;
 		this.read = read;
+		this.emergency = emergency;
 	}
 	
 	public int getAlertId() {
@@ -51,5 +54,13 @@ public class Alert {
 
 	public void setRead(boolean read) {
 		this.read = read;
+	}
+
+	public boolean isEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(boolean emergency) {
+		this.emergency = emergency;
 	}
 }
