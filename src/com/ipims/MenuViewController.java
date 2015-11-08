@@ -4,6 +4,7 @@ package com.ipims;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController;
+import com.ipims.healthconditions.SevereConditionViewController;
 import com.ipims.hsp.ViewPatientInfoViewController;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
@@ -86,6 +87,15 @@ public class MenuViewController {
 	public void handleViewPatientInfo() {
 		ViewPatientInfoViewController PatientInfoView = new ViewPatientInfoViewController();
 		view.getStage().setScene(PatientInfoView.getScene());
+	}
+	
+	public void handleViewEmergencyCases() {
+		SevereConditionViewController scViewController = new SevereConditionViewController();
+		view.getStage().setScene(scViewController.getScene());
+	}
+	
+	public void handleViewSevereCases() {
+		
 	}
 
 }

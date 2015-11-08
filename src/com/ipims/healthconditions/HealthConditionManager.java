@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ipims.database.DatabaseManager;
+import com.ipims.models.Alert;
 import com.ipims.models.HealthCondition;
 import com.ipims.models.Patient;
 
@@ -32,8 +33,13 @@ public class HealthConditionManager {
 		if (condition.isCurrent()) {
 			if(condition.getSeverity() > 4) {
 				
+				Alert alert = new Alert(condition.getHealthConditionId(), condition.getPatientId(), false, false);
+				DatabaseManager.getInstance().newAlert(alert);
+				
 			} else if (condition.getHealthConcern().equals("Emergency")) {
 				
+				Alert alert = new Alert(condition.getHealthConditionId(), condition.getPatientId(), false, true);
+				DatabaseManager.getInstance().newAlert(alert);
 			}
 		}
 		
@@ -50,6 +56,11 @@ public class HealthConditionManager {
 		
 	}
 	
+	/**
+	 * Updates the health condition.
+	 * @param oldCondition
+	 * @param updatedCondition
+	 */
 	public void updateHealthCondition(HealthCondition oldCondition, HealthCondition updatedCondition) {
 		if (oldCondition != null && oldCondition.getHealthConditionId() > -1) {
 			updatedCondition.setHealthConditionId(oldCondition.getHealthConditionId());
@@ -143,7 +154,7 @@ public class HealthConditionManager {
 
 		healthCondition = new HealthCondition();
 		healthCondition.setCurrent(true);
-		healthCondition.setSeverity(5);
+		healthCondition.setSeverity(1);
 		healthCondition.setHealthConcern("Emergency");
 		list.add(healthCondition);
 

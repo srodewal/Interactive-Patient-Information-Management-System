@@ -1,6 +1,10 @@
 package com.ipims.views;
 
+import java.util.List;
+
 import com.ipims.MenuViewController;
+import com.ipims.database.DatabaseManager;
+import com.ipims.models.Alert;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 
@@ -45,6 +49,11 @@ public class MenuView extends BaseView {
 			vbox.getChildren().add(ViewPatientInfoButton(parentController));
 
 		} else if (user.getUsertype() == UserType.HSPSTAFF) {
+			
+			List<Alert> alerts = DatabaseManager.getInstance().getAllSevereAlerts();
+			if (alerts.size() > 0)
+				vbox.getChildren().add(severeButton(parentController, alerts.size()));
+			
 			vbox.getChildren().add(appoinmentButton(parentController));
 			vbox.getChildren().add(updateHealthButton(parentController));
 			vbox.getChildren().add(PatientCaseButton(parentController));
@@ -55,6 +64,9 @@ public class MenuView extends BaseView {
 			
 		} else if (user.getUsertype() == UserType.DOCTOR) {
 			
+			List<Alert> alerts = DatabaseManager.getInstance().getAllEmergencyAlerts();
+			if (alerts.size() > 0)
+				vbox.getChildren().add(emergencyButton(parentController, alerts.size()));
 			vbox.getChildren().add(appoinmentButton(parentController));
 			vbox.getChildren().add(updateHealthButton(parentController));
 			vbox.getChildren().add(PrescribeMedButton(parentController));
@@ -210,6 +222,33 @@ public class MenuView extends BaseView {
 			public void handle(ActionEvent e) {
 				// Pass the control of handling button clicks to the view controller
 				parentController.handleViewPatientInfo();
+			}
+		});
+		return vpBtn;
+	}
+	
+	
+	private Button emergencyButton(MenuViewController parentController, int count) {
+		Button vpBtn = createButton("Emergency ("+count+")");
+		vpBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleViewEmergencyCases();
+			}
+		});
+		return vpBtn;
+	}
+	
+	private Button severeButton(MenuViewController parentController, int count) {
+		Button vpBtn = createButton("Severe cases ("+count+")");
+		vpBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				parentController.handleViewSevereCases();
 			}
 		});
 		return vpBtn;
