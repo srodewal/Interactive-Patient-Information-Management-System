@@ -6,7 +6,7 @@ import com.ipims.appointment.AppointmentViewController;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.stats.ReportsViewController;
-import com.ipims.stats.StatisticalReporter;
+import com.ipims.stats.ReportManager;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -85,16 +85,16 @@ public class ReportsView extends BaseView {
 		
 		// create items observable list depending upon which report specified
 		if(reportTitle.getText().equals("Admission Rates")) {
-			items = StatisticalReporter.analyzeAdmissionRate();
+			items = ReportManager.analyzeAdmissionRate();
 		}
 		else if(reportTitle.getText().equals("Health Outcomes")) {
-			items = StatisticalReporter.analyzeHealth();
+			items = ReportManager.analyzeHealth();
 		}
 		else if(reportTitle.getText().equals("Patient Populations")) {
-			items = StatisticalReporter.analyzePatientPopulation();
+			items = ReportManager.analyzePatientPopulation();
 		}
 		else {
-			items = StatisticalReporter.analyzeTypeOfPatients();
+			items = ReportManager.analyzeTypeOfPatients();
 		}
 		
 		list.setItems(items); // moved

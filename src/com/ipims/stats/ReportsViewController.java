@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 public class ReportsViewController {
 	private ReportsView view;
 	//public Text reportTitle;
-	private StatisticalReporter statRep;
+	private ReportManager statRep;
 
 
 	//--------------- View Controller methods ---------------

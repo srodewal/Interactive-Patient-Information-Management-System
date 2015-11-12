@@ -16,7 +16,7 @@ import javafx.collections.ObservableList;
 import com.ipims.models.Patient;
 
 
-public class StatisticalReporter {
+public class ReportManager {
 
 	//This function retrieves the lab record information from each patient that has a lab record,
 	//and determines which percent of patients fall into the healthy or abnormal categories
