@@ -37,6 +37,7 @@ import javafx.scene.text.Text;
 public class PrescribeMedView extends BaseView {
 	private List<Patient> allPatients;
 	
+	// method for printing current view
 	private void print(Node node) {
 	    System.out.println("Creating a printer job...");
 
