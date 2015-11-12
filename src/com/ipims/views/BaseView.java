@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -26,6 +27,7 @@ public class BaseView {
 	
 	private static final int WIDTH = 600;
 	private static final int HEIGHT = 700;
+		
 	
 	public Scene getCurrentScene() {
 		return currentScene;

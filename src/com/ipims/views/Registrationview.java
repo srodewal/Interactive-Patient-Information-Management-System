@@ -24,6 +24,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Registrationview extends BaseView {
+	
+	public boolean isNumeric(String s) {
+	    return s.matches("\\d+");
+	}
 
 	public void createRegistrationMenu (RegistrationViewController parentController) {
 
@@ -131,13 +135,15 @@ public class Registrationview extends BaseView {
 
 		final Text actiontarget = new Text();
 		registerPane.add(actiontarget, 1, 14);
-
+		
+		
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
 
 //TODO: Validate input
+				
 				if(nameTextField.getText().equals("")) {
 					parentController.handleError();
 				}
@@ -153,9 +159,25 @@ public class Registrationview extends BaseView {
 				else if(ssnNumberTextField.getText().equals("")) {
 					parentController.handleError();
 				}
+				else if(ssnNumberTextField.getText().length() != 8) {
+					parentController.handleError();
+				}
+				
+				else if(isNumeric(ssnNumberTextField.getText()) == false) {
+					parentController.handleError();
+				}
 				else if(phoneNumberTextField.getText().equals("")) {
 					parentController.handleError();
 				}
+				
+				else if(phoneNumberTextField.getText().length() != 10) {
+					parentController.handleError();
+				}
+				
+				else if(isNumeric(phoneNumberTextField.getText()) == false) {
+					parentController.handleError();
+				}
+				
 				else if(emailTextField.getText().equals("")) {
 					parentController.handleError();
 				}
@@ -168,9 +190,13 @@ public class Registrationview extends BaseView {
 				else if(SexComboBox.getValue().equals("")) {
 					parentController.handleError();
 				}
-				else {
+				
 			
+				
+				else {
 					User patient = new Patient();
+					
+					
 					patient.setName(nameTextField.getText());
 					patient.setUserName(userNameTextField.getText());
 					patient.setAddress(currentAddressTextField.getText());

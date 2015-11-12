@@ -44,7 +44,7 @@ public class RegistrationViewController {
     }
     
     public void handleError() {
-    	view.showErrorMessage("Error! Please make sure all available field are filled out.");
+    	view.showErrorMessage("Error! Please make sure all available field are filled out correctly.");
     }
     
     public void handleExistingUserError() {
