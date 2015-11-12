@@ -1,10 +1,9 @@
-package com.ipims.patientcase;
+package com.ipims.healthconditions;
 
 import java.util.List;
 
 import com.ipims.Helper;
 import com.ipims.MenuViewController;
-import com.ipims.healthconditions.HealthConditionManager;
 import com.ipims.labrecord.LabRecordManager;
 import com.ipims.models.HealthCondition;
 import com.ipims.models.LabRecord;

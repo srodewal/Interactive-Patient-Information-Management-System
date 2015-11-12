@@ -6,13 +6,13 @@ import java.util.List;
 
 import com.ipims.Helper;
 import com.ipims.database.DatabaseManager;
+import com.ipims.healthconditions.PatientCaseViewController;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
 import com.ipims.models.LabRecord;
 import com.ipims.models.Patient;
 import com.ipims.models.Prescription;
 import com.ipims.models.User;
-import com.ipims.patientcase.PatientCaseViewController;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

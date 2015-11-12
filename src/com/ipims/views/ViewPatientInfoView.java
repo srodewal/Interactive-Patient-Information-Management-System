@@ -6,11 +6,11 @@ import java.util.List;
 import com.ipims.Helper;
 import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController; // should be taken out
-import com.ipims.hsp.ViewPatientInfoViewController;
 import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
 import com.ipims.usersession.UserSession;
+import com.ipims.usersession.ViewPatientInfoViewController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

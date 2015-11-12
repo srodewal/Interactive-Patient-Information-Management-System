@@ -2,9 +2,9 @@ package com.ipims.views;
 
 
 import com.ipims.Helper;
+import com.ipims.healthconditions.PatientCaseViewController;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
-import com.ipims.patientcase.PatientCaseViewController;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

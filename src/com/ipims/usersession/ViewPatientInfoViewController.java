@@ -1,4 +1,4 @@
-package com.ipims.hsp;
+package com.ipims.usersession;
 
 import com.ipims.MenuViewController;
 import com.ipims.views.ViewPatientInfoView;

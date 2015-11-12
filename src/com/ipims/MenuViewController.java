@@ -4,15 +4,15 @@ package com.ipims;
 import com.ipims.appointment.AppointmentViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.healthconditions.HealthViewController;
+import com.ipims.healthconditions.PatientCaseViewController;
+import com.ipims.healthconditions.PrescribeMedViewController;
 import com.ipims.healthconditions.SevereConditionViewController;
-import com.ipims.hsp.ViewPatientInfoViewController;
 import com.ipims.labrecord.EnterLabRecordViewController;
 import com.ipims.labrecord.LabRecordViewController;
-import com.ipims.medication.PrescribeMedViewController;
-import com.ipims.patientcase.PatientCaseViewController;
 import com.ipims.stats.StatsViewController;
 import com.ipims.usersession.LoginViewController;
 import com.ipims.usersession.UserSession;
+import com.ipims.usersession.ViewPatientInfoViewController;
 import com.ipims.views.MenuView;
 
 import javafx.scene.Scene;

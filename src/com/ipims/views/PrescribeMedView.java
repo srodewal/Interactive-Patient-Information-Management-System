@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.ipims.Helper;
 import com.ipims.database.DatabaseManager;
-import com.ipims.medication.PrescribeMedViewController;
+import com.ipims.healthconditions.PrescribeMedViewController;
 import com.ipims.models.Patient;
 import com.ipims.models.Prescription;
 import com.ipims.models.User;

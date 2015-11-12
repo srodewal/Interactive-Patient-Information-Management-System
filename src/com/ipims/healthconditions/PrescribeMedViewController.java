@@ -1,4 +1,4 @@
-package com.ipims.medication;
+package com.ipims.healthconditions;
 
 	import com.ipims.MenuViewController;
 	import com.ipims.usersession.UserSession;
