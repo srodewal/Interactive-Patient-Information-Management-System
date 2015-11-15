@@ -36,7 +36,7 @@ public class Appointmentsview extends BaseView {
 
 	private ListView<String> listView;
 	private DatePicker datePicker;
-	private TextField timeTextField;
+	private ComboBox<String> timeComboBox;
 	private ComboBox<String> catComboBox;
 	private ComboBox<String> docComboBox;
 	
@@ -143,11 +143,10 @@ public class Appointmentsview extends BaseView {
 
 		Label timeLabel = new Label("Time:");
 		timeLabel.setTextFill(Color.WHITE);
-		timeTextField = new TextField();
-		timeTextField.setPromptText("HH:MM");
-		timeTextField.setMaxSize(110, 5);
+		timeComboBox = new ComboBox<String>();
+		timeComboBox.getItems().addAll(Helper.getTimeSlots());
 
-		hbox.getChildren().addAll(dateLabel, datePicker, timeLabel, timeTextField);
+		hbox.getChildren().addAll(dateLabel, datePicker, timeLabel, timeComboBox);
 		baseVbox.getChildren().add(hbox);
 
 		HBox hbox2 = new HBox();
@@ -182,7 +181,7 @@ public class Appointmentsview extends BaseView {
 
 			title.setText("Update Appointment");
 			datePicker.setValue(appointment.getDate());
-			timeTextField.setText(appointment.getTime());
+			timeComboBox.setValue(appointment.getTime());
 			if (appointment.getDoctor() != null)
 				docComboBox.setValue(appointment.getDoctor().getName());
 			catComboBox.setValue(appointment.getCategory());
@@ -207,7 +206,7 @@ public class Appointmentsview extends BaseView {
 						patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
 					}
 
-					Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
+					Appointment newApp = new Appointment(datePicker.getValue(), timeComboBox.getValue(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
 
 					parentController.handleUpdateClick(newApp);
 
@@ -241,7 +240,7 @@ public class Appointmentsview extends BaseView {
 						patient = Helper.getPatientAtIndex(catPatientBox.getSelectionModel().getSelectedIndex());
 					}
 
-					Appointment newApp = new Appointment(datePicker.getValue(), timeTextField.getText(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
+					Appointment newApp = new Appointment(datePicker.getValue(), timeComboBox.getValue(), doctor, patient, catComboBox.getSelectionModel().getSelectedItem());
 					parentController.handleSubmitClick(newApp);
 				}
 			});
@@ -286,7 +285,7 @@ public class Appointmentsview extends BaseView {
 		docComboBox.setValue(null);
 		catComboBox.setValue(null);
 		datePicker.setValue(null);
-		timeTextField.setText(null);
+		timeComboBox.setValue(null);
 		
 		listView.getItems().clear();
 		listView.getItems().addAll(list);

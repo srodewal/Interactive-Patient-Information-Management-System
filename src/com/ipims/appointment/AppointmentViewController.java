@@ -138,8 +138,7 @@ public class AppointmentViewController {
 	public void handleSubmitClick(Appointment newAppoinment) {
 
 		if (validateInputAppoinment(newAppoinment) == true &&
-				checkForConflict( newAppoinment) == true) {
-
+				checkForConflict(newAppoinment) == true) {
 			
 			appManager.newAppointment(newAppoinment);
 			view.refreshList(getAppoinmentList());
@@ -154,6 +153,11 @@ public class AppointmentViewController {
 		view.showInfo("Appoinment cancelled!!");
 	}
 
+	/**
+	 * Validate the inputs are correct.
+	 * @param newAppoinment
+	 * @return
+	 */
 	private boolean validateInputAppoinment(Appointment newAppoinment) {
 
 		// Check if all the fields are entered.
@@ -197,6 +201,11 @@ public class AppointmentViewController {
 		return true;
 	}
 
+	/**
+	 * Check if the appointment time conflicts with another one for the same doctor.
+	 * @param newAppoinment
+	 * @return
+	 */
 	private boolean checkForConflict(Appointment newAppoinment) {
 		
 		String datetext = newAppoinment.getDate().toString();

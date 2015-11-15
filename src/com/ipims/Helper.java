@@ -3,7 +3,6 @@ package com.ipims;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ipims.appointment.AppointmentManager;
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Doctor;
 import com.ipims.models.Patient;
@@ -57,6 +56,20 @@ public class Helper {
 		list.add("Eye");
 		list.add("Ortho");
 		list.add("Dental");
+		return list;
+	}
+	
+	public static List<String> getTimeSlots() {
+		List<String> list = new ArrayList<>(); 
+		list.add("9:00");
+		list.add("10:00");
+		list.add("11:00");
+		list.add("12:00");
+		list.add("14:00");
+		list.add("15:00");
+		list.add("16:00");
+		list.add("17:00");
+		list.add("18:00");
 		return list;
 	}
 
