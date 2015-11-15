@@ -123,7 +123,56 @@ public class HealthConditionManager {
 		healthCondition.setCurrent(false);
 		healthCondition.setHealthConcern("Skin Problems");
 		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Nausea");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Ear ache");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Abdominal Pain");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Coughing");
+		list.add(healthCondition);
 
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Blood Clots");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Fatigue");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Gas");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Headache");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Neck Pain");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Influenza");
+		list.add(healthCondition);
 		return list;
 	}
 
@@ -156,6 +205,71 @@ public class HealthConditionManager {
 		healthCondition.setCurrent(true);
 		healthCondition.setSeverity(1);
 		healthCondition.setHealthConcern("Emergency");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(4);
+		healthCondition.setHealthConcern("Skin Problems");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(2);
+		healthCondition.setHealthConcern("Nausea");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(4);
+		healthCondition.setHealthConcern("Ear ache");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(3);
+		healthCondition.setHealthConcern("Abdominal Pain");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(false);
+		healthCondition.setHealthConcern("Coughing");
+		list.add(healthCondition);
+
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(1);
+		healthCondition.setHealthConcern("Blood Clots");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(1);
+		healthCondition.setHealthConcern("Fatigue");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(5);
+		healthCondition.setHealthConcern("Gas");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(3);
+		healthCondition.setHealthConcern("Headache");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(4);
+		healthCondition.setHealthConcern("Neck Pain");
+		list.add(healthCondition);
+                
+                healthCondition = new HealthCondition();
+		healthCondition.setCurrent(true);
+                healthCondition.setSeverity(3);
+		healthCondition.setHealthConcern("Influenza");
 		list.add(healthCondition);
 
 		return list;
