@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 public class Registrationview extends BaseView {
 	
@@ -64,6 +66,27 @@ public class Registrationview extends BaseView {
 		DatePicker datePicker = new DatePicker();
 		datePicker.setPromptText("mm/dd/yyyy");
 		registerPane.add(datePicker, 1, 4);
+		
+		// following code makes it impossible to select birth date in future
+		LocalDate currentDate = LocalDate.now(); // current date
+		final Callback<DatePicker, DateCell> dayCellFactory = 
+				new Callback<DatePicker, DateCell>() {
+				@Override
+					public DateCell call(final DatePicker datePicker) {
+						return new DateCell() {
+							@Override
+							public void updateItem(LocalDate item, boolean empty) {
+								super.updateItem(item, empty);
+
+								if (item.isAfter(currentDate)) {
+									setDisable(true);
+									setStyle("-fx-background-color: #ffc0cb;");
+								}   
+							}
+						};
+				}
+		};
+		datePicker.setDayCellFactory(dayCellFactory);
 
 		Label currentAddress = new Label("Current Address:");
 		registerPane.add(currentAddress, 0, 5);
