@@ -159,7 +159,7 @@ public class Registrationview extends BaseView {
 				else if(ssnNumberTextField.getText().equals("")) {
 					parentController.handleError();
 				}
-				else if(ssnNumberTextField.getText().length() != 8) {
+				else if(ssnNumberTextField.getText().length() != 9) {
 					parentController.handleError();
 				}
 				
