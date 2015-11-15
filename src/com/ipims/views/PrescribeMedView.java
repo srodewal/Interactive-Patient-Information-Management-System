@@ -202,27 +202,49 @@ public class PrescribeMedView extends BaseView {
 					if(MedicationTextField.getText().equals("")) {
 						actionTarget.setFill(Color.RED);
 						actionTarget.setText("Error: Unable to Prescribe Medication!");
+						actionTarget2.setText("");
 					}
 					else if(!items.contains(prescribeMed)) {
-						
-						// send to database
-						Prescription newMed = new Prescription();
+						// check to see if duplicate in database
+						boolean duplicate = false;
+						List<Prescription> allMeds = new ArrayList<Prescription>();
 						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
-						newMed.setUserId(tempPatient.getUserId());
-						newMed.setCurrent(true);
-						newMed.setDate(currentDate.toString()); // set date prescribed on
-						newMed.setPrescriptionText(MedicationTextField.getText());
-						DatabaseManager.getInstance().newPrescription(newMed);
+						allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
+						for(int i = 0; i < allMeds.size(); i++) {
+							if(allMeds.get(i).isCurrent() && allMeds.get(i).getPrescriptionText().equals(MedicationTextField.getText())) {
+								duplicate = true;
+							}
+						}
 						
-						// add to visible list
-						items.add(prescribeMed);
+						if(duplicate == false) {
+							// send to database
+							Prescription newMed = new Prescription();
+							tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+							newMed.setUserId(tempPatient.getUserId());
+							newMed.setCurrent(true);
+							newMed.setDate(currentDate.toString()); // set date prescribed on
+							newMed.setPrescriptionText(MedicationTextField.getText());
+							DatabaseManager.getInstance().newPrescription(newMed);
+							
+							// add to visible list
+							items.add(prescribeMed);
+							
+							actionTarget.setFill(Color.GREEN);
+							actionTarget.setText("Medication Prescribed!");
+							actionTarget2.setText("");
+						}
+						else {
+							actionTarget.setFill(Color.RED);
+							actionTarget.setText("Error: Prescription is a duplicate!");
+							actionTarget2.setText("");
+						}
 						
-						actionTarget.setFill(Color.GREEN);
-						actionTarget.setText("Medication Prescribed!");
+			
 					}
 					else {
 						actionTarget.setFill(Color.RED);
 						actionTarget.setText("Error: Prescription already entered!");
+						actionTarget2.setText("");
 					}
 					
 					/*// lab test
@@ -313,27 +335,49 @@ public class PrescribeMedView extends BaseView {
 					if(LabTestTextField.getText().equals("")) {
 						actionTarget2.setFill(Color.RED);
 						actionTarget2.setText("Error: Unable to Prescribe Lab Test!");
+						actionTarget.setText("");
 					}
 					else if(!items.contains(prescribeTest)) {
-						
-						// send to database
-						Prescription newTest = new Prescription();
+						// check to see if duplicate in database
+						boolean duplicate = false;
+						List<Prescription> allMeds = new ArrayList<Prescription>();
 						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
-						newTest.setUserId(tempPatient.getUserId());
-						newTest.setCurrent(false); // to indicate lab test
-						newTest.setDate(currentDate.toString()); // set date prescribed on
-						newTest.setPrescriptionText(LabTestTextField.getText());
-						DatabaseManager.getInstance().newPrescription(newTest);
+						allMeds = DatabaseManager.getInstance().getPrescriptionsForPatient(tempPatient.getUserId());
+						for(int i = 0; i < allMeds.size(); i++) {
+							if(!allMeds.get(i).isCurrent() && allMeds.get(i).getPrescriptionText().equals(LabTestTextField.getText())) {
+								duplicate = true;
+							}
+						}
 						
-						// add to visible list
-						items.add(prescribeTest);
+						if(duplicate == false) {
+							// send to database
+							Prescription newTest = new Prescription();
+							tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+							newTest.setUserId(tempPatient.getUserId());
+							newTest.setCurrent(false); // to indicate lab test
+							newTest.setDate(currentDate.toString()); // set date prescribed on
+							newTest.setPrescriptionText(LabTestTextField.getText());
+							DatabaseManager.getInstance().newPrescription(newTest);
+							
+							// add to visible list
+							items.add(prescribeTest);
+							
+							actionTarget2.setFill(Color.GREEN);
+							actionTarget2.setText("Lab Test Prescribed!");
+							actionTarget.setText("");
+						}
 						
-						actionTarget2.setFill(Color.GREEN);
-						actionTarget2.setText("Lab Test Prescribed!");
+						else {
+							actionTarget2.setFill(Color.RED);
+							actionTarget2.setText("Error: Test is a duplicate!");
+							actionTarget.setText("");
+						}
+						
 					}
 					else {
 						actionTarget2.setFill(Color.RED);
 						actionTarget2.setText("Error: Test already entered!");
+						actionTarget.setText("");
 					} // end else	
 				} // end else for (temp == ?)
 			} // end handle method
