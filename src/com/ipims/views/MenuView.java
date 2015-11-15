@@ -51,15 +51,14 @@ public class MenuView extends BaseView {
 		} else if (user.getUsertype() == UserType.HSPSTAFF) {
 			
 			List<Alert> alerts = DatabaseManager.getInstance().getAllSevereAlerts();
-			boolean containsUnread = false;
+			int unreadCount = 0;
 			for (Alert alert : alerts) {
 				if (alert.isRead() == false) {
-					containsUnread = true;
-					break;
+					unreadCount++;
 				}
 			}
-			if (containsUnread)
-				vbox.getChildren().add(severeButton(parentController, alerts.size()));
+			if (unreadCount > 0)
+				vbox.getChildren().add(severeButton(parentController, unreadCount));
 			
 			vbox.getChildren().add(appoinmentButton(parentController));
 			vbox.getChildren().add(updateHealthButton(parentController));
@@ -72,15 +71,15 @@ public class MenuView extends BaseView {
 		} else if (user.getUsertype() == UserType.DOCTOR) {
 			
 			List<Alert> alerts = DatabaseManager.getInstance().getAllEmergencyAlerts();
-			boolean containsUnread = false;
+			int unreadCount = 0;
 			for (Alert alert : alerts) {
 				if (alert.isRead() == false) {
-					containsUnread = true;
-					break;
+					unreadCount++;
 				}
 			}
-			if (containsUnread)
-				vbox.getChildren().add(emergencyButton(parentController, alerts.size()));
+			if (unreadCount > 0)
+				vbox.getChildren().add(emergencyButton(parentController,unreadCount));
+			
 			vbox.getChildren().add(appoinmentButton(parentController));
 			vbox.getChildren().add(updateHealthButton(parentController));
 			vbox.getChildren().add(PrescribeMedButton(parentController));
