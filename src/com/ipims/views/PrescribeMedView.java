@@ -180,7 +180,7 @@ public class PrescribeMedView extends BaseView {
 		HBox hbox2 = new HBox();
 		hbox2.setSpacing(10);
 
-		Button PrescribeMedBtn = new Button("Submit");
+		Button PrescribeMedBtn = new Button("Submit Medication");
 		PrescribeMedBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -225,10 +225,90 @@ public class PrescribeMedView extends BaseView {
 						actionTarget.setText("Error: Prescription already entered!");
 					}
 					
-					// lab test
+					/*// lab test
 					temp = patientComboBox.getSelectionModel().getSelectedIndex();
 					patientName = allPatients.get(temp).getName();
 					currentDate = LocalDate.now(); // current date
+					String prescribeTest = patientName + " needs to have lab test for: " + LabTestTextField.getText() + " on: " + currentDate.toString();
+					if(LabTestTextField.getText().equals("")) {
+						actionTarget2.setFill(Color.RED);
+						actionTarget2.setText("Error: Unable to Prescribe Lab Test!");
+					}
+					else if(!items.contains(prescribeTest)) {
+						
+						// send to database
+						Prescription newTest = new Prescription();
+						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+						newTest.setUserId(tempPatient.getUserId());
+						newTest.setCurrent(false); // to indicate lab test
+						newTest.setDate(currentDate.toString()); // set date prescribed on
+						newTest.setPrescriptionText(LabTestTextField.getText());
+						DatabaseManager.getInstance().newPrescription(newTest);
+						
+						// add to visible list
+						items.add(prescribeTest);
+						
+						actionTarget2.setFill(Color.GREEN);
+						actionTarget2.setText("Lab Test Prescribed!");
+					}
+					else {
+						actionTarget2.setFill(Color.RED);
+						actionTarget2.setText("Error: Test already entered!");
+					} // end else	
+					*/
+				} // end else for (temp == ?)
+			} // end handle method
+		}); // end setOnAction method
+		
+		Button PrescribeTestBtn = new Button("Submit Lab Test");
+		PrescribeTestBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				// Pass the control of handling button clicks to the view controller
+				
+				int temp = patientComboBox.getSelectionModel().getSelectedIndex(); // is -1 if no patient selected
+				//System.out.println("Index selected is: " + temp); // test
+				
+				if(temp == -1) {
+					actionTarget.setFill(Color.RED);
+					actionTarget.setText("Please select a patient from the dropdown menu!");
+				}
+				else {
+					/*String patientName = allPatients.get(temp).getName();
+					LocalDate currentDate = LocalDate.now(); // current date
+					String prescribeMed = patientName + " prescribed " + MedicationTextField.getText() + " on: " + currentDate.toString();
+					
+					if(MedicationTextField.getText().equals("")) {
+						actionTarget.setFill(Color.RED);
+						actionTarget.setText("Error: Unable to Prescribe Medication!");
+					}
+					else if(!items.contains(prescribeMed)) {
+						
+						// send to database
+						Prescription newMed = new Prescription();
+						Patient tempPatient = Helper.getPatientAtIndex(patientComboBox.getSelectionModel().getSelectedIndex());
+						newMed.setUserId(tempPatient.getUserId());
+						newMed.setCurrent(true);
+						newMed.setDate(currentDate.toString()); // set date prescribed on
+						newMed.setPrescriptionText(MedicationTextField.getText());
+						DatabaseManager.getInstance().newPrescription(newMed);
+						
+						// add to visible list
+						items.add(prescribeMed);
+						
+						actionTarget.setFill(Color.GREEN);
+						actionTarget.setText("Medication Prescribed!");
+					}
+					else {
+						actionTarget.setFill(Color.RED);
+						actionTarget.setText("Error: Prescription already entered!");
+					}*/
+					
+					// lab test
+					temp = patientComboBox.getSelectionModel().getSelectedIndex();
+					String patientName = allPatients.get(temp).getName();
+					LocalDate currentDate = LocalDate.now(); // current date
 					String prescribeTest = patientName + " needs to have lab test for: " + LabTestTextField.getText() + " on: " + currentDate.toString();
 					if(LabTestTextField.getText().equals("")) {
 						actionTarget2.setFill(Color.RED);
@@ -308,7 +388,7 @@ public class PrescribeMedView extends BaseView {
 			buttons.getChildren().add(showMedBtn);
 		}
 		else {
-			buttons.getChildren().addAll(PrescribeMedBtn, showMedBtn);
+			buttons.getChildren().addAll(PrescribeMedBtn, PrescribeTestBtn, showMedBtn);
 		}
 		
 		baseVbox.getChildren().add(buttons);
