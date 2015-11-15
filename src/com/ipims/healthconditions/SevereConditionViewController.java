@@ -81,9 +81,24 @@ public class SevereConditionViewController {
 		if(index >= 0) {
 			
 			List<Alert> alerts = getAllAlertsForLoggedInUser();
-			Alert alert = alerts.get(index);
-			System.out.println("going to mark read" + alert.getPatientId() +" " + alert.getAlertId());
-			DatabaseManager.getInstance().markAlertRead(alert.getAlertId());
+			
+			int i = -1;
+			Alert alertToDelete = null;
+			for (Alert alert : alerts) {
+				
+				if(alert.isRead() == false) {
+					i++;
+					if (i == index) {
+						alertToDelete = alert;
+						break;
+					}
+				}
+				
+			}
+			
+			
+			System.out.println("going to mark read" + alertToDelete.getPatientId() +" " + alertToDelete.getAlertId());
+			DatabaseManager.getInstance().markAlertRead(alertToDelete.getAlertId());
 			view.refreshList(alertObsList());
 		}
 		

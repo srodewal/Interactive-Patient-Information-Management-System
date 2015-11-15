@@ -2,7 +2,10 @@ package com.ipims.stats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
@@ -94,48 +97,43 @@ public class ReportManager {
 
 	}
 
-	// to do
+	/**
+	 * Returns a list for displaying in analyze patient type report.
+	 * @return Observable list to be displayed
+	 */
 	public static ObservableList<String> analyzeTypeOfPatients() {
-		int allergyCount = 0;
-		int chestCount = 0;
-		int heartCount = 0;
-		int diabeticCount = 0;
-		int skinCount = 0;
 
-		//String allergy, chestPain, heartProb, diabetic, skinProb;
-		
+		HashMap<String, Integer> patientTypeMap = new HashMap<>();
+
 		List<Patient> patientList = new ArrayList<Patient>();
 		patientList = DatabaseManager.getInstance().getAllPatients();
+
 		for(int i = 0; i < patientList.size(); i++) {
+			
 			// return all health conditions for each patient and update counts
 			List<HealthCondition> hcList = DatabaseManager.getInstance().getPatientConditions(patientList.get(i));
-			for(int j = 0; j < hcList.size(); j++) {
-				if(hcList.get(i).getHealthConcern().equals("Allergies")) {
-					allergyCount++;
+			for(HealthCondition condition : hcList) {
+				
+				if (condition.getHealthConcern().equals("Emergency") == false) {
+					Integer value = patientTypeMap.get(condition.getHealthConcern());
+					if (value == null) {
+						value = new Integer(0);
+					}
+					value++;
+					patientTypeMap.put(condition.getHealthConcern(), value);
 				}
-				if(hcList.get(i).getHealthConcern().equals("Chest Pain")) {
-					chestCount++;
-				}
-				if(hcList.get(i).getHealthConcern().equals("Heart Problems")) {
-					heartCount++;
-				}
-				if(hcList.get(i).getHealthConcern().equals("Diabetes")) {
-					diabeticCount++;
-				}
-				if(hcList.get(i).getHealthConcern().equals("Skin Problems")) {
-					skinCount++;
-				}
+				
 			}
 			
 		}
 
-		ObservableList<String> typePatients = FXCollections.observableArrayList (
-				);
-		typePatients.add("Allergy Count: " + Integer.toString(allergyCount));
-		typePatients.add("Chest Pain Count: " + Integer.toString(chestCount));
-		typePatients.add("Heart Problems Count: " + Integer.toString(heartCount));
-		typePatients.add("Diabetes Count: " + Integer.toString(diabeticCount));
-		typePatients.add("Skin Problems Count: " + Integer.toString(skinCount));
+		ObservableList<String> typePatients = FXCollections.observableArrayList ();
+		for (Map.Entry<String, Integer> entry : patientTypeMap.entrySet()) {
+		    String key = entry.getKey();
+		    Object value = entry.getValue();
+		    typePatients.add(key + " Count: " + value);
+		}
+	
 		return typePatients;
 
 	}
