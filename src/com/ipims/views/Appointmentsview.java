@@ -23,7 +23,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -147,6 +146,15 @@ public class Appointmentsview extends BaseView {
 		timeComboBox.getItems().addAll(Helper.getTimeSlots());
 
 		hbox.getChildren().addAll(dateLabel, datePicker, timeLabel, timeComboBox);
+		ComboBox<String> catPatientBox = new ComboBox<String>();
+		if (UserSession.getInstance().getCurrentUser().getUsertype() != UserType.PATIENT) {
+			Label patientLabel = new Label("Patient:");
+			patientLabel.setTextFill(Color.WHITE);
+			catPatientBox.getItems().addAll(Helper.getPatientList());
+
+			hbox.getChildren().add(patientLabel);
+			hbox.getChildren().add(catPatientBox);
+		}
 		baseVbox.getChildren().add(hbox);
 
 		HBox hbox2 = new HBox();
@@ -155,25 +163,44 @@ public class Appointmentsview extends BaseView {
 		Label docLabel = new Label("Doctor:");
 		docLabel.setTextFill(Color.WHITE);
 
-		 docComboBox = new ComboBox<String>();
+		docComboBox = new ComboBox<String>();
 		docComboBox.getItems().addAll(Helper.getDoctorList());
 
+		Label orLabel = new Label("OR");
+		orLabel.setTextFill(Color.WHITE);
+		
+		
 		Label categoryLabel = new Label("Category:");
 		categoryLabel.setTextFill(Color.WHITE);
 		catComboBox = new ComboBox<String>();
 		catComboBox.getItems().addAll(Helper.getCategoryList());
+		hbox2.getChildren().addAll(docLabel, docComboBox, orLabel, categoryLabel, catComboBox);
 
-		hbox2.getChildren().addAll(docLabel, docComboBox, categoryLabel, catComboBox);
+		// Patient can select either doctor or category. So when the select one, make the 
+		// other null.
+		//
+		catComboBox.setOnAction(new EventHandler<ActionEvent>() {
 
-		ComboBox<String> catPatientBox = new ComboBox<String>();
-		if (UserSession.getInstance().getCurrentUser().getUsertype() != UserType.PATIENT) {
-			Label patientLabel = new Label("Patient:");
-			patientLabel.setTextFill(Color.WHITE);
-			catPatientBox.getItems().addAll(Helper.getPatientList());
+			@Override
+			public void handle(ActionEvent event) {
+				docComboBox.setValue(null);
 
-			hbox2.getChildren().add(patientLabel);
-			hbox2.getChildren().add(catPatientBox);
-		}
+
+			}
+
+		});
+		docComboBox.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				catComboBox.setValue(null);
+
+
+			}
+
+		});
+		
+		
 		baseVbox.getChildren().add(hbox2);
 
 		// Fill in values for update
@@ -184,7 +211,7 @@ public class Appointmentsview extends BaseView {
 			timeComboBox.setValue(appointment.getTime());
 			if (appointment.getDoctor() != null)
 				docComboBox.setValue(appointment.getDoctor().getName());
-			catComboBox.setValue(appointment.getCategory());
+			
 
 			if (catPatientBox != null) {
 				catPatientBox.setValue(appointment.getPatient().getName());
