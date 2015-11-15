@@ -7,7 +7,7 @@ import com.ipims.Helper;
 import com.ipims.MenuViewController;
 import com.ipims.database.DatabaseManager;
 import com.ipims.models.Appointment;
-
+import com.ipims.models.Doctor;
 import com.ipims.models.Patient;
 import com.ipims.models.User;
 import com.ipims.models.User.UserType;
@@ -140,10 +140,7 @@ public class AppointmentViewController {
 		if (validateInputAppoinment(newAppoinment) == true &&
 				checkForConflict( newAppoinment) == true) {
 
-			if (newAppoinment.getCategory() == null) {
-				System.out.println(newAppoinment.getDoctor().getCategory());
-				newAppoinment.setCategory(newAppoinment.getDoctor().getCategory());
-			}
+			
 			appManager.newAppointment(newAppoinment);
 			view.refreshList(getAppoinmentList());
 		}
@@ -160,11 +157,27 @@ public class AppointmentViewController {
 	private boolean validateInputAppoinment(Appointment newAppoinment) {
 
 		// Check if all the fields are entered.
-		if (newAppoinment.getDate() == null || newAppoinment.getTime() == null || newAppoinment.getDoctor() == null) {
+		if (newAppoinment.getDate() == null || newAppoinment.getTime() == null ||
+				(newAppoinment.getDoctor() == null && newAppoinment.getCategory() == null)) {
+			
 			view.showErrorMessage("Cannot submit the appoinment. Please enter all the required fields.");
 			return false;
 		}
 
+		// Fill category if its empty
+		if (newAppoinment.getCategory() == null) {
+			newAppoinment.setCategory(newAppoinment.getDoctor().getCategory());
+		}
+		
+		if (newAppoinment.getDoctor() == null) {
+			for (Doctor doc : DatabaseManager.getInstance().getAllDoctors()) {
+				if (newAppoinment.getCategory().equals(doc.getCategory())) {
+					newAppoinment.setDoctor(doc);
+					break;
+				}
+			}
+		}
+		
 		// Check if the time is valid.
 		String []parts = newAppoinment.getTime().split(":");
 		if (parts.length != 2 || Helper.isNumeric(parts[0]) == false || Helper.isNumeric(parts[1]) == false  ) {

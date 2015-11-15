@@ -61,4 +61,8 @@ public class Appointment {
 	public void setCategory(String cat) {
 		this.category = cat;
 	}
+	
+	public void setDoctor(Doctor doc) {
+		this.doctor = doc;
+	}
 }

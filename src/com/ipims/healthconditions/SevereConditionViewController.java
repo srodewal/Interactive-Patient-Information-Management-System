@@ -49,8 +49,15 @@ public class SevereConditionViewController {
 		for (Alert alert : alerts) {
 			
 			if(alert.isRead() == false) {
+				String text = "";
 				Patient patient = (Patient)DatabaseManager.getInstance().getUser(alert.getPatientId());
-				String text = "Patient: " + patient.getName() + " need emergency care.";
+				
+				if (UserSession.getInstance().getCurrentUser().getUsertype() == UserType.DOCTOR) {
+					
+					text = "Patient: " + patient.getName() + " need emergency care.";
+				} else {
+					text = "Patient: " + patient.getName() + " has added a severe condition.";
+				}
 				alertList.add(text);
 			}
 			

@@ -95,7 +95,8 @@ public class MenuViewController {
 	}
 	
 	public void handleViewSevereCases() {
-		
+		SevereConditionViewController scViewController = new SevereConditionViewController();
+		view.getStage().setScene(scViewController.getScene());
 	}
 
 }
