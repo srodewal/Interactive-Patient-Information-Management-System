@@ -94,6 +94,9 @@ public class HealthViewController {
 	}
 
 	public void handleSubmitHc(HealthCondition newHc) {
+		if (currentlySelectedPerson == null) {
+			view.showErrorMessage("Please select a patient");
+		}
 		newHc.setPatientId(currentlySelectedPerson.getUserId());
 		manager.saveHealthCondition(newHc);
 		this.view.showInfo("Condition saved.");

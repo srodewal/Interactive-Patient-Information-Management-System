@@ -47,9 +47,13 @@ public class SevereConditionViewController {
 		List<Alert> alerts = getAllAlertsForLoggedInUser();
 		List<String> alertList = new ArrayList<>();
 		for (Alert alert : alerts) {
-			Patient patient = (Patient)DatabaseManager.getInstance().getUser(alert.getPatientId());
-			String text = "Patient: " + patient.getName() + " need emergency care.";
-			alertList.add(text);
+			
+			if(alert.isRead() == false) {
+				Patient patient = (Patient)DatabaseManager.getInstance().getUser(alert.getPatientId());
+				String text = "Patient: " + patient.getName() + " need emergency care.";
+				alertList.add(text);
+			}
+			
 		}
 		ObservableList<String> items = FXCollections.observableArrayList (alertList);
 		return items;
@@ -66,6 +70,15 @@ public class SevereConditionViewController {
 	}
 	
 	public void handleMarkRead(int index) {
+		
+		if(index >= 0) {
+			
+			List<Alert> alerts = getAllAlertsForLoggedInUser();
+			Alert alert = alerts.get(index);
+			System.out.println("going to mark read" + alert.getPatientId() +" " + alert.getAlertId());
+			DatabaseManager.getInstance().markAlertRead(alert.getAlertId());
+			view.refreshList(alertObsList());
+		}
 		
 	}
 }

@@ -4,8 +4,7 @@ package com.ipims.views;
 import com.ipims.healthconditions.SevereConditionViewController;
 import com.ipims.models.User;
 
-
-
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -58,8 +57,13 @@ public class SevereConditionView extends BaseView {
 				parentController.handleMarkRead(listView.getSelectionModel().getSelectedIndex());
 			}
 		});
-		
+		vbox.getChildren().add(markReadBtn);
 		createScene(vbox);
 
+	}
+	
+	public void refreshList(ObservableList<String>list) {
+		listView.getItems().clear();
+		listView.getItems().addAll(list);
 	}
 }

@@ -51,7 +51,14 @@ public class MenuView extends BaseView {
 		} else if (user.getUsertype() == UserType.HSPSTAFF) {
 			
 			List<Alert> alerts = DatabaseManager.getInstance().getAllSevereAlerts();
-			if (alerts.size() > 0)
+			boolean containsUnread = false;
+			for (Alert alert : alerts) {
+				if (alert.isRead() == false) {
+					containsUnread = true;
+					break;
+				}
+			}
+			if (containsUnread)
 				vbox.getChildren().add(severeButton(parentController, alerts.size()));
 			
 			vbox.getChildren().add(appoinmentButton(parentController));
@@ -65,7 +72,14 @@ public class MenuView extends BaseView {
 		} else if (user.getUsertype() == UserType.DOCTOR) {
 			
 			List<Alert> alerts = DatabaseManager.getInstance().getAllEmergencyAlerts();
-			if (alerts.size() > 0)
+			boolean containsUnread = false;
+			for (Alert alert : alerts) {
+				if (alert.isRead() == false) {
+					containsUnread = true;
+					break;
+				}
+			}
+			if (containsUnread)
 				vbox.getChildren().add(emergencyButton(parentController, alerts.size()));
 			vbox.getChildren().add(appoinmentButton(parentController));
 			vbox.getChildren().add(updateHealthButton(parentController));
