@@ -67,7 +67,7 @@ public class IPIMSApplication extends Application {
 	private void preFillDoctor() {
 
 		Doctor user = new Doctor();
-		user.setName("John XX");
+		user.setName("Dr. Jones");
 		user.setUserName("johnc");
 		user.setAddress("asdad");
 		user.setDateOfBirth("12/2/1978");
@@ -83,23 +83,23 @@ public class IPIMSApplication extends Application {
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 
-		if (DatabaseManager.getInstance().getUser("tom", "test") == null) {
-			user.setName("Tom T");
+		if (DatabaseManager.getInstance().getUser("adam", "test") == null) {
+			user.setName("Dr. Adams");
 			user.setCategory(Helper.getAllCategories().get(0));
-			user.setUserName("tom");
+			user.setUserName("adam");
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
 
 		if (DatabaseManager.getInstance().getUser("will", "test") == null) {
-			user.setName("Will");
+			user.setName("Dr. Williams");
 			user.setUserName("will");
 			user.setCategory(Helper.getAllCategories().get(3));
 			DatabaseManager.getInstance().newUser(user, "test");
 		}		
 
-		if (DatabaseManager.getInstance().getUser("emg") == null) {
-			user.setName("Smith");
-			user.setUserName("emg");
+		if (DatabaseManager.getInstance().getUser("smith") == null) {
+			user.setName("Dr. Smith");
+			user.setUserName("smith");
 			user.setCategory(Helper.getAllCategories().get(2));
 			DatabaseManager.getInstance().newUser(user, "test");
 		}

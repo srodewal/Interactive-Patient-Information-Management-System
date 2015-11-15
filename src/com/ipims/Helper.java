@@ -52,10 +52,10 @@ public class Helper {
 
 	public static List<String> getAllCategories() {
 		List<String> list = new ArrayList<>(); 
-		list.add("Heart");
-		list.add("Eye");
-		list.add("Ortho");
-		list.add("Dental");
+		list.add("Cardiologist");
+		list.add("Allergist");
+		list.add("Pediatrician");
+		list.add("Orthopedic");
 		return list;
 	}
 	
