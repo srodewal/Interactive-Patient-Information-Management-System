@@ -11,9 +11,6 @@ import java.util.logging.Logger;
 import com.ipims.models.*;
 import com.ipims.models.User.UserType;
 
-//TODO: make sure everything that uses a database connection checks for a null connection
-//TODO: make sure every statement gets closed
-
 /**
  * 
  * @author Matthew Hanna
@@ -450,33 +447,36 @@ public class DatabaseManager {
 	 */
 	public LabRecord newLabRecord(LabRecord record)
 	{
-		try
+		if(dbConnection != null)
 		{
-			PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium, date) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			insertRecord.setInt(1, record.getPatientId());
-			insertRecord.setFloat(2, record.getGlucose());
-			insertRecord.setFloat(3, record.getCalcium());
-			insertRecord.setFloat(4, record.getMagnesium());
-			insertRecord.setFloat(5, record.getSodium());
-			insertRecord.setString(6, record.getDate().toString());
-
-			int affectedRows = insertRecord.executeUpdate();
-			
-			if(affectedRows != 0)
+			try
 			{
-				ResultSet rs = insertRecord.getGeneratedKeys();
-				if(rs.next())
+				PreparedStatement insertRecord = dbConnection.prepareStatement("INSERT INTO LabRecord (userId, glucose, calcium, magnesium, sodium, date) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+				insertRecord.setInt(1, record.getPatientId());
+				insertRecord.setFloat(2, record.getGlucose());
+				insertRecord.setFloat(3, record.getCalcium());
+				insertRecord.setFloat(4, record.getMagnesium());
+				insertRecord.setFloat(5, record.getSodium());
+				insertRecord.setString(6, record.getDate().toString());
+	
+				int affectedRows = insertRecord.executeUpdate();
+				
+				if(affectedRows != 0)
 				{
-					record.setLabRecordId(rs.getInt(1));
+					ResultSet rs = insertRecord.getGeneratedKeys();
+					if(rs.next())
+					{
+						record.setLabRecordId(rs.getInt(1));
+					}
 				}
+				
+				insertRecord.close();
 			}
-			
-			insertRecord.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not add lab record to the database. Please check that the database has been set up properly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not add lab record to the database. Please check that the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return record;
@@ -490,35 +490,38 @@ public class DatabaseManager {
 	 */
 	public Prescription newPrescription(Prescription prescription)
 	{
-		try
+		if(dbConnection != null)
 		{
-			System.out.println("p1");
-			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent, testOrMedicine) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			System.out.println("p2");
-			System.out.println("Setup " + prescription.getUserId() + "\n");
-			insertPrescription.setInt(1, prescription.getUserId());
-			insertPrescription.setString(2, prescription.getDate());
-			insertPrescription.setString(3, prescription.getPrescriptionText());
-			insertPrescription.setInt(4, prescription.isCurrent() ? 1 : 0);
-			insertPrescription.setInt(5, prescription.isMedicine() ? 1 : 0);
-
-			int affectedRows = insertPrescription.executeUpdate();
-			
-			if(affectedRows != 0)
+			try
 			{
-				ResultSet rs = insertPrescription.getGeneratedKeys();
-				if(rs.next())
+				System.out.println("p1");
+				PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO Prescription (userId, date, medicine, pastOrCurrent, testOrMedicine) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+				System.out.println("p2");
+				System.out.println("Setup " + prescription.getUserId() + "\n");
+				insertPrescription.setInt(1, prescription.getUserId());
+				insertPrescription.setString(2, prescription.getDate());
+				insertPrescription.setString(3, prescription.getPrescriptionText());
+				insertPrescription.setInt(4, prescription.isCurrent() ? 1 : 0);
+				insertPrescription.setInt(5, prescription.isMedicine() ? 1 : 0);
+	
+				int affectedRows = insertPrescription.executeUpdate();
+				
+				if(affectedRows != 0)
 				{
-					prescription.setPrescriptionId(rs.getInt(1));
+					ResultSet rs = insertPrescription.getGeneratedKeys();
+					if(rs.next())
+					{
+						prescription.setPrescriptionId(rs.getInt(1));
+					}
 				}
+				
+				insertPrescription.close();
 			}
-			
-			insertPrescription.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not add prescription the the database. Please check that the database has been set up properly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not add prescription the the database. Please check that the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return prescription;
@@ -530,21 +533,24 @@ public class DatabaseManager {
 	 * @param category
 	 */
 	public void newDoctorCategory(Doctor doc, String category) {
-		try
+		if(dbConnection != null)
 		{
+			try
+			{
+				
+				PreparedStatement insertCategory = dbConnection.prepareStatement("INSERT INTO DoctorCategory (userId, category) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 			
-			PreparedStatement insertPrescription = dbConnection.prepareStatement("INSERT INTO DoctorCategory (userId, category) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-		
-			insertPrescription.setInt(1, doc.getUserId());
-			insertPrescription.setString(2, category);
-			insertPrescription.executeUpdate();
-			
-			insertPrescription.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not add category the the database. Please check that the database has been set up properly.");
-			logError(e.getMessage());
+				insertCategory.setInt(1, doc.getUserId());
+				insertCategory.setString(2, category);
+				insertCategory.executeUpdate();
+				
+				insertCategory.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not add category the the database. Please check that the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 		
 	}
@@ -556,31 +562,34 @@ public class DatabaseManager {
 	 */
 	public Alert newAlert(Alert alert)
 	{
-		try
+		if(dbConnection != null)
 		{
-			PreparedStatement insertAlert = dbConnection.prepareStatement("INSERT INTO Alert (conditionId, patientId, read, severeOrEmergency) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			insertAlert.setInt(1, alert.getConditionId());
-			insertAlert.setInt(2, alert.getPatientId());
-			insertAlert.setInt(3, alert.isRead() ? 1 : 0);
-			insertAlert.setInt(4, alert.isEmergency() ? 1 : 0);
-			
-			int affectedRows = insertAlert.executeUpdate();
-			
-			if(affectedRows != 0)
+			try
 			{
-				ResultSet rs = insertAlert.getGeneratedKeys();
-				if(rs.next())
+				PreparedStatement insertAlert = dbConnection.prepareStatement("INSERT INTO Alert (conditionId, patientId, read, severeOrEmergency) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+				insertAlert.setInt(1, alert.getConditionId());
+				insertAlert.setInt(2, alert.getPatientId());
+				insertAlert.setInt(3, alert.isRead() ? 1 : 0);
+				insertAlert.setInt(4, alert.isEmergency() ? 1 : 0);
+				
+				int affectedRows = insertAlert.executeUpdate();
+				
+				if(affectedRows != 0)
 				{
-					alert.setAlertId(rs.getInt(1));
+					ResultSet rs = insertAlert.getGeneratedKeys();
+					if(rs.next())
+					{
+						alert.setAlertId(rs.getInt(1));
+					}
 				}
+				
+				insertAlert.close();
 			}
-			
-			insertAlert.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not add alert to the database. Please check that the database has been set up properly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not add alert to the database. Please check that the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return alert;
@@ -594,18 +603,26 @@ public class DatabaseManager {
 	 */
 	public User getUser(String userName, String password) {
 		User user = null;
-		try {
-			PreparedStatement stat = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ? AND passwordHash = ?");
-			stat.setString(1, userName);
-			stat.setString(2, password);
-			ResultSet rs = stat.executeQuery();
-			if (rs.isClosed() == false) {
-				user = createUser(rs);
+		if(dbConnection != null)
+		{
+			try
+			{
+				PreparedStatement stat = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ? AND passwordHash = ?");
+				stat.setString(1, userName);
+				stat.setString(2, password);
+				ResultSet rs = stat.executeQuery();
+				
+				if (rs.isClosed() == false)
+				{
+					user = createUser(rs);
+				}
+	
+				stat.close();
 			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
+			catch (SQLException e) {
+	
+				e.printStackTrace();
+			}
 		}
 		return user;
 	}
@@ -618,22 +635,28 @@ public class DatabaseManager {
 	public User getUser(int userId)
 	{
 		User user = null;
-
-		try
+		
+		if(dbConnection != null)
 		{
-			PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userId = ?");
-			userStatement.setInt(1, userId);
-
-			ResultSet rs = userStatement.executeQuery();
-			if(rs.isClosed() == false)
+			try
 			{
-				user = createUser(rs);
+				PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userId = ?");
+				userStatement.setInt(1, userId);
+	
+				ResultSet rs = userStatement.executeQuery();
+				
+				if(rs.isClosed() == false)
+				{
+					user = createUser(rs);
+				}
+				
+				userStatement.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get user. Please check that the database has been set up properly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get user. Please check that the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return user;
@@ -647,22 +670,28 @@ public class DatabaseManager {
 	public User getUser(String userName)
 	{
 		User user = null;
-
-		try
+		
+		if(dbConnection != null)
 		{
-			PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ?");
-			userStatement.setString(1, userName);
-
-			ResultSet rs = userStatement.executeQuery();
-			if(rs.isClosed() == false)
+			try
 			{
-				user = createUser(rs);
+				PreparedStatement userStatement = dbConnection.prepareStatement("SELECT * FROM User WHERE userName = ?");
+				userStatement.setString(1, userName);
+	
+				ResultSet rs = userStatement.executeQuery();
+				
+				if(rs.isClosed() == false)
+				{
+					user = createUser(rs);
+				}
+				
+				userStatement.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get user. Please check that the database has been set up properly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get user. Please check that the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return user;
@@ -675,19 +704,27 @@ public class DatabaseManager {
 	public List<User> getPatientList() {
 
 		List<User> userList = new ArrayList<>();
-
-		try {
-			Statement stat = dbConnection.createStatement();
-			ResultSet rs = stat.executeQuery("select * from USER WHERE type = " + UserType.PATIENT.ordinal() + ";");
-
-			while (rs.next()) {
-
-				User user = createUser(rs);
-				userList.add(user);
+		
+		if(dbConnection != null)
+		{
+			try
+			{
+				Statement stat = dbConnection.createStatement();
+				ResultSet rs = stat.executeQuery("select * from USER WHERE type = " + UserType.PATIENT.ordinal() + ";");
+	
+				while (rs.next())
+				{
+					User user = createUser(rs);
+					userList.add(user);
+				}
+				
+				stat.close();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
+		
 		return userList;
 	}
 
@@ -699,24 +736,30 @@ public class DatabaseManager {
 	public List<Appointment> getAppointmentForPatient(Patient patient)
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
-		try
+		
+		if(dbConnection != null)
 		{
-
-			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE patientId = ?");
-			getAppointments.setInt(1, patient.getUserId());
-
-			ResultSet rs = getAppointments.executeQuery();
-
-			while(rs.next())
+			try
 			{
-				Appointment appointment = createAppointment(rs);
-				appointmentList.add(appointment);
+	
+				PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE patientId = ?");
+				getAppointments.setInt(1, patient.getUserId());
+	
+				ResultSet rs = getAppointments.executeQuery();
+	
+				while(rs.next())
+				{
+					Appointment appointment = createAppointment(rs);
+					appointmentList.add(appointment);
+				}
+				
+				getAppointments.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get appointments. Please check the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get appointments. Please check the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return appointmentList;
@@ -726,23 +769,28 @@ public class DatabaseManager {
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
 		
-		try
+		if(dbConnection != null)
 		{
-			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE doctorId = ? AND date = ?");
-			getAppointments.setInt(1, doctorId);
-			getAppointments.setString(2, date);
-			
-			ResultSet rs = getAppointments.executeQuery();
-			while(rs.next())
+			try
 			{
-				appointmentList.add(createAppointment(rs));
+				PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE doctorId = ? AND date = ?");
+				getAppointments.setInt(1, doctorId);
+				getAppointments.setString(2, date);
+				
+				ResultSet rs = getAppointments.executeQuery();
+				
+				while(rs.next())
+				{
+					appointmentList.add(createAppointment(rs));
+				}
+				
+				getAppointments.close();
 			}
-			getAppointments.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not get appointments. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get appointments. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return appointmentList;
@@ -752,22 +800,27 @@ public class DatabaseManager {
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
 		
-		try
+		if(dbConnection != null)
 		{
-			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE date = ?");
-			getAppointments.setString(1, date);
-			
-			ResultSet rs = getAppointments.executeQuery();
-			while(rs.next())
+			try
 			{
-				appointmentList.add(createAppointment(rs));
+				PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments WHERE date = ?");
+				getAppointments.setString(1, date);
+				
+				ResultSet rs = getAppointments.executeQuery();
+				
+				while(rs.next())
+				{
+					appointmentList.add(createAppointment(rs));
+				}
+				
+				getAppointments.close();
 			}
-			getAppointments.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not get appointments. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get appointments. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return appointmentList;
@@ -775,23 +828,30 @@ public class DatabaseManager {
 	
 	public String getCategoryForDoctor(Doctor doc) {
 		String cat = null;
-		try
+		
+		if(dbConnection != null)
 		{
-			PreparedStatement getCat = dbConnection.prepareStatement("SELECT * FROM DoctorCategory WHERE userId = ?");
-			getCat.setInt(1, doc.getUserId());
-			
-			ResultSet rs = getCat.executeQuery();
-			while(rs.next())
+			try
 			{
-				cat = rs.getString("category");
+				PreparedStatement getCat = dbConnection.prepareStatement("SELECT * FROM DoctorCategory WHERE userId = ?");
+				getCat.setInt(1, doc.getUserId());
+				
+				ResultSet rs = getCat.executeQuery();
+				
+				while(rs.next())
+				{
+					cat = rs.getString("category");
+				}
+				
+				getCat.close();
 			}
-			getCat.close();
+			catch(Exception e)
+			{
+				logError("Could not get category. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
-		catch(Exception e)
-		{
-			logError("Could not get category. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
-		}
+		
 		return cat;
 	}
 
@@ -802,22 +862,28 @@ public class DatabaseManager {
 	public List<Appointment> getAllAppointments()
 	{
 		List<Appointment> appointmentList = new ArrayList<>();
-		try
+		
+		if(dbConnection != null)
 		{
-
-			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments");
-			ResultSet rs = getAppointments.executeQuery();
-
-			while(rs.next())
+			try
 			{
-				Appointment appointment = createAppointment(rs);
-				appointmentList.add(appointment);
+	
+				PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM Appointments");
+				ResultSet rs = getAppointments.executeQuery();
+	
+				while(rs.next())
+				{
+					Appointment appointment = createAppointment(rs);
+					appointmentList.add(appointment);
+				}
+				
+				getAppointments.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get appointments. Please check the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get appointments. Please check the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return appointmentList;
@@ -831,46 +897,52 @@ public class DatabaseManager {
 	public List<Prescription> getPrescriptionsForPatient(int patientId)
 	{
 		List<Prescription> prescriptions = new ArrayList<>();
-
-		try
+		
+		if(dbConnection != null)
 		{
-			PreparedStatement getPrescriptions = dbConnection.prepareStatement("SELECT * FROM Prescription WHERE userId = ?");
-			getPrescriptions.setInt(1, patientId);
-
-			ResultSet rs = getPrescriptions.executeQuery();
-			while(rs.next())
+			try
 			{
-				Prescription prescription = new Prescription();
-				prescription.setPrescriptionId(rs.getInt("prescriptionId"));
-				prescription.setUserId(patientId);
-				prescription.setDate(rs.getString("date"));
-				prescription.setPrescriptionText(rs.getString("medicine"));
-
-				if(rs.getInt("pastOrCurrent") == 0)
+				PreparedStatement getPrescriptions = dbConnection.prepareStatement("SELECT * FROM Prescription WHERE userId = ?");
+				getPrescriptions.setInt(1, patientId);
+	
+				ResultSet rs = getPrescriptions.executeQuery();
+				
+				while(rs.next())
 				{
-					prescription.setCurrent(false);
-				}
-				else
-				{
-					prescription.setCurrent(true);
+					Prescription prescription = new Prescription();
+					prescription.setPrescriptionId(rs.getInt("prescriptionId"));
+					prescription.setUserId(patientId);
+					prescription.setDate(rs.getString("date"));
+					prescription.setPrescriptionText(rs.getString("medicine"));
+	
+					if(rs.getInt("pastOrCurrent") == 0)
+					{
+						prescription.setCurrent(false);
+					}
+					else
+					{
+						prescription.setCurrent(true);
+					}
+					
+					if(rs.getInt("testOrMedicine") == 0)
+					{
+						prescription.setMedicine(false);
+					}
+					else
+					{
+						prescription.setMedicine(true);
+					}
+	
+					prescriptions.add(prescription);
 				}
 				
-				if(rs.getInt("testOrMedicine") == 0)
-				{
-					prescription.setMedicine(false);
-				}
-				else
-				{
-					prescription.setMedicine(true);
-				}
-
-				prescriptions.add(prescription);
+				getPrescriptions.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get prescriptions. Please check the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get prescriptions. Please check the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return prescriptions;
@@ -883,25 +955,28 @@ public class DatabaseManager {
 	public List<Alert> getAllSevereAlerts()
 	{
 		List<Alert> alerts = new ArrayList<>();
-		
-		try
+	
+		if(dbConnection != null)
 		{
-			Statement getAlerts = dbConnection.createStatement();
-			
-			ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert WHERE severeOrEmergency = 0;");
-			while(rs.next())
+			try
 			{
-				Alert alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), rs.getInt("read") == 0 ? false: true, false);
+				Statement getAlerts = dbConnection.createStatement();
 				
-				alerts.add(alert);
+				ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert WHERE severeOrEmergency = 0;");
+				while(rs.next())
+				{
+					Alert alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), rs.getInt("read") == 0 ? false: true, false);
+					
+					alerts.add(alert);
+				}
+				
+				getAlerts.close();
 			}
-			
-			getAlerts.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not get alerts. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get alerts. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return alerts;
@@ -915,24 +990,27 @@ public class DatabaseManager {
 	{
 		List<Alert> alerts = new ArrayList<>();
 		
-		try
+		if(dbConnection != null)
 		{
-			Statement getAlerts = dbConnection.createStatement();
-			
-			ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert WHERE severeOrEmergency = 1;");
-			while(rs.next())
+			try
 			{
-				Alert alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), rs.getInt("read") == 0 ? false: true, true);
+				Statement getAlerts = dbConnection.createStatement();
 				
-				alerts.add(alert);
+				ResultSet rs = getAlerts.executeQuery("SELECT * FROM Alert WHERE severeOrEmergency = 1;");
+				while(rs.next())
+				{
+					Alert alert = new Alert(rs.getInt("alertId"), rs.getInt("conditionId"), rs.getInt("patientId"), rs.getInt("read") == 0 ? false: true, true);
+					
+					alerts.add(alert);
+				}
+				
+				getAlerts.close();
 			}
-			
-			getAlerts.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not get alerts. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get alerts. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return alerts;
@@ -945,24 +1023,29 @@ public class DatabaseManager {
 	public List<Doctor> getAllDoctors()
 	{
 		List<Doctor> doctors = new ArrayList<>();
-
-		try
+		
+		if(dbConnection != null)
 		{
-			Statement getDoctors = dbConnection.createStatement();
-			ResultSet rs = getDoctors.executeQuery("SELECT * FROM User LEFT OUTER JOIN DoctorCategory ON User.userId = DoctorCategory.userId AND User.type=" + UserType.DOCTOR.ordinal());
-
-			while(rs.next())
+			try
 			{
-				Doctor doctor = (Doctor) createUser(rs);
-				doctor.setCategory(rs.getString("category"));
-
-				doctors.add(doctor);
+				Statement getDoctors = dbConnection.createStatement();
+				ResultSet rs = getDoctors.executeQuery("SELECT * FROM User LEFT OUTER JOIN DoctorCategory ON User.userId = DoctorCategory.userId AND User.type=" + UserType.DOCTOR.ordinal());
+	
+				while(rs.next())
+				{
+					Doctor doctor = (Doctor) createUser(rs);
+					doctor.setCategory(rs.getString("category"));
+	
+					doctors.add(doctor);
+				}
+				
+				getDoctors.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get doctors from the database. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get doctors from the database. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return doctors;
@@ -975,24 +1058,29 @@ public class DatabaseManager {
 	public List<Patient> getAllPatients()
 	{
 		List<Patient> patients = new ArrayList<>();
-
-		try
+		
+		if(dbConnection != null)
 		{
-			PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM User WHERE type = ?");
-			getPatients.setInt(1, UserType.PATIENT.ordinal());
-			ResultSet rs = getPatients.executeQuery();
-
-			while(rs.next())
+			try
 			{
-				Patient patient = (Patient) createUser(rs);
-
-				patients.add(patient);
+				PreparedStatement getPatients = dbConnection.prepareStatement("SELECT * FROM User WHERE type = ?");
+				getPatients.setInt(1, UserType.PATIENT.ordinal());
+				ResultSet rs = getPatients.executeQuery();
+	
+				while(rs.next())
+				{
+					Patient patient = (Patient) createUser(rs);
+	
+					patients.add(patient);
+				}
+				
+				getPatients.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get patients from the database. Please check that the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get patients from the database. Please check that the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return patients;
@@ -1006,28 +1094,35 @@ public class DatabaseManager {
 	public List<HealthCondition> getPatientConditions(Patient patient)
 	{
 		List<HealthCondition> conditions = new ArrayList<>();
-		try
+		
+		if(dbConnection != null)
 		{
-
-			PreparedStatement getAppointments = dbConnection.prepareStatement("SELECT * FROM HealthCondition WHERE userId = ?");
-			getAppointments.setInt(1, patient.getUserId());
-
-			ResultSet rs = getAppointments.executeQuery();
-			while(rs.next()) {
-				HealthCondition healthCondition  = new HealthCondition();				
-				healthCondition.setHealthConditionId(rs.getInt("id"));
-				healthCondition.setHealthConcern(rs.getString("healthConcerns"));
-				healthCondition.setComments(rs.getString("comments"));
-				healthCondition.setSeverity(rs.getInt("severity"));
-				healthCondition.setCurrent(rs.getInt("isCurrent")==1);
-				healthCondition.setPatientId(rs.getInt("userId"));
-				conditions.add(healthCondition);
+			try
+			{
+	
+				PreparedStatement getConditions = dbConnection.prepareStatement("SELECT * FROM HealthCondition WHERE userId = ?");
+				getConditions.setInt(1, patient.getUserId());
+	
+				ResultSet rs = getConditions.executeQuery();
+				
+				while(rs.next()) {
+					HealthCondition healthCondition  = new HealthCondition();				
+					healthCondition.setHealthConditionId(rs.getInt("id"));
+					healthCondition.setHealthConcern(rs.getString("healthConcerns"));
+					healthCondition.setComments(rs.getString("comments"));
+					healthCondition.setSeverity(rs.getInt("severity"));
+					healthCondition.setCurrent(rs.getInt("isCurrent")==1);
+					healthCondition.setPatientId(rs.getInt("userId"));
+					conditions.add(healthCondition);
+				}
+				
+				getConditions.close();
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not get patient condition. Please check the database has been set up correctly.");
-			logError(e.getMessage());
+			catch(Exception e)
+			{
+				logError("Could not get patient condition. Please check the database has been set up correctly.");
+				logError(e.getMessage());
+			}
 		}
 
 		return conditions;
@@ -1041,29 +1136,35 @@ public class DatabaseManager {
 	public List<LabRecord> getLabRecordsForPatient(int patientId)
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
-		try
-		{	
-			PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord WHERE userId = ?");		
-			getRecords.setInt(1, patientId);
-			ResultSet rs = getRecords.executeQuery();
-			
-			while(rs.next())
-			{
-				LabRecord record = new LabRecord();
-				record.setPatientId(rs.getInt("userId"));
-				record.setLabRecordId(rs.getInt("recordId"));
-				record.setGlucose(rs.getFloat("glucose"));
-				record.setSodium(rs.getFloat("sodium"));
-				record.setCalcium(rs.getFloat("calcium"));
-				record.setMagnesium(rs.getFloat("magnesium"));
-				record.setDate(LocalDate.parse(rs.getString("date"), DateTimeFormatter.ISO_LOCAL_DATE));
-				records.add(record);
-			}
-		}
-		catch(Exception e)
+		
+		if(dbConnection != null)
 		{
-			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
-			logError(e.getMessage());
+			try
+			{	
+				PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord WHERE userId = ?");		
+				getRecords.setInt(1, patientId);
+				ResultSet rs = getRecords.executeQuery();
+				
+				while(rs.next())
+				{
+					LabRecord record = new LabRecord();
+					record.setPatientId(rs.getInt("userId"));
+					record.setLabRecordId(rs.getInt("recordId"));
+					record.setGlucose(rs.getFloat("glucose"));
+					record.setSodium(rs.getFloat("sodium"));
+					record.setCalcium(rs.getFloat("calcium"));
+					record.setMagnesium(rs.getFloat("magnesium"));
+					record.setDate(LocalDate.parse(rs.getString("date"), DateTimeFormatter.ISO_LOCAL_DATE));
+					records.add(record);
+				}
+				
+				getRecords.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
+				logError(e.getMessage());
+			}
 		}
 
 		return records;
@@ -1075,17 +1176,23 @@ public class DatabaseManager {
 	 */
 	public int getNumberOfRegisteredPatients() 
 	{
-		int NumberOfPatients = 0; 
-		try {
-			Statement getNumber = dbConnection.createStatement();
-			
-			ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT.ordinal() + ";");
-			NumberOfPatients = rs.getInt(1);
-		}
-		catch(Exception e) 
+		int NumberOfPatients = 0;
+		
+		if(dbConnection != null)
 		{
-			logError("Could not retrieve patient count. Please check that the database has been properly set up.");
-			logError(e.getMessage());
+			try {
+				Statement getNumber = dbConnection.createStatement();
+				
+				ResultSet rs = getNumber.executeQuery("SELECT COUNT(*) AS NumberOfPatients FROM User WHERE type=" + UserType.PATIENT.ordinal() + ";");
+				NumberOfPatients = rs.getInt(1);
+				
+				getNumber.close();
+			}
+			catch(Exception e) 
+			{
+				logError("Could not retrieve patient count. Please check that the database has been properly set up.");
+				logError(e.getMessage());
+			}
 		}
 		
 		return NumberOfPatients;
@@ -1098,28 +1205,34 @@ public class DatabaseManager {
 	public List<LabRecord> getAllLabRecord()
 	{
 		ArrayList<LabRecord> records = new ArrayList<>();
-		try
-		{	
-			PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord");		
-			ResultSet rs = getRecords.executeQuery();
-			
-			while(rs.next())
-			{
-				LabRecord record = new LabRecord();
-				record.setPatientId(rs.getInt("userId"));
-				record.setLabRecordId(rs.getInt("recordId"));
-				record.setGlucose(rs.getFloat("glucose"));
-				record.setSodium(rs.getFloat("sodium"));
-				record.setCalcium(rs.getFloat("calcium"));
-				record.setMagnesium(rs.getFloat("magnesium"));
-				record.setDate(LocalDate.parse(rs.getString("date"), DateTimeFormatter.ISO_LOCAL_DATE));
-				records.add(record);
-			}
-		}
-		catch(Exception e)
+		
+		if(dbConnection != null)
 		{
-			logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
-			logError(e.getMessage());
+			try
+			{	
+				PreparedStatement getRecords = dbConnection.prepareStatement("SELECT * FROM LabRecord");		
+				ResultSet rs = getRecords.executeQuery();
+				
+				while(rs.next())
+				{
+					LabRecord record = new LabRecord();
+					record.setPatientId(rs.getInt("userId"));
+					record.setLabRecordId(rs.getInt("recordId"));
+					record.setGlucose(rs.getFloat("glucose"));
+					record.setSodium(rs.getFloat("sodium"));
+					record.setCalcium(rs.getFloat("calcium"));
+					record.setMagnesium(rs.getFloat("magnesium"));
+					record.setDate(LocalDate.parse(rs.getString("date"), DateTimeFormatter.ISO_LOCAL_DATE));
+					records.add(record);
+				}
+				
+				getRecords.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not retrieve list of lab records. Please check that the database has been properly set up.");
+				logError(e.getMessage());
+			}
 		}
 
 		return records;
@@ -1141,7 +1254,9 @@ public class DatabaseManager {
 				updateAppointment.setString(4, appoinment.getTime());
 				updateAppointment.setString(5, appoinment.getDate().toString());
 				updateAppointment.setInt(6, appoinment.getAppointmentId());
+				
 				updateAppointment.executeUpdate();
+				
 				updateAppointment.close();
 			}
 			catch(Exception e)
@@ -1172,7 +1287,9 @@ public class DatabaseManager {
 				updateAppointment.setInt(4, condition.getSeverity());
 				updateAppointment.setInt(5, condition.isCurrent() ? 1 : 0);
 				updateAppointment.setInt(6, condition.getHealthConditionId());
+				
 				updateAppointment.executeUpdate();
+				
 				updateAppointment.close();
 			}
 			catch(Exception e)
@@ -1193,30 +1310,35 @@ public class DatabaseManager {
 	 */
 	public void updateLabRecord(LabRecord record)
 	{
-		try
+		if(dbConnection != null)
 		{
-			if(record.getLabRecordId() != -1)
+			try
 			{
-				PreparedStatement updateRecord = dbConnection.prepareStatement("Update LabRecord SET userId = ?, glucose = ?, sodium = ?, calcium = ?, magnesium = ?, date = ? WHERE recordId = ?");
-				updateRecord.setInt(1, record.getPatientId());
-				updateRecord.setFloat(2, record.getGlucose());
-				updateRecord.setFloat(3, record.getSodium());
-				updateRecord.setFloat(4, record.getCalcium());
-				updateRecord.setFloat(5, record.getMagnesium());
-				updateRecord.setString(6, record.getDate().toString());
-				updateRecord.setInt(7, record.getLabRecordId());
-				
-				updateRecord.executeUpdate();
+				if(record.getLabRecordId() != -1)
+				{
+					PreparedStatement updateRecord = dbConnection.prepareStatement("Update LabRecord SET userId = ?, glucose = ?, sodium = ?, calcium = ?, magnesium = ?, date = ? WHERE recordId = ?");
+					updateRecord.setInt(1, record.getPatientId());
+					updateRecord.setFloat(2, record.getGlucose());
+					updateRecord.setFloat(3, record.getSodium());
+					updateRecord.setFloat(4, record.getCalcium());
+					updateRecord.setFloat(5, record.getMagnesium());
+					updateRecord.setString(6, record.getDate().toString());
+					updateRecord.setInt(7, record.getLabRecordId());
+					
+					updateRecord.executeUpdate();
+					
+					updateRecord.close();
+				}
+				else
+				{
+					logError("Cannot update a lab record without an id.");
+				}
 			}
-			else
+			catch(Exception e)
 			{
-				logError("Cannot update a lab record without an id.");
+				logError("Could not update given lab record. Please check that the database has been properly set up.");
+				logError(e.getMessage());
 			}
-		}
-		catch(Exception e)
-		{
-			logError("Could not update given lab record. Please check that the database has been properly set up.");
-			logError(e.getMessage());
 		}
 	}
 	
@@ -1225,20 +1347,23 @@ public class DatabaseManager {
 	 * @param appoinment the appointment that should be deleted
 	 */
 	public void deleteAppoinment(Appointment appoinment) {
-		try
+		if(dbConnection != null)
 		{
-			System.out.println("Deleting appoinment with id " + appoinment.getAppointmentId() + " ****");
-			PreparedStatement delApp = dbConnection.prepareStatement("DELETE FROM Appointments WHERE id = ?");
-			delApp.setInt(1, appoinment.getAppointmentId());
-			delApp.executeUpdate();
-			delApp.close();
-
-
-		}
-		catch(Exception e)
-		{
-			logError("Could not delete the appoinment");
-			logError(e.getMessage());
+			try
+			{
+				System.out.println("Deleting appoinment with id " + appoinment.getAppointmentId() + " ****");
+				PreparedStatement delApp = dbConnection.prepareStatement("DELETE FROM Appointments WHERE id = ?");
+				delApp.setInt(1, appoinment.getAppointmentId());
+				
+				delApp.executeUpdate();
+				
+				delApp.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not delete the appoinment");
+				logError(e.getMessage());
+			}
 		}
 
 	}
@@ -1248,20 +1373,23 @@ public class DatabaseManager {
 	 * @param condition condition that should be deleted from the database.
 	 */
 	public void deleteHealthCondition(HealthCondition condition) {
-		try
+		if(dbConnection != null)
 		{
-			System.out.println("Deleting Condition with id " + condition.getHealthConditionId() + " ****");
-			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM HealthCondition WHERE id = ?");
-			stat.setInt(1, condition.getHealthConditionId());
-			stat.executeUpdate();
-			stat.close();
-
-
-		}
-		catch(Exception e)
-		{
-			logError("Could not delete the condition");
-			logError(e.getMessage());
+			try
+			{
+				System.out.println("Deleting Condition with id " + condition.getHealthConditionId() + " ****");
+				PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM HealthCondition WHERE id = ?");
+				stat.setInt(1, condition.getHealthConditionId());
+				
+				stat.executeUpdate();
+				
+				stat.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not delete the condition");
+				logError(e.getMessage());
+			}
 		}
 
 	}
@@ -1271,20 +1399,23 @@ public class DatabaseManager {
 	 * @param labrecord record that should be deleted.
 	 */
 	public void deleteLabRecord(LabRecord labrecord) {
-		try
+		if(dbConnection != null)
 		{
-			System.out.println("Deleting Lab Record with id " + labrecord.getLabRecordId() + " ****");
-			PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE recordId = ?");
-			stat.setInt(1, labrecord.getLabRecordId());
-			stat.executeUpdate();
-			stat.close();
-
-
-		}
-		catch(Exception e)
-		{
-			logError("Could not delete the Lab Record");
-			logError(e.getMessage());
+			try
+			{
+				System.out.println("Deleting Lab Record with id " + labrecord.getLabRecordId() + " ****");
+				PreparedStatement stat = dbConnection.prepareStatement("DELETE FROM LabRecord WHERE recordId = ?");
+				stat.setInt(1, labrecord.getLabRecordId());
+				
+				stat.executeUpdate();
+				
+				stat.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not delete the Lab Record");
+				logError(e.getMessage());
+			}
 		}
 
 	}
@@ -1295,18 +1426,22 @@ public class DatabaseManager {
 	 */
 	public void markAlertRead(int alertId)
 	{
-		try
+		if(dbConnection != null)
 		{
-			PreparedStatement markRead = dbConnection.prepareStatement("UPDATE Alert SET read=1 WHERE alertId = ? AND read=0");
-			markRead.setInt(1, alertId);
-			
-			markRead.executeUpdate();
-			markRead.close();
-		}
-		catch(Exception e)
-		{
-			logError("Could not mark alert read. Check that the inputs are correct and the database has been set up properly.");
-			logError(e.getMessage());
+			try
+			{
+				PreparedStatement markRead = dbConnection.prepareStatement("UPDATE Alert SET read=1 WHERE alertId = ? AND read=0");
+				markRead.setInt(1, alertId);
+				
+				markRead.executeUpdate();
+				
+				markRead.close();
+			}
+			catch(Exception e)
+			{
+				logError("Could not mark alert read. Check that the inputs are correct and the database has been set up properly.");
+				logError(e.getMessage());
+			}
 		}
 	}
 	
