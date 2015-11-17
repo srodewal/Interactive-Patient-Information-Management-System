@@ -8,17 +8,18 @@ import com.ipims.models.Appointment;
 import com.ipims.models.Patient;
 
 
-
+/**
+ * Manages appointment creation and modification.
+ * @author jithin
+ *
+ */
 public class AppointmentManager {
 
-	public boolean confirmAppointment(Appointment appoinment) {
-
-		if (appoinment != null) {
-			return true;
-		}
-		return false;
-	}
-
+	/**
+	 * Get all the appointment for the patient.
+	 * @param patient
+	 * @return Return the list of appointments
+	 */
 	public List<Appointment> getAppointmentForPatient(Patient patient) {
 		List<Appointment> appointmentList = null;
 		if (patient == null) {
@@ -30,10 +31,11 @@ public class AppointmentManager {
 		return appointmentList;
 	}
 
-	public boolean scheduleAppointment(Appointment appointment) {
-		return false;
-	}
-
+	/**
+	 * Create a new appointment.
+	 * @param appointment
+	 * @return
+	 */
 	public boolean newAppointment(Appointment appointment) {
 		if (appointment.getAppointmentId() == -1) {
 			DatabaseManager.getInstance().newAppointment(appointment);
@@ -42,6 +44,12 @@ public class AppointmentManager {
 		return false;
 	}
 
+	/**
+	 * Update the appointment with the new value.
+	 * @param oldApp
+	 * @param newApp
+	 * @return
+	 */
 	public boolean updateAppointment(Appointment oldApp, Appointment newApp) {
 		if (oldApp.getAppointmentId() > 0) {
 			newApp.setAppointmentId(oldApp.getAppointmentId());
@@ -52,6 +60,11 @@ public class AppointmentManager {
 		return false;
 	}
 
+	/**
+	 * Delete the appointment.
+	 * @param appoinment
+	 * @return
+	 */
 	public boolean deleteAppoinment(Appointment appoinment) {
 		if (appoinment.getAppointmentId() != -1) {
 			DatabaseManager.getInstance().deleteAppoinment(appoinment);

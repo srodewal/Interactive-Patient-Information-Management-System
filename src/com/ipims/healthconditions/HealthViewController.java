@@ -16,6 +16,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 
+/**
+ * View Controller that controls the health view that update condition and history.
+ * @author jithin
+ *
+ */
 public class HealthViewController {
 
 	private HealthView view;

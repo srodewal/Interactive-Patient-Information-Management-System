@@ -18,7 +18,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 
-
+/**
+ * View Controller that controls the appointment view.
+ * @author jithin
+ *
+ */
 public class AppointmentViewController {
 
 	private Appointmentsview view;

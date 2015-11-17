@@ -11,26 +11,51 @@ import com.ipims.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Helper methods that gives out most commonly used data.
+ * 
+ * @author jithin
+ *
+ */
 public class Helper {
 
+	/**
+	 * Observable String list of doctor categories used in UI
+	 * 
+	 * @return
+	 */
 	public static ObservableList<String> getCategoryList() {
 		ObservableList<String> items = FXCollections.observableArrayList();
 		items.addAll(Helper.getAllCategories());
 		return items;
 	}
 
+	/**
+	 * Observable string list of doctor name
+	 * 
+	 * @return
+	 */
 	public static ObservableList<String> getDoctorList() {
 		ObservableList<String> items = FXCollections.observableArrayList();
 		items.addAll(Helper.getAllDoctors());
 		return items;
 	}
 
+	/**
+	 * Observable string list of patient names.
+	 * 
+	 * @return
+	 */
 	public static ObservableList<String> getPatientList() {
 		ObservableList<String> items = FXCollections.observableArrayList();
 		items.addAll(Helper.getAllPatients());
 		return items;
 	}
 
+	/**
+	 * String list of doctor names.
+	 * @return
+	 */
 	public static List<String> getAllDoctors() {
 		List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
 		List<String> list = new ArrayList<>(); 
@@ -41,6 +66,10 @@ public class Helper {
 		return list;
 	}
 
+	/**
+	 * String list of patient names.
+	 * @return
+	 */
 	public static List<String> getAllPatients() {
 		List<User> patientList = DatabaseManager.getInstance().getPatientList();
 		List<String> list = new ArrayList<>(); 
@@ -50,6 +79,10 @@ public class Helper {
 		return list;
 	}
 
+	/**
+	 * String list of category names.
+	 * @return
+	 */
 	public static List<String> getAllCategories() {
 		List<String> list = new ArrayList<>(); 
 		list.add("Cardiologist");
@@ -59,6 +92,11 @@ public class Helper {
 		return list;
 	}
 	
+	/**
+	 * Time slot for doctor appointments.
+	 * 
+	 * @return
+	 */
 	public static List<String> getTimeSlots() {
 		List<String> list = new ArrayList<>(); 
 		list.add("9:00");
@@ -73,6 +111,11 @@ public class Helper {
 		return list;
 	}
 
+	/**
+	 * Get the patient at index, ordered from the database list.
+	 * @param index
+	 * @return
+	 */
 	public static Patient getPatientAtIndex(int index) {
 		if(index>=0) {
 			List<User> patientList = DatabaseManager.getInstance().getPatientList();
@@ -81,6 +124,11 @@ public class Helper {
 		return null;
 	}
 
+	/**
+	 * Get the doctor at index, ordered from the database list.
+	 * @param index
+	 * @return
+	 */
 	public static Doctor getDoctorAtIndex(int index) {
 		if(index>=0) {
 			List<Doctor> docList = DatabaseManager.getInstance().getAllDoctors();
@@ -89,6 +137,11 @@ public class Helper {
 		return null;
 	}
 	
+	/**
+	 * Check if the string is numeric.
+	 * @param str
+	 * @return true is numeric
+	 */
 	public static boolean isNumeric(String str)  {  
 	  try  {  
 	    double d = Double.parseDouble(str);  

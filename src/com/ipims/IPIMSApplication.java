@@ -12,6 +12,12 @@ import com.ipims.usersession.UserSession;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Controller class that is load when the application is launched.
+ * 
+ * @author jithin
+ *
+ */
 public class IPIMSApplication extends Application {
 
 	public static void main(String[] args) {
@@ -28,17 +34,16 @@ public class IPIMSApplication extends Application {
 			LoginViewController vc = new LoginViewController();
 			primaryStage.setScene(vc.getScene());
 			primaryStage.show();
-
-		} else {
-			// User is logged in, so show the menu
-		}
+		} 
 
 	}
 
+	/**
+	 * Prefill database with dummy data.
+	 */
 	private void preFillDatabase() {
 		preFillDoctor();
 		preFillNurse();
-		preFillCategory();
 		preFillHSPStaff();
 		preFillPatient();
 		preFillLabStaff();
@@ -60,8 +65,6 @@ public class IPIMSApplication extends Application {
 		if (DatabaseManager.getInstance().getUser("lab", "test") == null) {
 			DatabaseManager.getInstance().newUser(user, "test");
 		}
-
-		
 	}
 	
 	private void preFillDoctor() {
@@ -130,10 +133,6 @@ public class IPIMSApplication extends Application {
 
 	}
 
-	private void preFillCategory() {
-
-	}
-
 	private void preFillHSPStaff() {
 		HSPStaff user = new HSPStaff();
 		user.setName("HSP");
@@ -172,7 +171,5 @@ public class IPIMSApplication extends Application {
 		if (DatabaseManager.getInstance().getUser("j", "j") == null) {
 			DatabaseManager.getInstance().newUser(user, "j");
 		}
-
-		
 	}
 }
