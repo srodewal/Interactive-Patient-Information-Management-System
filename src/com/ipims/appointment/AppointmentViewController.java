@@ -46,9 +46,9 @@ public class AppointmentViewController {
 			Appointment app = appointmentList.get(i);
 			int index = i+1;
 
-			String str = "" + index +".";
+			String str = "" + index +". ";
 			if (app.getDoctor() != null) {
-				str += " Dr. "+app.getDoctor().getName();
+				str += app.getDoctor().getName();
 			} 
 			str+= " (Category: "+ app.getCategory()+") on "+ app.getDate()+" at "+ app.getTime();
 			stringAppList.add(str);
